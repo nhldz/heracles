@@ -5,6 +5,10 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 import java.util.Date;
 
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.EntitySubclass;
+import com.googlecode.objectify.annotation.Load;
+
 /**
  * Representa los estados en que se finalizo el ejercicio. 
  * Permite saber como realizo el cliente el ejercicio.
@@ -12,11 +16,14 @@ import java.util.Date;
  * @author Nahuel Diaz <nahd85@gmail.com>
  *
  */
+@EntitySubclass
 public class ExerciseSnapshot extends ExerciseConfiguration {
 	
 	private Date startDate;
 	private Date endDate;
-	private ExerciseState state;
+	
+	@Load
+	private Ref<ExerciseState> state;
 	
 	public Date getStartDate() {
 		return startDate;
@@ -31,10 +38,10 @@ public class ExerciseSnapshot extends ExerciseConfiguration {
 		this.endDate = endDate;
 	}
 	public ExerciseState getState() {
-		return state;
+		return state.get();
 	}
 	public void setState(ExerciseState state) {
-		this.state = state;
+		this.state = Ref.create(state);
 	}
 
 }

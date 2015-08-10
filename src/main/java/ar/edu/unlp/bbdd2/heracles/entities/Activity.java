@@ -2,6 +2,13 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 import java.util.List;
 
+import ar.com.bbdd2.heracles.helper.RefHelper;
+
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Load;
+
 /**
  *
  * Las actividades contiene los ejercicios configurados para la rutina del cliente 
@@ -10,18 +17,28 @@ import java.util.List;
  * @author Nahuel Diaz <nahd85@gmail.com>
  *
  */
+@Entity
 public class Activity {
 	
+	
+	@Id private Long id;
 	private String name;
 	private String description;
 	private Routine routine;
 	
 	//Ejercicio que se esta haciendo actualemnte
-	private ExerciseConfiguration runExercise;
+	@Load
+	private Ref<ExerciseConfiguration> runExercise;
 //	private Activity nextActivity;
 //	private Activity previousActivity;
-	private List<ExerciseConfiguration> exercises;
+	private List<Ref<ExerciseConfiguration>> exercises;
 	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
@@ -41,10 +58,10 @@ public class Activity {
 		this.routine = routine;
 	}
 	public ExerciseConfiguration getRunExercise() {
-		return runExercise;
+		return runExercise.get();
 	}
 	public void setRunExercise(ExerciseConfiguration runExercise) {
-		this.runExercise = runExercise;
+		this.runExercise = Ref.create(runExercise);
 	}
 	// TODO: replantear si tiene sentido saber cual es la actividad previa u anterior.
 //	public Activity getNextActivity() {
@@ -60,10 +77,10 @@ public class Activity {
 //		this.previousActivity = previousActivity;
 //	}
 	public List<ExerciseConfiguration> getExercises() {
-		return exercises;
+		return RefHelper.deref(exercises);
 	}
 	public void setExercises(List<ExerciseConfiguration> exercises) {
-		this.exercises = exercises;
+		this.exercises = RefHelper.ref(exercises);
 	}
 	
 }

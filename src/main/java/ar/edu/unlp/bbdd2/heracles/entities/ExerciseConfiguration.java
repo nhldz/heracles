@@ -2,6 +2,13 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 import java.util.List;
 
+import ar.com.bbdd2.heracles.helper.RefHelper;
+
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Load;
+
 /**
  * Contiene la configuración del ejercicio que se realiza para las actividades de cada cliente.
  * La configuración permite personalizar por cada cliente un ejercicio en particular.
@@ -9,17 +16,22 @@ import java.util.List;
  * @author Nahuel Diaz <nahd85@gmail.com>
  * 
  */
+
+@Entity
 public class ExerciseConfiguration {
 	
+	@Id
+	private Long id;
 	/**
 	 * Series
 	 */
-	private List<Integer> sets;
+	private List<Ref<Integer>> sets;
 	
 	/**
 	 * Repeticiones
 	 */
-	private List<Integer> reps;
+	@Load
+	private List<Ref<Integer>> reps;
 	
 	/**
 	 * Descanzo
@@ -31,23 +43,34 @@ public class ExerciseConfiguration {
 	 */
 	private Integer weigth;
 	
-	private Exercise exercise;
-	private List<ExerciseSnapshot> snapshots;
+	@Load
+	private Ref<Exercise> exercise;
+	
+	private List<Ref<ExerciseSnapshot>> snapshots;
+
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public List<Integer> getSets() {
-		return sets;
+		return RefHelper.deref(this.sets);
 	}
 
 	public void setSets(List<Integer> sets) {
-		this.sets = sets;
+		this.sets = RefHelper.ref(sets);
 	}
 
 	public List<Integer> getReps() {
-		return reps;
+		return RefHelper.deref(this.reps);
 	}
 
 	public void setReps(List<Integer> reps) {
-		this.reps = reps;
+		this.reps = RefHelper.ref(reps);
 	}
 
 	public Integer getRest() {
@@ -67,19 +90,19 @@ public class ExerciseConfiguration {
 	}
 
 	public Exercise getExercise() {
-		return exercise;
+		return exercise.get();
 	}
 
 	public void setExercise(Exercise exercise) {
-		this.exercise = exercise;
+		this.exercise = Ref.create(exercise);
 	}
 
 	public List<ExerciseSnapshot> getSnapshots() {
-		return snapshots;
+		return RefHelper.deref(snapshots);
 	}
 
 	public void setSnapshots(List<ExerciseSnapshot> snapshots) {
-		this.snapshots = snapshots;
+		this.snapshots = RefHelper.ref(snapshots);
 	}
 
 }

@@ -7,20 +7,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ar.com.bbdd2.heracles.helper.RefHelper;
+
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Load;
+
 /**
  *
  * @author Nahuel Diaz <nahd85@gmail.com>
  *
  */
+@Entity
 public class Routine {
 	
+	@Id	
+	private Long id;
 	private String name;
 	private Date createDate;
 	private Date endDate;
 	private Trainer trainer;
-	private Client client;
+	
+	@Load
+	private Ref<Client> client;
 	private Activity runActivity;
-	private List<Activity> activities;
+	private List<Ref<Activity>> activities;
 	
 	/**
 	 * Contructor default
@@ -34,11 +46,18 @@ public class Routine {
 		this.name = routine.getName();
 		this.createDate = new Date();
 		this.trainer = routine.getTrainer();
-		this.activities = routine.getActivities();
-		this.client = client;
-		this.activities = new ArrayList<Activity>();
+		this.client = Ref.create(client);
+		this.activities = new ArrayList<Ref<Activity>>();
 	}
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -63,24 +82,27 @@ public class Routine {
 	public void setTrainer(Trainer trainer) {
 		this.trainer = trainer;
 	}
+	
 	public Client getClient() {
-		return client;
+		return client.get();
 	}
 	public void setClient(Client client) {
-		this.client = client;
+		this.client = Ref.create(client);
 	}
+	
 	public Activity getRunActivity() {
 		return runActivity;
 	}
+
 	public void setRunActivity(Activity runActivity) {
 		this.runActivity = runActivity;
 	}
 
 	public List<Activity> getActivities() {
-		return activities;
+		return RefHelper.deref(this.activities);
 	}
 	public void setActivities(List<Activity> activities) {
-		this.activities = activities;
+		this.activities = RefHelper.ref(activities);
 	}
 
 }
