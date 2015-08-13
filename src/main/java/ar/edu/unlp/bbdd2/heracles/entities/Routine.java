@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ar.edu.bbdd2.heracles.helper.RefHelper;
+import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;

@@ -2,7 +2,7 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 import java.util.List;
 
-import ar.edu.bbdd2.heracles.helper.RefHelper;
+import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 
 import com.googlecode.objectify.annotation.EntitySubclass;
 import com.googlecode.objectify.annotation.Load;

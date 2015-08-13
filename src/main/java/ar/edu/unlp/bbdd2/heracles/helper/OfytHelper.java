@@ -1,4 +1,4 @@
-package ar.edu.bbdd2.heracles.helper;
+package ar.edu.unlp.bbdd2.heracles.helper;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
