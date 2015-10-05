@@ -2,20 +2,22 @@ package ar.edu.unlp.bbdd2.heracles.dao.impl;
 
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import ar.edu.unlp.bbdd2.heracles.dao.BaseDAO;
 
+import com.googlecode.objectify.LoadResult;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 
 public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 	
-	private Class<T> type;
+	protected Class<T> type;
 	
-	public BaseDAOImpl (Class<T> type){
-		this.type = type;
+	public void setType (Class<T> classType){
+		this.type = classType;
 	}
 	
 	public Class<T> getType() {
@@ -32,28 +34,30 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
 	@Override
 	public void save(T object) {
-		ofy().save().entity(object);
+		ofy().save().entity(object).now();
 	}
 
 	@Override
 	public void saveAll(Collection<T> objects) {
-		ofy().save().entities(objects);		
+		ofy().save().entities(objects).now();		
 	}
 
 	@Override
 	public void saveOrUpdate(T object) {
-		ofy().save().entity(object);		
+		ofy().save().entity(object).now();		
 	}
 
 	@Override
 	public void saveOrUpdateAll(Collection<T> objects) {
-		ofy().save().entities(objects);		
+		ofy().save().entities(objects).now();		
 		
 	}
 	
 	@Override
 	public T load(T object) {
-		return (T) ofy().load().entity(object);
+		LoadResult<T> resutl = ofy().load().entity(object);
+		
+		return resutl.now();
 	}
 
 	@Override
@@ -63,14 +67,18 @@ public abstract class BaseDAOImpl<T> implements BaseDAO<T> {
 
 	@Override
 	public Collection<T> loadAll(Collection<T> objects) {
-		Map<T, T> mapResult = (Map<T, T>) ofy().load().entities(objects);
-		return mapResult.values();
+		List<T> listResult = ofy().load().type(this.getType()).list();
+		return listResult;
 	}
 	
 	@Override
 	public Collection<T> loadAllById(Collection<Long> ids) {
 		Map<Long, T> mapResult = ofy().load().type(this.getType()).ids(ids);
 		return mapResult.values();
+	}
+	
+	public List<T> loadAll (){
+		return (List<T>) ofy().load().type(this.getType()).list();
 	}
 
 	@Override
