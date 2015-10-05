@@ -24,7 +24,7 @@ public class Activity {
 	@Id private Long id;
 	private String name;
 	private String description;
-	private Routine routine;
+	private Ref<Routine> routine;
 	
 	//Ejercicio que se esta haciendo actualemnte
 	@Load
@@ -52,10 +52,10 @@ public class Activity {
 		this.description = description;
 	}
 	public Routine getRoutine() {
-		return routine;
+		return routine.get();
 	}
 	public void setRoutine(Routine routine) {
-		this.routine = routine;
+		this.routine = Ref.create(routine);
 	}
 	public ExerciseConfiguration getRunExercise() {
 		return runExercise.get();

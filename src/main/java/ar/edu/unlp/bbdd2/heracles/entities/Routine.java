@@ -27,7 +27,7 @@ public class Routine {
 	private String name;
 	private Date createDate;
 	private Date endDate;
-	private Trainer trainer;
+	private Ref<Trainer> trainer;
 	
 	@Load
 	private Ref<Client> client;
@@ -45,11 +45,20 @@ public class Routine {
 		this();
 		this.name = routine.getName();
 		this.createDate = new Date();
-		this.trainer = routine.getTrainer();
+		this.setTrainer(routine.getTrainer()) ;
 		this.client = Ref.create(client);
 		this.activities = new ArrayList<Ref<Activity>>();
 	}
 	
+	public Routine(String name, Trainer trainer, Client client) {
+		this();
+		this.name = name;
+		this.setTrainer(trainer);
+		this.setClient(client);
+		this.setActivities(new ArrayList<Activity>());
+		this.createDate = new Date();
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -77,10 +86,10 @@ public class Routine {
 		this.endDate = endDate;
 	}
 	public Trainer getTrainer() {
-		return trainer;
+		return trainer.get();
 	}
 	public void setTrainer(Trainer trainer) {
-		this.trainer = trainer;
+		this.trainer = Ref.create(trainer);
 	}
 	
 	public Client getClient() {

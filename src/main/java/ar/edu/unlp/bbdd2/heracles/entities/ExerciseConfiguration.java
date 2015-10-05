@@ -25,13 +25,13 @@ public class ExerciseConfiguration {
 	/**
 	 * Series
 	 */
-	private List<Ref<Integer>> sets;
+	private List<Integer> sets;
 	
 	/**
 	 * Repeticiones
 	 */
 	@Load
-	private List<Ref<Integer>> reps;
+	private List<Integer> reps;
 	
 	/**
 	 * Descanzo
@@ -47,6 +47,19 @@ public class ExerciseConfiguration {
 	private Ref<Exercise> exercise;
 	
 	private List<Ref<ExerciseSnapshot>> snapshots;
+	
+	public ExerciseConfiguration(){
+		super();
+	}
+	
+	public ExerciseConfiguration (Exercise exercise, List<Integer> sets, List<Integer> reps, Integer rest, Integer weight) {
+		this();
+		this.setExercise(exercise);
+		this.setSets(sets);
+		this.setReps(reps);
+		this.setRest(rest);
+		this.setWeigth(weight);
+	}
 
 	
 	public Long getId() {
@@ -58,19 +71,19 @@ public class ExerciseConfiguration {
 	}
 
 	public List<Integer> getSets() {
-		return RefHelper.deref(this.sets);
+		return this.sets;
 	}
 
 	public void setSets(List<Integer> sets) {
-		this.sets = RefHelper.ref(sets);
+		this.sets = sets;
 	}
 
 	public List<Integer> getReps() {
-		return RefHelper.deref(this.reps);
+		return this.reps;
 	}
 
 	public void setReps(List<Integer> reps) {
-		this.reps = RefHelper.ref(reps);
+		this.reps = reps;
 	}
 
 	public Integer getRest() {
