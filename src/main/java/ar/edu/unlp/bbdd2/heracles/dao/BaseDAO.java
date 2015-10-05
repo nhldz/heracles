@@ -1,6 +1,7 @@
 package ar.edu.unlp.bbdd2.heracles.dao;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Interfaz para definir los metodos comunes a los DAO
@@ -51,11 +52,13 @@ public interface BaseDAO<T> {
 	public Collection<T> loadAll (Collection<T> objects);
 	
 	/**
-	 * Obtiene una collecion de objetos buscados por id.
+	 * Obtiene una colleción de objetos buscados por id.
 	 * @param ids
 	 * @return
 	 */
 	public Collection<T> loadAllById (Collection<Long> ids);
+	
+	public List<T> loadAll();
 	
 	/**
 	 * Borra un objeto.
