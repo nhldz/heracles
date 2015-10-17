@@ -1,5 +1,8 @@
 package ar.edu.unlp.bbdd2.heracles.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Enumerativo con los distintos equipos que se utilizan
  * durante un ejercicio.
@@ -10,7 +13,14 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 public enum Equipment {
 	
-	MANCUERNA ("MANCUERNA");
+	MANCUERNA ("MANCUERNA"),
+	BARRA_OLIMPICA ("BARRA OLIMPICA"),
+	KETTLEBELL("KETTLEBELL"),
+	SOGA ("SOGA"),
+	MEDICINE_BALL("MEDICINE BALL"),
+	SOGA_ONDULACIONES ("SOGA ONDULACIONES"),
+	CINTA("CINTA");
+	
 	
 	private final String name;
 	
@@ -20,6 +30,15 @@ public enum Equipment {
 	
 	public final String getName(){
 		return this.name;
+	}
+	
+	public final List<Equipment> getAll (){
+		List<Equipment> equipments = new ArrayList<Equipment>();
+		Equipment[] values = Equipment.values();
+		for (Equipment equipment : values) {
+			equipments.add(equipment);
+		}
+		return equipments;
 	}
 
 }
