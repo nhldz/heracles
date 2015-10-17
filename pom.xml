@@ -15,8 +15,7 @@
 		<appengine.version>1.9.24</appengine.version>
 		<spring.version>3.2.14.RELEASE</spring.version>
 		<gcloud.plugin.version>0.9.58.v20150505</gcloud.plugin.version>
-		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>ISO-8859-1</project.reporting.outputEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<prerequisites>
