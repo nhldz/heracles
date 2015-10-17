@@ -10,6 +10,16 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 public enum Equipment {
 	
-	//TODO: crear listado de equipos
+	MANCUERNA ("MANCUERNA");
+	
+	private final String name;
+	
+	private Equipment(String name) {
+		this.name = name;
+	}
+	
+	public final String getName(){
+		return this.name;
+	}
 
 }

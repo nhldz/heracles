@@ -2,12 +2,12 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 import java.util.List;
 
-import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
-
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Representa el ejercicio y como debe realizarse.
@@ -18,19 +18,36 @@ import com.googlecode.objectify.annotation.Load;
 @Entity
 public class Exercise {
 	
-	@Id
-	private Long id;
+	@Id private Long id;
+	@Index
 	private String name;
 	private ExerciseType type;
 	
-	@Load
-	private Ref<Equipment> equipment;
+	private Equipment equipment;
 	
-	private List<Ref<BodyPart>> bodyParts;
+	private List<BodyPart> bodyParts;
 	private String description;
 	
-	@Load
 	private Ref<Trainer> owner;
+	
+	public Exercise (){
+		super();
+	}
+	
+	public Exercise(String name, ExerciseType type, Equipment equipment,
+			List<BodyPart> bodyParts, String description) {
+		this();
+		this.name = name;
+		this.type = type;
+		
+		this.equipment = equipment;
+		this.setBodyParts(bodyParts);
+		this.description = description;
+	}
+
+	public static Objectify ofy() {
+        return ObjectifyService.ofy();
+    }
 	
 	public Long getId() {
 		return id;
@@ -51,16 +68,23 @@ public class Exercise {
 		this.type = type;
 	}
 	public Equipment getEquipment() {
-		return equipment.get();
+		return equipment;
 	}
 	public void setEquipment(Equipment equipment) {
-		this.equipment = Ref.create(equipment);
+		this.equipment = equipment;
 	}
+//	public List<BodyPart> getBodyParts() {
+//		return RefHelper.deref(this.bodyParts);
+//	}
+//	public void setBodyParts(List<BodyPart> bodyParts) {
+//		this.bodyParts = RefHelper.ref(bodyParts);
+//	}
 	public List<BodyPart> getBodyParts() {
-		return RefHelper.deref(this.bodyParts);
+		return bodyParts;
 	}
+
 	public void setBodyParts(List<BodyPart> bodyParts) {
-		this.bodyParts = RefHelper.ref(bodyParts);
+		this.bodyParts = bodyParts;
 	}
 	public String getDescription() {
 		return description;
@@ -69,7 +93,8 @@ public class Exercise {
 		this.description = description;
 	}
 	public Trainer getOwner() {
-		return owner.get();
+//		return this.owner.get();
+		return ofy().load().key(this.owner.getKey()).now();
 	}
 	public void setOwner(Trainer owner) {
 		this.owner = Ref.create(owner);

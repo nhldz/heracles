@@ -4,9 +4,9 @@ import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.EntitySubclass;
 import com.googlecode.objectify.annotation.Load;
-import com.googlecode.objectify.Ref;
 
 
 /**
@@ -15,7 +15,7 @@ import com.googlecode.objectify.Ref;
  * @author Nahuel Diaz <nahd85@gmail.com>
  *
  */
-@EntitySubclass(index=true)
+@EntitySubclass
 public class Client extends User {
 	
 	@Load
