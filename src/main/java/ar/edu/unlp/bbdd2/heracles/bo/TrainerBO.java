@@ -3,9 +3,15 @@
  */
 package ar.edu.unlp.bbdd2.heracles.bo;
 
+import java.util.List;
+
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
+import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
+import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
+import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
+import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 
 /**
  *
@@ -13,6 +19,54 @@ import ar.edu.unlp.bbdd2.heracles.entities.Routine;
  *
  */
 public interface TrainerBO {
+	
+	/**
+	 * Crea una rutina
+	 * @param name
+	 * 		Nombre de la rutina.
+	 * @param trainer
+	 * 		Entrenador que crea la rutina.
+	 * @param client
+	 * 		Cleinte que debe realizar la rutina.
+	 * @return
+	 */
+	public Routine createRoutine (String name, Trainer trainer, Client client);
+	
+	/**
+	 * Crea una actividad
+	 * @param routine
+	 * 		Rutina para la que se crea la actividad.
+	 * @param name
+	 * 		Nombre de la actividad.
+	 * @param Description
+	 * 		Descripción de la actidad.
+	 * @param next
+	 * 		Proxima actividad.
+	 * @param previous
+	 * 		Actividad previa.
+	 * @return
+	 * 		actividad creada.
+	 */
+	public Activity createActivity (Routine routine,  String name, String description, Activity next, Activity previous);
+	
+	/**
+	 * Crea una configuracion de un ejercicio para una actividad
+	 * @param exercise
+	 * 		Ejercicio para el que se realiza la configuración.
+	 * @param activity
+	 * 		Actividad a la que se le asigna la configuración del ejericio.
+	 * @param sets
+	 * 		Lista de series
+	 * @param reps
+	 * 		Lista de repeticiones
+	 * @param rest
+	 * 		Tiempo de descanzo
+	 * @param weight
+	 * 		Peso con el que se configura el ejercicio.
+	 * @return
+	 * 		Configuración de ejercicio creada.
+	 */
+	public ExerciseConfiguration createExConfiguration (Exercise exercise, Activity activity, List<Integer> sets, List<Integer> reps, Integer rest, Integer weight);
 	
 	/**
 	 * Asigna una rutina a un cliente, si la rutina no tiene un cliente.

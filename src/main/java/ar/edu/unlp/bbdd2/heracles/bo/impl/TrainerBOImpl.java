@@ -3,15 +3,25 @@
  */
 package ar.edu.unlp.bbdd2.heracles.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.ClientDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
+import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseSnapshot;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
+import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 
 /**
  *
@@ -19,7 +29,51 @@ import ar.edu.unlp.bbdd2.heracles.entities.Routine;
  *
  */
 public class TrainerBOImpl implements TrainerBO{
-
+	
+	private ClientDAOImpl clientDAO;
+	private TrainerDAOImpl trainerDAO;
+	private ExerciseDAOImpl exerciseDAO;
+	private RoutineDAOImpl routineDAO;
+	private ExerciseConfigurationDAOImpl exConfDAO;
+	private ActivityDAOImpl activityDAO;
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Activity createActivity (Routine routine,  String name, String description, Activity next, Activity previous){
+		Activity activity = new Activity();
+		activity.setName(name);
+		activity.setDescription(description);
+		activity.setRoutine(routine);
+		activity.setExercises(new ArrayList<ExerciseConfiguration>());
+		this.getActivityDAO().save(activity);
+		routine.getActivities().add(activity);
+		this.getRoutineDAO().saveOrUpdate(routine);
+		return activity;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public ExerciseConfiguration createExConfiguration (Exercise exercise, Activity activity, List<Integer> sets, List<Integer> reps, Integer rest, Integer weight) {
+		ExerciseConfiguration exConf = new ExerciseConfiguration(exercise, sets, reps, rest, weight);
+		this.getExConfDAO().save(exConf);
+		activity.getExercises().add(exConf);
+		this.getActivityDAO().save(activity);
+		return exConf;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public Routine createRoutine (String name, Trainer trainer, Client client){
+		Routine routine = new Routine(name, trainer, client);
+		this.getRoutineDAO().save(routine);
+		this.getTrainerDAO().saveOrUpdate(trainer);
+		this.getClientDAO().saveOrUpdate(client);
+		return routine;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -66,9 +120,61 @@ public class TrainerBOImpl implements TrainerBO{
 			snapshot.setState(ExerciseState.SKIP);
 			client.getActualRoutine().getRunActivity().setRunExercise(null);
 		}else {
-			throw new BusinessException("El cleinte "+ client.getName() +" no esta realizando ningun ejeri");
+			throw new BusinessException("El cleinte "+ client.getName() +" no esta realizando ningun ejercicio");
 		}
 		
 	}
+	
+	public Trainer findByEmail (String email){
+		return this.getTrainerDAO().loadByEmail(email);
+	}
+	
+	public ClientDAOImpl getClientDAO() {
+		return clientDAO;
+	}
 
+	public void setClientDAO(ClientDAOImpl clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+
+	public TrainerDAOImpl getTrainerDAO() {
+		return trainerDAO;
+	}
+
+	public void setTrainerDAO(TrainerDAOImpl trainerDAO) {
+		this.trainerDAO = trainerDAO;
+	}
+
+	public ExerciseDAOImpl getExerciseDAO() {
+		return exerciseDAO;
+	}
+
+	public void setExerciseDAO(ExerciseDAOImpl exerciseDAO) {
+		this.exerciseDAO = exerciseDAO;
+	}
+
+	public RoutineDAOImpl getRoutineDAO() {
+		return routineDAO;
+	}
+
+	public void setRoutineDAO(RoutineDAOImpl routineDAO) {
+		this.routineDAO = routineDAO;
+	}
+
+	public ExerciseConfigurationDAOImpl getExConfDAO() {
+		return exConfDAO;
+	}
+
+	public void setExConfDAO(ExerciseConfigurationDAOImpl exConfDAO) {
+		this.exConfDAO = exConfDAO;
+	}
+
+	public ActivityDAOImpl getActivityDAO() {
+		return activityDAO;
+	}
+
+	public void setActivityDAO(ActivityDAOImpl activityDAO) {
+		this.activityDAO = activityDAO;
+	}
+	
 }

@@ -14,13 +14,18 @@ http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 http://www.springframework.org/schema/aop
 http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
-	<!-- Make a NOTE of component scan. Create HelloController in package "com.orgname.hello" -->
-	<context:component-scan base-package="ar.edu.unlp.bbdd2.heracles.controller" />
+	<context:component-scan base-package="ar.edu.unlp.bbdd2.heracles.controller" >
+		<context:exclude-filter type="regex"
+				expression="ar.edu.unlp.bbdd2.heracles.controller.HelloWorldController" />
+		<context:exclude-filter type="regex"
+				expression="ar.edu.unlp.bbdd2.heracles.controller.HelloWorldControllerMati" />
+	</context:component-scan>
+	
+	<import resource="classpath:spring/backend/spring-controller.xml" />
 
 	<!-- Configuration defining views files -->
 
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
 			<value>/WEB-INF/views/</value>
 		</property>

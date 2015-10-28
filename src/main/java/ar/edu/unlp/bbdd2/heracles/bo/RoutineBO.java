@@ -6,6 +6,8 @@ package ar.edu.unlp.bbdd2.heracles.bo;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
+import ar.edu.unlp.bbdd2.heracles.entities.Client;
+import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 
 /**
  *
@@ -20,7 +22,7 @@ public interface RoutineBO {
 	 * @return
 	 * 		Lista de actividades
 	 */
-	List <Activity> getCompleteActivities ();
+	List <Activity> getCompleteActivities (Routine routine);
 	
 	
 	/**
@@ -30,7 +32,7 @@ public interface RoutineBO {
 	 * @return
 	 * 		Actividad
 	 */
-	Activity getActualActivity();
+	Activity getActualActivity(Client client);
 	
 	/**
 	 * Retorna aquellas actividades que contienen ejercicios cancelados.
@@ -38,6 +40,6 @@ public interface RoutineBO {
 	 * @return
 	 * 		Lista de actividades canceladas
 	 */
-	List<Activity> getCanceledActivities ();
+	List<Activity> getCanceledActivities (Routine routine);
 
 }
