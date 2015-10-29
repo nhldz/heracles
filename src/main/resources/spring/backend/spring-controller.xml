@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<import resource="classpath:spring/backend/spring-dao.xml" />
+	<import resource="classpath:spring/backend/spring-bo.xml" />
+
+	<bean id="rootUtil" class="ar.edu.unlp.bbdd2.heracles.util.RootUtil">
+	
+		<property name="exerciseDAO" ref="exercise.dao"/>
+		<property name="exerciseConfigurationDAO" ref="exerciseConfiguration.dao"/>
+		<property name="trainerDAO" ref="trainer.dao"/>
+		<property name="activityDAO" ref="activity.dao"/>
+		<property name="routineDAO" ref="routine.dao"/>
+		<property name="clientDAO" ref="client.dao"/>
+		
+		<property name="exerciseBO" ref="exercise.bo"/>
+		<property name="trainerBO" ref="trainer.bo"/>
+		<property name="routineBO" ref="routine.bo"/>
+		<property name="clientBO" ref="client.bo"/>
+	
+	</bean>
+	
+	<bean id="helloControllerMati"
+		class="ar.edu.unlp.bbdd2.heracles.controller.HelloWorldControllerMati">
+	</bean>
+
+</beans>

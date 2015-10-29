@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<import resource="classpath:spring/backend/spring-dao.xml" />
+
+	<bean id="trainer.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.TrainerBOImpl">
+		<property name="trainerDAO" ref="trainer.dao"/>
+		<property name="clientDAO" ref="client.dao"/>
+		<property name="exerciseDAO" ref="exercise.dao"/>
+		<property name="routineDAO" ref="routine.dao"/>
+		<property name="exConfDAO" ref="exerciseConfiguration.dao"/>
+		<property name="activityDAO" ref="activity.dao"/>
+	</bean>
+	
+	<bean id="exercise.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseBOImpl">
+		<property name="trainerDAO" ref="trainer.dao"/>
+		<property name="exerciseDAO" ref="exercise.dao"/>
+	</bean>
+	
+	<bean id="client.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ClientBOImpl">
+		<property name="clientDAO" ref="client.dao"/>
+		<property name="exConfDAO" ref="exerciseConfiguration.dao"/>
+		<property name="exSanpshotDAO" ref="exerciseSnapshot.dao"/>
+	</bean>
+	
+	<bean id="routine.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.RoutineBOImpl">
+	</bean>
+	
+	<bean id="heraclesAuthenticationProvider" class="ar.edu.unlp.bbdd2.heracles.helper.HeraclesAuthenticationProvider">
+		<property name="userDAO" ref="user.dao"/>
+	</bean>
+
+</beans>

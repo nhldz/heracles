@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="activity.dao" class="ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.Activity"></constructor-arg>
+	</bean>
+
+	<bean id="client.dao" class="ar.edu.unlp.bbdd2.heracles.dao.impl.ClientDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.Client"></constructor-arg>
+	</bean>
+
+	<bean id="exerciseConfiguration.dao"
+		class="ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration"></constructor-arg>
+	</bean>
+
+	<bean id="exercise.dao" class="ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.Exercise"></constructor-arg>
+	</bean>
+
+	<bean id="exerciseSnapshot.dao"
+		class="ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseSnapshotDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.ExerciseSnapshot"></constructor-arg>
+	</bean>
+
+	<bean id="routine.dao" class="ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.Routine"></constructor-arg>
+	</bean>
+
+	<bean id="trainer.dao" class="ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.Trainer"></constructor-arg>
+	</bean>
+	
+	<bean id="user.dao" class="ar.edu.unlp.bbdd2.heracles.dao.impl.UserDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.User"></constructor-arg>
+	</bean>
+
+</beans>
