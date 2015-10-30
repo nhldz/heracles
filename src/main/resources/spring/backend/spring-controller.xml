@@ -24,8 +24,8 @@
 	
 	</bean>
 	
-	<bean id="helloControllerMati"
-		class="ar.edu.unlp.bbdd2.heracles.controller.HelloWorldControllerMati">
+	<bean id="helloController"
+		class="ar.edu.unlp.bbdd2.heracles.controller.HelloWorldController">
 	</bean>
 
 </beans>
