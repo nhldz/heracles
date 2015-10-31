@@ -7,7 +7,7 @@ package ar.edu.unlp.bbdd2.heracles.entities;
  *
  */
 
-public enum ExerciseType {
+public enum ExerciseType{
 	
 	AEROBIC ("Aerobico"),
 	ANAEROBIC ("Anaerobico");
@@ -20,6 +20,11 @@ public enum ExerciseType {
 	
 	public final String getName(){
 		return this.name;
+	}
+	
+	@Override
+	public String toString() {
+		return this.getName();
 	}
 
 }

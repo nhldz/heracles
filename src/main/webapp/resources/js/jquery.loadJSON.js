@@ -84,7 +84,6 @@
             }
             type = type.toLowerCase();
             switch (type) {
-
                 case 'radio':
                     if (value.toString().toLowerCase() == element.value.toLowerCase()) {
                         $(element).attr("checked", "checked");
@@ -130,9 +129,8 @@
                 case 'select':
                 case 'select-one':
                     if (typeof value == "string") {
-                        $(element).attr("value", value);
+                    	$(element).val(value);
                         refreshMobileSelect(element);
-
                     } else {
                         loadSelect(element, value, name);
                     }

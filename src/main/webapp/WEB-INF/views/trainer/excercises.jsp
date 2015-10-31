@@ -1,9 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
 	<div class="row">
@@ -23,8 +21,9 @@
 							<thead>
 								<tr>
 									<th class="no-sort id" ></th>
-									<th>Name</th>
-									<th>Description</th>
+									<th>Nombre</th>
+									<th>Tipo</th>
+									<th>Descripci&oacute;n</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -56,7 +55,33 @@
 							<input name="name" class="form-control" required/>
 						</div>
 						<div class="form-group">
-							<label for="description">Descripción:</label>
+							<label for="type">Tipo:</label>
+							<select name="type" required>
+								<option value="">Seleccione..</option>
+							  	<c:forEach items="${excercisesTypes}" var="type">
+							   	 	<option value="${type}">${type.name}</option>
+							  	</c:forEach>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="equipment">Herramienta:</label>
+							<select name="equipment" required>	
+								<option value="">Seleccione..</option>
+							  	<c:forEach items="${equipments}" var="equipment">
+							    	<option value="${equipment}">${equipment.name}</option>
+							  	</c:forEach>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="bodyParts">Partes Trabajadas:</label>
+							<select name="bodyParts" multiple="multiple" required>
+							  	<c:forEach items="${bodyParts}" var="bodyPart">
+							    	<option value="${bodyPart}">${bodyPart.name}</option>
+							  	</c:forEach>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="description">Descripci&oacute;n:</label>
 							<textarea name="description" class="form-control" rows="3" required></textarea>
 						</div>
 						<button type="submit" class="btn btn-success">Aceptar</button>
@@ -67,6 +92,7 @@
 			</div>
 		</div>
 	</form>	
+	
 	<script>
 		$(document).ready(function() {
 			dataTable = $('#excercisesTable').DataTable({
@@ -81,6 +107,8 @@
 				},{
 					'mData' : 'name'
 				},{
+					'mData' : 'type'
+				},{
 					'mData' : 'description'
 				}],
 				'columnDefs': [{
@@ -93,9 +121,9 @@
                     }
                 }],
 				'language' : {
-					"lengthMenu" : "_MENU_ elementos por página",
+					"lengthMenu" : "_MENU_ elementos por p&aacute;gina",
 					"zeroRecords" : "No se obtuvieron resultados",
-					"info" : "Página _PAGE_ de _PAGES_",
+					"info" : "P&aacute;gina _PAGE_ de _PAGES_",
 					"infoEmpty" : "No se obtuvieron resultados",
 					"infoFiltered" : "(de _MAX_ elementos)"
 				}
@@ -130,36 +158,47 @@
 			});
 			
 			$('#btnEdit').click(function(e) {
+				var id = $('input[type="radio"]:checked').val();
 				var frm = $('#excerciseForm');
 				toogleButtons();
 				frm[0].reset();
-				$.ajax({
-					type : "POST",
-					url : "/editar",
-					data : "id=" + $('input[type="radio"]:checked').val(),
-					success : function(callback) {
-						frm.loadJSON(callback);
-						toogle('myContent');
-					},
-					error : function() {
-						alert("Error!");
-					}
-				});
+				if(typeof id === "undefined"){
+					toogleButtons();
+					alert("Por favor, seleccione un elemento de la lista");	
+				}else{
+					$.ajax({
+						type : "POST",
+						url : "/editar",
+						data : "id=" + id,
+						success : function(callback) {
+							frm.loadJSON(callback);
+							toogle('myContent');
+						},
+						error : function() {
+							alert("Error!");
+						}
+					});
+				};	
 			});
 			
 			$('#btnDelete').click(function(){
-				$.ajax({
-					type : "POST",
-					url : "/borrar",
-					data : "id=" + $('input[type="radio"]:checked').val(),
-					success : function() {
-					    var tr = $('input[type="radio"]:checked').parent().parent();
-						dataTable.row(tr).remove().draw(false);
-					},
-					error : function() {
-						alert("Error!");
-					}
-				});
+				var id = $('input[type="radio"]:checked').val();
+				if(typeof id === "undefined"){
+					alert("Por favor, seleccione un elemento de la lista");	
+				}else{
+					$.ajax({
+						type : "POST",
+						url : "/borrar",
+						data : "id=" + id,
+						success : function() {
+						    var tr = $('input[type="radio"]:checked').parent().parent();
+							dataTable.row(tr).remove().draw(false);
+						},
+						error : function() {
+							alert("Error!");
+						}
+					});
+				};
 			});
 		});
 	</script>

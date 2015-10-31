@@ -5,15 +5,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="stylesheet" href="resources/css/bootstrap.min.css">
-<link rel="stylesheet" href="resources/css/bootstrap-theme.css">
-<link href="resources/css/metisMenu.css" rel="stylesheet">
-<link href="resources/css/timeline.css" rel="stylesheet">
-<link href="resources/css/sb-admin-2.css" rel="stylesheet">
-<link rel="stylesheet"
-	href="resources/css/dataTables/dataTables.bootstrap.min.css">
-<link href="resources/css/font-awesome.min.css" rel="stylesheet"
-	type="text/css">
+<link href="resources/css/jquery-ui.min.css" rel="stylesheet">
+<link rel="stylesheet" href="resources/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="resources/css/bootstrap-theme.css" type="text/css">
+<link href="resources/css/metisMenu.css" rel="stylesheet" type="text/css">
+<link href="resources/css/timeline.css" rel="stylesheet" type="text/css">
+<link href="resources/css/sb-admin-2.css" rel="stylesheet" type="text/css">
+<link href="resources/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="resources/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <title>Heracles</title>
 </head>
 <body>
@@ -62,8 +61,8 @@
 				return false;
 			});
 
-			$("#excercises").click(function() {
-				$("#page-wrapper").load("/excercises");
+			$("#exercises").click(function() {
+				$("#page-wrapper").load("/exercises");
 				return false;
 			});
 

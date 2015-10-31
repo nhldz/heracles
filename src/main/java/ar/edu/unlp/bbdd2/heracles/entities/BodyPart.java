@@ -10,19 +10,20 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 public enum BodyPart {
 	
-	NECK ("Cuello"),
-	TRAPS ("Trapezios"),
-	SHOULDERS ("Hombros"),
-	CHEST ("Pectorales"),
-	BICEPS ("Biceps"),
 	ABS ("Abdomilaes"),
-	QUADS ("Quadriceps"),
+	BICEPS ("Biceps"),
+	HAMSTRINGS ("Biceps femorales"),
 	CALVES ("Cuadricesp"),
-	TRICEPS ("Triceps"),
-	LATS ("????"),
-	MIDDLE_BACK ("Romboides"),
+	NECK ("Cuello"),
 	GLUTS ("GLuteos"),
-	HAMSTRINGS ("Biceps femorales");
+	SHOULDERS ("Hombros"),	
+	CHEST ("Pectorales"),
+	QUADS ("Quadriceps"),
+	TRAPS ("Trapezios"),
+	TRICEPS ("Triceps"),
+	MIDDLE_BACK ("Romboides"),
+	LATS ("????");
+	
 	
 	private final String name;
 	
