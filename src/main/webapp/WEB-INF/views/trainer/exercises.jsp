@@ -15,7 +15,7 @@
 				<div class="panel-heading">Ejercicios</div>
 				<div class="panel-body">
 					<div class="dataTable_wrapper">
-						<table id="excercisesTable"
+						<table id="exercisesTable"
 							class="table table-striped table-bordered table-hover"
 							cellspacing="0" width="100%">
 							<thead>
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 	<br>
-	<form id="excerciseForm" action="guardar" method="POST" data-toggle="validator">
+	<form id="exerciseForm" action="guardar" method="POST" data-toggle="validator">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
 				<div class="panel panel-default">
@@ -95,10 +95,10 @@
 	
 	<script>
 		$(document).ready(function() {
-			dataTable = $('#excercisesTable').DataTable({
+			dataTable = $('#exercisesTable').DataTable({
 				'processing' : false,
 				'serverSide' : false,
-				'sAjaxSource' : '/getexcercises',
+				'sAjaxSource' : '/getExercises',
 				'bJQueryUI' : true,
 				'autoWidth': true,
 				'order': [[ 1, "asc" ]],
@@ -129,12 +129,12 @@
 				}
 			});
 						
-			$('#page-wrapper').on('click', '#excercisesTable tr', function() {
+			$('#page-wrapper').on('click', '#exercisesTable tr', function() {
 				$(this).find('input:radio').attr('checked', true);
 			});
 
-			$('#excerciseForm').submit(function(e) {
-				var frm = $('#excerciseForm');
+			$('#exerciseForm').submit(function(e) {
+				var frm = $('#exerciseForm');
 				e.preventDefault();
 				$.ajax({
 					type : frm.attr('method'),
@@ -154,12 +154,12 @@
 			$('#btnAdd').click(function(e) {
 				toogle('myContent');
 				toogleButtons();
-				$('#excerciseForm')[0].reset();
+				$('#exerciseForm')[0].reset();
 			});
 			
 			$('#btnEdit').click(function(e) {
-				var id = $('input[type="radio"]:checked').val();
-				var frm = $('#excerciseForm');
+				var id = $('input[type="radio"]:checked').val();		
+				var frm = $('#exerciseForm');
 				toogleButtons();
 				frm[0].reset();
 				if(typeof id === "undefined"){

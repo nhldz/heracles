@@ -16,17 +16,17 @@
 			<div class="col-sm-6 col-md-4 col-md-offset-4">
 				<h1 class="text-center login-title">HERACLES</h1>
 				<div class="account-wall">
-					<form:form class="form-signin" action="/index" method="POST">
-						<input type="text" class="form-control" placeholder="Usuario"
+					<form:form class="form-signin" action="/j_spring_security_check" method="POST">
+						<input type="text" class="form-control" name="j_username" placeholder="Usuario"
 							required autofocus>
 						</br>
-						<input type="password" class="form-control"
-							placeholder="Contraseña" required>
+						<input type="password" class="form-control" name="j_password"
+							placeholder="Contrase&#324a" required>
 						</br>
 						<button class="btn btn-lg btn-primary btn-block" type="submit">
 							Entrar</button>
 						<label class="checkbox pull-left"> <input type="checkbox"
-							value="remember-me"> No cerrar sesión
+							value="remember-me"> No cerrar sesi&oacuten
 						</label>
 						<!--  <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span> -->
 					</form:form>

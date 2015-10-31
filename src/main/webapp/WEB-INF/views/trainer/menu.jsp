@@ -188,7 +188,7 @@
 						Profile</a></li>
 				<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
 				<li class="divider"></li>
-				<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>
+				<li><a href="j_spring_security_logout"><i class="fa fa-sign-out fa-fw"></i>
 						Logout</a></li>
 			</ul> <!-- /.dropdown-user --></li>
 		<!-- /.dropdown -->
@@ -208,7 +208,7 @@
 <!-- 						</span> -->
 <!-- 					</div> -->
 <!-- 				</li> -->
-				<li><a href="#" id="excercises"><i
+				<li><a href="/exercises" id="exercises"><i
 						class="fa fa-check fa-fw"></i> Ejercicios</a></li>
 				<li><a href="#" id="routines"><i
 						class="fa fa-dashboard fa-fw"></i> Rutinas</a></li>

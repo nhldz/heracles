@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.ClientDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseSnapshotDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseSnapshot;
@@ -15,6 +18,10 @@ import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
  *
  */
 public class ClientBOImpl implements ClientBO {
+	
+	private ClientDAOImpl clientDAO;
+	private ExerciseConfigurationDAOImpl exConfDAO;
+	private ExerciseSnapshotDAOImpl exSanpshotDAO;
 
 	/**
 	 * {@inheritDoc}
@@ -26,8 +33,11 @@ public class ClientBOImpl implements ClientBO {
 			ExerciseSnapshot snapshot = new ExerciseSnapshot();
 			snapshot.setStartDate(new Date());
 			snapshot.setState(ExerciseState.RUN);
+			this.getExSanpshotDAO().save(snapshot);
 			exercise.getSnapshots().add(snapshot);
+			this.getExConfDAO().saveOrUpdate(exercise);
 			client.getActualRoutine().getRunActivity().setRunExercise(exercise);
+			this.getClientDAO().saveOrUpdate(client);
 		}else {
 			throw new BusinessException ("Actualmente se esta realizando el ejercicio: "+runExercise.getExercise().getName());
 		}
@@ -45,6 +55,7 @@ public class ClientBOImpl implements ClientBO {
 			ExerciseSnapshot snapshot = runExercise.getSnapshots().get(runExercise.getSnapshots().size()-1);
 			snapshot.setState(ExerciseState.STOP);
 			snapshot.setEndDate(new Date());
+			this.getExSanpshotDAO().saveOrUpdate(snapshot);
 			runExercise = null;
 		}else {
 			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "+
@@ -66,12 +77,38 @@ public class ClientBOImpl implements ClientBO {
 			snapshot.setSets(sets);
 			snapshot.setReps(reps);
 			snapshot.setWeigth(weight);
+			this.getExSanpshotDAO().saveOrUpdate(snapshot);
 			runExercise.getSnapshots().add(snapshot);
 			runExercise = null;
+			this.getExConfDAO().saveOrUpdate(runExercise);
 		}else {
 			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "+
 					client.getActualRoutine().getRunActivity().getName());
 		}
 	}
 
+	public ClientDAOImpl getClientDAO() {
+		return clientDAO;
+	}
+
+	public void setClientDAO(ClientDAOImpl clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+
+	public ExerciseConfigurationDAOImpl getExConfDAO() {
+		return exConfDAO;
+	}
+
+	public void setExConfDAO(ExerciseConfigurationDAOImpl exConfDAO) {
+		this.exConfDAO = exConfDAO;
+	}
+
+	public ExerciseSnapshotDAOImpl getExSanpshotDAO() {
+		return exSanpshotDAO;
+	}
+
+	public void setExSanpshotDAO(ExerciseSnapshotDAOImpl exSanpshotDAO) {
+		this.exSanpshotDAO = exSanpshotDAO;
+	}
+	
 }

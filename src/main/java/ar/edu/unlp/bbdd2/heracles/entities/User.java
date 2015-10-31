@@ -143,5 +143,6 @@ public abstract class User {
 //	public void setRoles(List<Role> roles) {
 //		this.roles = RefHelper.ref(roles);
 //	}
+
 	
 }

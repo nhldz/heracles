@@ -1,4 +1,4 @@
-package ar.edu.unlp.bbdd2.heracles.controller;
+package ar.edu.unlp.bbdd2.heracles.helper;
 
 import java.util.List;
 

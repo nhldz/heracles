@@ -1,4 +1,4 @@
-package ar.edu.unlp.bbdd2.heracles.bo.service;
+package ar.edu.unlp.bbdd2.heracles.service;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
