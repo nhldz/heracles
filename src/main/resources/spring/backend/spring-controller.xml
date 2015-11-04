@@ -21,6 +21,7 @@
 		<property name="trainerBO" ref="trainer.bo"/>
 		<property name="routineBO" ref="routine.bo"/>
 		<property name="clientBO" ref="client.bo"/>
+		<property name="roleDAO" ref="role.dao"/>
 	
 	</bean>
 	

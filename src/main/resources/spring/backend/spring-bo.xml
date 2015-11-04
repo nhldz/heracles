@@ -14,6 +14,7 @@
 		<property name="routineDAO" ref="routine.dao"/>
 		<property name="exConfDAO" ref="exerciseConfiguration.dao"/>
 		<property name="activityDAO" ref="activity.dao"/>
+		<property name="roleDAO" ref="role.dao"/>
 	</bean>
 	
 	<bean id="exercise.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseBOImpl">
@@ -25,13 +26,16 @@
 		<property name="clientDAO" ref="client.dao"/>
 		<property name="exConfDAO" ref="exerciseConfiguration.dao"/>
 		<property name="exSanpshotDAO" ref="exerciseSnapshot.dao"/>
+		<property name="roleDAO" ref="role.dao"/>
 	</bean>
 	
 	<bean id="routine.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.RoutineBOImpl">
 	</bean>
 	
-	<bean id="heraclesAuthenticationProvider" class="ar.edu.unlp.bbdd2.heracles.helper.HeraclesAuthenticationProvider">
+	<bean id="heraclesAuthenticationProvider" class="ar.edu.unlp.bbdd2.heracles.security.HeraclesAuthenticationProvider">
 		<property name="userDAO" ref="user.dao"/>
+		<property name="trainerDAO" ref="trainer.dao"/>
+		<property name="roleDAO" ref="role.dao"/>
 	</bean>
 
 </beans>
