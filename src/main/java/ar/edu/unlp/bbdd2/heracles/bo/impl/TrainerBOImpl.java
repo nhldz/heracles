@@ -12,6 +12,7 @@ import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ClientDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
@@ -20,8 +21,12 @@ import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseSnapshot;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
+import ar.edu.unlp.bbdd2.heracles.entities.Gender;
+import ar.edu.unlp.bbdd2.heracles.entities.Role;
+import ar.edu.unlp.bbdd2.heracles.entities.RoleName;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
+import ar.edu.unlp.bbdd2.heracles.entities.User;
 
 /**
  *
@@ -36,6 +41,7 @@ public class TrainerBOImpl implements TrainerBO{
 	private RoutineDAOImpl routineDAO;
 	private ExerciseConfigurationDAOImpl exConfDAO;
 	private ActivityDAOImpl activityDAO;
+	private RoleDAOImpl roleDAO;
 	
 	/**
 	 * {@inheritDoc}
@@ -125,8 +131,38 @@ public class TrainerBOImpl implements TrainerBO{
 		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Trainer findByEmail (String email){
 		return this.getTrainerDAO().loadByEmail(email);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Trainer createTrainer (String name, String email, Date birthday, Gender gender) throws BusinessException{
+		Trainer trainer = null;
+		if (this.findByEmail(email) == null){
+			trainer = new Trainer(name, email, birthday, gender);
+			trainer.setExercises(new ArrayList<Exercise>());
+			trainer.setRoutines(new ArrayList<Routine>());
+			trainer.setRegistrationDate(new Date());
+			Role role = roleDAO.loadByName(RoleName.TRAINER.getType());
+			List<Role> roles = new ArrayList<Role>();
+			roles.add(role);
+			trainer.setRoles(roles);
+			trainerDAO.save(trainer);
+			List<User> users = role.getUsers();
+			users.add(trainer);
+			role.setUsers(users);
+			roleDAO.saveOrUpdate(role);
+		}else {
+			throw new BusinessException("El email ya existe");
+		}
+		return trainer;
 	}
 	
 	public ClientDAOImpl getClientDAO() {
@@ -175,6 +211,14 @@ public class TrainerBOImpl implements TrainerBO{
 
 	public void setActivityDAO(ActivityDAOImpl activityDAO) {
 		this.activityDAO = activityDAO;
+	}
+
+	public RoleDAOImpl getRoleDAO() {
+		return roleDAO;
+	}
+
+	public void setRoleDAO(RoleDAOImpl roleDAO) {
+		this.roleDAO = roleDAO;
 	}
 	
 }
