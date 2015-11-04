@@ -3,6 +3,7 @@
  */
 package ar.edu.unlp.bbdd2.heracles.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
@@ -10,6 +11,7 @@ import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
+import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 
@@ -92,5 +94,30 @@ public interface TrainerBO {
 	 * @param client
 	 */
 	void skipExercise (Client client) throws BusinessException;
+	
+	/**
+	 * Recupera un entrenador por el email.
+	 * @param email
+	 * 		email del entrenador a buscar.
+	 * @return
+	 */
+	public Trainer findByEmail (String email);
+	
+	/**
+	 * Crea un nuevo entrenador y lo retorna
+	 * 
+	 * @param name
+	 * 		Nombre del entrenador
+	 * @param email
+	 * 		Email del entrenador
+	 * @param birthday
+	 * 		cumpleaños/fecha de nacimiento
+	 * @param gender
+	 * 		Genero
+	 * @return
+	 * 		Un entrenador (Trainer)
+	 * @throws BusinessException
+	 */
+	public Trainer createTrainer (String name, String email, Date birthday, Gender gender) throws BusinessException;
 
 }
