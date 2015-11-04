@@ -24,7 +24,7 @@ public class RefHelper {
 //    public static <T> List<T> deref(List<Ref<T>> reflist) {
 //        return Lists.transform(reflist, (Func)Func.INSTANCE);
 //    }
-	
+	@SuppressWarnings("unchecked")
 	public static <T> T deref (Ref<T> ref){
 		if (ref != null){
 			ref = (Ref<T>) ref.get();

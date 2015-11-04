@@ -60,10 +60,10 @@
 				return false;
 			});
 
-			$("#exercises").click(function() {
-				$("#page-wrapper").load("/exercises");
-				return false;
-			});
+// 			$("#exercises").click(function() {
+// 				$("#page-wrapper").load("/exercises");
+// 				return false;
+// 			});
 
 			$("#routines").click(function() {
 				$("#page-wrapper").load("/routines");

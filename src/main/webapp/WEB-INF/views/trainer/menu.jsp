@@ -210,9 +210,9 @@
 <!-- 				</li> -->
 				<li><a href="/exercises" id="exercises"><i
 						class="fa fa-check fa-fw"></i> Ejercicios</a></li>
-				<li><a href="#" id="routines"><i
+				<li><a href="index" id="routines"><i
 						class="fa fa-dashboard fa-fw"></i> Rutinas</a></li>
-				<li><a href="#"><i class="fa fa-users fa-fw"></i>Usuarios<span
+				<li><a href="index"><i class="fa fa-users fa-fw"></i>Usuarios<span
 						class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
 						<li><a id="clients" href="#">Clientes</a></li>
