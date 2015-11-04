@@ -87,4 +87,9 @@ public class ExerciseBOImpl implements ExerciseBO {
 		this.trainerDAO = trainerDAO;
 	}
 
+	public void deleteExercise(Long id) {
+		exerciseDAO.deleteById(id);
+		
+	}
+
 }
