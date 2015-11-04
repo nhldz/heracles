@@ -1,5 +1,6 @@
 package ar.edu.unlp.bbdd2.heracles.entities;
 
+import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
@@ -19,6 +20,14 @@ public class Trainer extends User {
 	private List<Ref<Exercise>> exercises;
 	
 	private List<Ref<Routine>> routines;
+	
+	public Trainer (){
+		super();
+	}
+	
+	public Trainer (String name, String email, Date birthday, Gender gender){
+		super(name, email, birthday, gender);
+	}
 	
 	public List<Exercise> getExercises() {
 		return RefHelper.deref(this.exercises);
