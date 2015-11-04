@@ -9,4 +9,8 @@ public class ClientDAOImpl extends BaseDAOImpl<Client> {
 		this.type = classType;
 	}
 	
+	public Client loadByEmail (String email){
+		return ofy().load().type(this.getType()).filter("email", email).first().now();
+	}
+	
 }
