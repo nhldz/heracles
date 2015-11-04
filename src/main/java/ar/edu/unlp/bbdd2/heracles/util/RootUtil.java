@@ -13,6 +13,7 @@ import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ClientDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
@@ -22,8 +23,12 @@ import ar.edu.unlp.bbdd2.heracles.entities.Equipment;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseType;
+import ar.edu.unlp.bbdd2.heracles.entities.Gender;
+import ar.edu.unlp.bbdd2.heracles.entities.Role;
+import ar.edu.unlp.bbdd2.heracles.entities.RoleName;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
+import ar.edu.unlp.bbdd2.heracles.entities.User;
 
 public class RootUtil {
 	
@@ -33,12 +38,12 @@ public class RootUtil {
 	private ActivityDAOImpl activityDAO;
 	private RoutineDAOImpl routineDAO;
 	private ClientDAOImpl clientDAO;
+	private RoleDAOImpl roleDAO;
 	
 	private ExerciseBOImpl exerciseBO;
 	private TrainerBOImpl trainerBO;
 	private RoutineBOImpl routineBO;
 	private ClientBOImpl clientBO;
-	private boolean loaded = false;
 	
 	public ExerciseDAOImpl getExerciseDAO() {
 		return exerciseDAO;
@@ -120,28 +125,47 @@ public class RootUtil {
 	public void setClientBO(ClientBOImpl clientBO) {
 		this.clientBO = clientBO;
 	}
+	
+	public RoleDAOImpl getRoleDAO() {
+		return roleDAO;
+	}
+
+	public void setRoleDAO(RoleDAOImpl roleDAO) {
+		this.roleDAO = roleDAO;
+	}
+	
+	public void loadRoles(){
+		Role roleTrainer = new Role();
+		roleTrainer.setName(RoleName.TRAINER.getType());
+		roleTrainer.setUsers(new ArrayList<User>());
+		roleDAO.save(roleTrainer);
+		Role roleClient = new Role();
+		roleClient.setName(RoleName.CLIENT.getType());
+		roleClient.setUsers(new ArrayList<User>());
+		roleDAO.save(roleClient);
+	}
 
 	public Client createClient (String name, String pass){
-		Client client = new Client();
-		client.setName(name);
-		client.setBirthday(new Date());
-		client.setEmail(name+".client@email.com");
-//		client.setGender(Gender.MALE);
-		client.setRoutines(new ArrayList<Routine>());
-		client.setPassword(pass);
-		this.getClientDAO().save(client);
+		Client client = null;
+		try {
+			client = clientBO.createClient(name, name+".client@email.com", 
+					new Date(), Gender.FEMALE);
+			client.setPassword(pass);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
 		return client;
 	}
 	
 	public Trainer createTrainer (String name, String pass){
-		Trainer trainer = new Trainer();
-		trainer.setBirthday(new Date());
-		trainer.setEmail(name+".trainer@email.com");
-		trainer.setExercises(new ArrayList<Exercise>());
-		trainer.setRegistrationDate(new Date());
-		trainer.setName(name);
-		trainer.setPassword(pass);
-		trainer.setRoutines(new ArrayList<Routine>());
+		Trainer trainer = null;
+		try {
+			trainer = trainerBO.createTrainer(name, name+".trainer@email.com", 
+					new Date(), Gender.MALE);
+			trainer.setPassword(pass);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
 		this.getTrainerDAO().save(trainer);
 		return trainer;
 	}
@@ -155,14 +179,16 @@ public class RootUtil {
 	
 	public ExerciseConfiguration createExConf (){
 		ExerciseConfiguration exConf = new ExerciseConfiguration();
-		exConf.setReps(new ArrayList<Integer>());
-		exConf.getReps().add(1);
-		exConf.getReps().add(2);
-		exConf.getReps().add(3);
-		exConf.setSets(new ArrayList<Integer>());
-		exConf.getSets().add(1);
-		exConf.getSets().add(2);
-		exConf.getSets().add(3);
+		List<Integer> reps = new ArrayList<Integer>();
+		reps.add(1);
+		reps.add(2);
+		reps.add(3);
+		exConf.setReps(reps);
+		List<Integer> sets = new ArrayList<Integer>();
+		sets.add(1);
+		sets.add(2);
+		sets.add(3);
+		exConf.setSets(sets);
 		exConf.setWeigth(10);
 		return exConf;
 	}
@@ -183,27 +209,35 @@ public class RootUtil {
 		return routine;
 	}
 	
+	public Role createRole (RoleName roleName){
+		Role role = new Role();
+		role.setName(roleName.getType());
+		role.setUsers(new ArrayList<User>());
+		return role;
+	}
+	
 	public void rootLoad (){
-		if (!loaded){
+		int count = trainerDAO.count();
+		System.out.println("COUNT: "+ count);
+		if (count == 0){
 			String clientName = "ClientName";
 			String trianerName = "TrainerName";
 			String activityName = "ActivityName";
 			String exName = "ExName";
 			String routineName = "RoutineName";
 			String pass = "123456";
+			
 			List<BodyPart> bodysParts = new ArrayList<BodyPart>();
 			bodysParts.add(BodyPart.BICEPS);
-			Trainer trainer = createTrainer("nahuel", "123");
+			loadRoles();
+			Trainer trainer = createTrainer("matias", "123");
+			trainer = createTrainer("nahuel", "123");
+			
 			for (int i = 0; i < 5; i++) {
 				Client client = createClient(clientName+i, pass);
 				client.setPassword(pass);
 				trainer = createTrainer(trianerName+i, pass);
 				Exercise exercise = null;
-//				Activity activity = createActivity(activityName+i);
-//				Routine routine = createRoutine(routineName+i);
-//				ExerciseConfiguration exConf = createExConf();
-//				exercise.setOwner(trainer);
-//				trainer.
 				
 				try {
 					exercise = this.getExerciseBO().createExercise(trainer, 
@@ -226,7 +260,6 @@ public class RootUtil {
 				
 			}
 			System.out.println("ROOT LOAD");
-			loaded = true;
 		}
 
 	}
