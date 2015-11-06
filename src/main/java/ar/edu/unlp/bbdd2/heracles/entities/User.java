@@ -29,14 +29,12 @@ public abstract class User {
 	private String cellPhone;
 	@Index
 	private String email;
-	private String userName;
 	private String password;
 	private boolean enabledUser;
 	//private List<Ref<Role>> roles;
 	private Date registrationDate;
 	private Date birthday;
 	private Gender gender;
-	// private Ref<Gender> gender;
 
 	public User() {
 		this.setEnabledUser(true);
@@ -83,14 +81,6 @@ public abstract class User {
 		this.email = email;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -123,12 +113,6 @@ public abstract class User {
 		this.birthday = birthday;
 	}
 
-	// public Gender getGender() {
-	// return gender.get();
-	// }
-	// public void setGender(Gender gender) {
-	// this.gender = Ref.create(gender);
-	// }
 	public Gender getGender() {
 		return gender;
 	}

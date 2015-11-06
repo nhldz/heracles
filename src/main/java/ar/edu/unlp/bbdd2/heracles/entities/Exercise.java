@@ -82,12 +82,6 @@ public class Exercise {
 		this.equipment = equipment;
 	}
 
-	// public List<BodyPart> getBodyParts() {
-	// return RefHelper.deref(this.bodyParts);
-	// }
-	// public void setBodyParts(List<BodyPart> bodyParts) {
-	// this.bodyParts = RefHelper.ref(bodyParts);
-	// }
 	public List<BodyPart> getBodyParts() {
 		return bodyParts;
 	}

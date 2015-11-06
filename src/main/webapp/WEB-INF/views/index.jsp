@@ -4,7 +4,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link href="resources/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="resources/css/bootstrap.min.css" type="text/css">
 <link rel="stylesheet" href="resources/css/bootstrap-theme.css" type="text/css">
@@ -31,6 +30,7 @@
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="resources/js/jquery-1.11.3.min.js"></script>
 	<script src="resources/js/jquery.loadJSON.js"></script>
+	<script src="resources/js/jquery-ui.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/sb-admin-2.js"></script>

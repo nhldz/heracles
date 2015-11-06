@@ -16,7 +16,7 @@ http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
 	<context:component-scan base-package="ar.edu.unlp.bbdd2.heracles.controller" >
 		<context:exclude-filter type="regex"
-				expression="ar.edu.unlp.bbdd2.heracles.controller.HelloWorldController" />
+				expression="ar.edu.unlp.bbdd2.heracles.controller.LoginController" />
 	</context:component-scan>
 	
 	<import resource="classpath:spring/backend/spring-controller.xml" />

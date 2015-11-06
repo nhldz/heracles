@@ -23,7 +23,6 @@
 									<th class="no-sort id"></th>
 									<th>Habilitado</th>
 									<th>Apellido y Nombre</th>
-									<th>Usuario</th>
 									<th>Email</th>
 									<th>Tel&eacute;fono</th>
 								</tr>
@@ -74,16 +73,12 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="email">E-mail:</label> <input type="email"
-								name="email" class="form-control" />
-						</div>
-						<div class="form-group">
 							<label for="cellPhone">Tel&eacute;fono:</label> <input
 								type="text" name="cellPhone" class="form-control" />
 						</div>
 						<div class="form-group">
-							<label for="userName">Usuario:</label> <input type="text" name="userName"
-								class="form-control" required />
+							<label for="email">E-mail:</label> <input type="email"
+								name="email" class="form-control" />
 						</div>
 						<div class="form-group">
 						<label for="password">Contrase&ntilde;a:</label> <input type="password"
@@ -99,145 +94,137 @@
 	</form>
 
 	<script>
-		$(document)
-				.ready(
-						function() {
-							$( "#birthday" ).datepicker({
-								changeMonth: true,
-							    changeYear: true,
-							    yearRange: "-100:+0",
-							    dateFormat: 'dd/mm/yy'
-							});
-							 
-							dataTable = $('#clientsTable')
-									.DataTable(
-											{
-												'processing' : false,
-												'serverSide' : false,
-												'sAjaxSource' : '/getclients',
-												'bJQueryUI' : true,
-												'autoWidth' : true,
-												'order' : [ [ 1, "asc" ] ],
-												'aoColumns' : [ {
-													'mData' : 'id'
-												}, {
-													'mData' : 'enabledUser'
-												}, {
-													'mData' : 'name'
-												},{
-													'mData' : 'userName'
-												},{
-													'mData' : 'email'
-												}, {
-													'mData' : 'cellPhone'
-												} ],
-												'columnDefs' : [ {
-													'targets' : 0,
-													'searchable' : false,
-													'ordenable' : false,
-													'className' : 'dt-body-center',
-													'render' : function(data,type, row) {
-														return '<input name="col" type="radio" id=' + row.id + ' value=' + row.id + ' >';
-													}
-												},{
-													'targets' : 1,
-													'width': '10%',
-													'searchable' : false,
-													'className' : 'dt-body-center',
-													'render' : function(data,type, row) {
-														return (data === true) ? '<span class="glyphicon glyphicon-ok centerSpan"></span>' : '<span class="glyphicon glyphicon-remove centerSpan"></span>';;
-													}
-												},{
-									                "render": function ( data, type, row ) {
-									                    return row.surname + ', '+ data;
-									                },
-									                "targets": 2
-									            }],
-												'language' : {
-													"lengthMenu" : "_MENU_ elementos por p&aacute;gina",
-													"zeroRecords" : "No se obtuvieron resultados",
-													"info" : "P&aacute;gina _PAGE_ de _PAGES_",
-													"infoEmpty" : "No se obtuvieron resultados",
-													"infoFiltered" : "(de _MAX_ elementos)"
-												}
-											});
+		$(document).ready(function(){
+			$( "#birthday" ).datepicker({
+				changeMonth: true,
+			    changeYear: true,
+			    yearRange: "-100:+0",
+			    dateFormat: 'dd/mm/yy'
+			});
+			 
+			dataTable = $('#clientsTable').DataTable({
+					'type' : 'GET',
+					'processing' : false,
+					'serverSide' : false,
+					'sAjaxSource' : '/getClients',
+					'bJQueryUI' : true,
+					'autoWidth' : true,
+					'order' : [ [ 1, "asc" ] ],
+					'aoColumns' : [ {
+						'mData' : 'id'
+					}, {
+						'mData' : 'enabledUser'
+					}, {
+						'mData' : 'name'
+					},{
+						'mData' : 'email'
+					}, {
+						'mData' : 'cellPhone'
+					} ],
+					'columnDefs' : [ {
+						'targets' : 0,
+						'searchable' : false,
+						'ordenable' : false,
+						'className' : 'dt-body-center',
+						'render' : function(data,type, row) {
+							return '<input name="col" type="radio" id=' + row.id + ' value=' + row.id + ' >';
+						}
+					},{
+						'targets' : 1,
+						'width': '5%',
+						'searchable' : false,
+						'className' : 'dt-body-center',
+						'render' : function(data,type, row) {
+							return (data === true) ? '<span class="glyphicon glyphicon-ok centerSpan"></span>' : '<span class="glyphicon glyphicon-remove centerSpan"></span>';;
+						}
+					},{
+		                "render": function ( data, type, row ) {
+		                    return row.surname + ', '+ data;
+		                },
+		                "targets": 2
+		            }],
+					'language' : {
+						"lengthMenu" : "_MENU_ elementos por p&aacute;gina",
+						"zeroRecords" : "No se obtuvieron resultados",
+						"info" : "P&aacute;gina _PAGE_ de _PAGES_",
+						"infoEmpty" : "No se obtuvieron resultados",
+						"infoFiltered" : "(de _MAX_ elementos)"
+					}
+			});
 
-							$('#page-wrapper').on(
-									'click',
-									'#clientsTable tr',
-									function() {
-										$(this).find('input:radio').attr(
-												'checked', true);
-									});
+			$('#page-wrapper').on('click','#clientsTable tr',function() {
+				$(this).find('input:radio').attr(
+						'checked', true);
+			});
 
-							$('#clientForm').submit(function(e) {
-								var frm = $('#clientForm');
-								e.preventDefault();
-								$.ajax({
-									type : frm.attr('method'),
-									url : frm.attr('action'),
-									data : frm.serialize(),
-									success : function() {
-										dataTable.ajax.reload();
-										toogle('myContent');
-										toogleButtons();
-									},
-									error : function() {
-										alert("Error!");
-									}
-								});
-							});
+			$('#clientForm').submit(function(e) {
+				var frm = $('#clientForm');
+				e.preventDefault();
+				$.ajax({
+					type : frm.attr('method'),
+					url : frm.attr('action'),
+					data : frm.serialize(),
+					success : function() {
+						dataTable.ajax.reload();
+						toogle('myContent');
+						toogleButtons();
+					},
+					error : function() {
+						alert("Error!");
+					}
+				});
+			});
 
-							$('#btnAdd').click(function(e) {
-								toogle('myContent');
-								toogleButtons();
-								$('#clientForm')[0].reset();
-							});
+			$('#btnAdd').click(function(e) {
+				toogle('myContent');
+				toogleButtons();
+				$('#clientForm')[0].reset();
+			});
 
-							// 			$('#btnEdit').click(function(e) {
-							// 				var id = $('input[type="radio"]:checked').val();
-							// 				var frm = $('#clientForm');
-							// 				toogleButtons();
-							// 				frm[0].reset();
-							// 				if(typeof id === "undefined"){
-							// 					toogleButtons();
-							// 					alert("Por favor, seleccione un elemento de la lista");	
-							// 				}else{
-							// 					$.ajax({
-							// 						type : "POST",
-							// 						url : "/editar",
-							// 						data : "id=" + id,
-							// 						success : function(callback) {
-							// 							frm.loadJSON(callback);
-							// 							toogle('myContent');
-							// 						},
-							// 						error : function() {
-							// 							alert("Error!");
-							// 						}
-							// 					});
-							// 				};	
-							// 			});
+// 			$('#btnEdit').click(function(e) {
+// 				var id = $('input[type="radio"]:checked').val();
+// 				var frm = $('#clientForm');
+// 				toogleButtons();
+// 				frm[0].reset();
+// 				if(typeof id === "undefined"){
+// 					toogleButtons();
+// 					alert("Por favor, seleccione un elemento de la lista");	
+// 				}else{
+// 					$.ajax({
+// 						type : "POST",
+// 						url : "/editar",
+// 						data : "id=" + id,
+// 						success : function(callback) {
+// 							frm.loadJSON(callback);
+// 							toogle('myContent');
+// 						},
+// 						error : function() {
+// 							alert("Error!");
+// 						}
+// 					});
+// 				};	
+// 			});
 
-							// 			$('#btnDelete').click(function(){
-							// 				var id = $('input[type="radio"]:checked').val();
-							// 				if(typeof id === "undefined"){
-							// 					alert("Por favor, seleccione un elemento de la lista");	
-							// 				}else{
-							// 					$.ajax({
-							// 						type : "POST",
-							// 						url : "/borrar",
-							// 						data : "id=" + id,
-							// 						success : function() {
-							// 						    var tr = $('input[type="radio"]:checked').parent().parent();
-							// 							dataTable.row(tr).remove().draw(false);
-							// 						},
-							// 						error : function() {
-							// 							alert("Error!");
-							// 						}
-							// 					});
-							// 				};
-							// 			});
-						});
+// 			$('#btnDelete').click(function(){
+// 				var id = $('input[type="radio"]:checked').val();
+// 				if(typeof id === "undefined"){
+// 					alert("Por favor, seleccione un elemento de la lista");	
+// 				}else{
+// 					$.ajax({
+// 						type : "POST",
+// 						url : "/borrar",
+// 						data : "id=" + id,
+// 						success : function() {
+// 						    var tr = $('input[type="radio"]:checked').parent().parent();
+// 							dataTable.row(tr).remove().draw(false);
+// 						},
+// 						error : function() {
+// 							alert("Error!");
+// 						}
+// 					});
+// 				};
+// 			});
+		});
 	</script>
 </body>
 </html>

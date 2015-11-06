@@ -22,10 +22,10 @@ public class HeraclesAuthenticationProvider implements AuthenticationProvider {
 			throws AuthenticationException {
 		String name = authentication.getName();
 		String password = authentication.getCredentials().toString();
-		User user = this.getUserDAO().loadByName(name);
+		User user = this.getUserDAO().loadByEmail(name);
 		Authentication auth = null;
 		if (user != null){
-			if (user.getName().equals(name) && user.getPassword().equals(password)){
+			if (user.getEmail().equals(name) && user.getPassword().equals(password)){
 				List<GrantedAuthority> grantedAuths = new ArrayList<>();
 	            grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
 	            auth = new UsernamePasswordAuthenticationToken(name, password, grantedAuths);

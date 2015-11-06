@@ -176,5 +176,9 @@ public class TrainerBOImpl implements TrainerBO{
 	public void setActivityDAO(ActivityDAOImpl activityDAO) {
 		this.activityDAO = activityDAO;
 	}
+
+	public List<Trainer> getAllTrainers() {
+		return this.getTrainerDAO().loadAll();
+	}
 	
 }

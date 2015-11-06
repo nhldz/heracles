@@ -42,7 +42,7 @@
 		</div>
 	</div>
 	<br>
-	<form id="exerciseForm" action="guardar" method="POST" data-toggle="validator">
+	<form id="exerciseForm" action="save" method="POST" data-toggle="validator">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
 				<div class="panel panel-default">
@@ -96,6 +96,7 @@
 	<script>
 		$(document).ready(function() {
 			dataTable = $('#exercisesTable').DataTable({
+				'type' : 'GET',
 				'processing' : false,
 				'serverSide' : false,
 				'sAjaxSource' : '/getExercises',
@@ -168,7 +169,7 @@
 				}else{
 					$.ajax({
 						type : "POST",
-						url : "/editar",
+						url : "/edit",
 						data : "id=" + id,
 						success : function(callback) {
 							frm.loadJSON(callback);
@@ -188,7 +189,7 @@
 				}else{
 					$.ajax({
 						type : "POST",
-						url : "/borrar",
+						url : "/delete",
 						data : "id=" + id,
 						success : function() {
 						    var tr = $('input[type="radio"]:checked').parent().parent();
