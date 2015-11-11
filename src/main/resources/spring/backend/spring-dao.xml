@@ -38,5 +38,9 @@
 	<bean id="user.dao" class="ar.edu.unlp.bbdd2.heracles.dao.impl.UserDAOImpl">
 		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.User"></constructor-arg>
 	</bean>
+	
+	<bean id="role.dao" class="ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl">
+		<constructor-arg type="java.lang.Class" value="ar.edu.unlp.bbdd2.heracles.entities.Role"></constructor-arg>
+	</bean>
 
 </beans>

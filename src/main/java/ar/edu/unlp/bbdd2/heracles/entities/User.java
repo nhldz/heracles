@@ -1,16 +1,16 @@
 package ar.edu.unlp.bbdd2.heracles.entities;
 
-import java.util.Calendar;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 
+import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 
 /**
  * Usuario
@@ -19,26 +19,36 @@ import com.googlecode.objectify.annotation.Index;
  *
  */
 @Entity
-public abstract class User {
+public abstract class User implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7962922856295831694L;
 
 	@Id
 	private Long id;
 	@Index
 	private String name;
-	private String surname;
-	private String cellPhone;
 	@Index
 	private String email;
 	private String password;
-	private boolean enabledUser;
-	//private List<Ref<Role>> roles;
+	@Load
+	private List<Ref<Role>> roles;
 	private Date registrationDate;
 	private Date birthday;
 	private Gender gender;
 
 	public User() {
-		this.setEnabledUser(true);
-		this.setRegistrationDate(Calendar.getInstance().getTime());
+		super();
+	}
+
+	public User(String name, String email, Date birthday, Gender gender) {
+		this();
+		this.name = name;
+		this.email = email;
+		this.birthday = birthday;
+		this.gender = gender;
 	}
 
 	public Long getId() {
@@ -57,44 +67,12 @@ public abstract class User {
 		this.name = name;
 	}
 
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public String getCellPhone() {
-		return cellPhone;
-	}
-
-	public void setCellPhone(String cellPhone) {
-		this.cellPhone = cellPhone;
-	}
-
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public boolean isEnabledUser() {
-		return enabledUser;
-	}
-
-	public void setEnabledUser(boolean enabledUser) {
-		this.enabledUser = enabledUser;
 	}
 
 	public Date getRegistrationDate() {
@@ -121,12 +99,20 @@ public abstract class User {
 		this.gender = gender;
 	}
 
-//	public List<Role> getRoles() {
-//		return RefHelper.deref(roles);
-//	}
-//	public void setRoles(List<Role> roles) {
-//		this.roles = RefHelper.ref(roles);
-//	}
+	public String getPassword() {
+		return password;
+	}
 
-	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public List<Role> getRoles() {
+		return RefHelper.deref(roles);
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = RefHelper.ref(roles);
+	}
+
 }

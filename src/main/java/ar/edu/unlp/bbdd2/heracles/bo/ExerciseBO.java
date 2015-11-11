@@ -50,4 +50,10 @@ public interface ExerciseBO {
 	 */
 	public List<Exercise> getAllExercises ();
 	
+	/**
+	 * Retorna si un ejercicio se puede guardar
+	 * @return true si el ejercicio se puede guardar
+	 */
+	public boolean validSave(Exercise exercise);
+	
 }

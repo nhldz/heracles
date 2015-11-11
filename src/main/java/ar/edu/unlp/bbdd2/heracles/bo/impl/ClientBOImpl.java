@@ -1,5 +1,6 @@
 package ar.edu.unlp.bbdd2.heracles.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,10 +8,16 @@ import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ClientDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseSnapshotDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseSnapshot;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
+import ar.edu.unlp.bbdd2.heracles.entities.Gender;
+import ar.edu.unlp.bbdd2.heracles.entities.Role;
+import ar.edu.unlp.bbdd2.heracles.entities.RoleName;
+import ar.edu.unlp.bbdd2.heracles.entities.Routine;
+import ar.edu.unlp.bbdd2.heracles.entities.User;
 
 /**
  *
@@ -18,8 +25,9 @@ import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
  *
  */
 public class ClientBOImpl implements ClientBO {
-	
+
 	private ClientDAOImpl clientDAO;
+	private RoleDAOImpl roleDAO;
 	private ExerciseConfigurationDAOImpl exConfDAO;
 	private ExerciseSnapshotDAOImpl exSanpshotDAO;
 
@@ -85,13 +93,46 @@ public class ClientBOImpl implements ClientBO {
 					+ client.getActualRoutine().getRunActivity().getName());
 		}
 	}
-	
+
 	public List<Client> getAllClients() {
-		return this.getClientDAO().loadAll();	
+		return this.getClientDAO().loadAll();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Client createClient(String name, String email, Date birthday, Gender gender) throws BusinessException {
+		Client client = null;
+		if (clientDAO.loadByEmail(email) == null) {
+			client = new Client(name, email, birthday, gender);
+			client.setRoutines(new ArrayList<Routine>());
+			client.setRegistrationDate(new Date());
+			Role role = roleDAO.loadByName(RoleName.CLIENT.getType());
+			List<Role> roles = new ArrayList<Role>();
+			roles.add(role);
+			client.setRoles(roles);
+			clientDAO.save(client);
+			List<User> users = role.getUsers();
+			users.add(client);
+			role.setUsers(users);
+			roleDAO.saveOrUpdate(role);
+		} else {
+			throw new BusinessException("El email ya existe");
+		}
+		return client;
 	}
 
 	public ClientDAOImpl getClientDAO() {
 		return clientDAO;
+	}
+
+	public RoleDAOImpl getRoleDAO() {
+		return roleDAO;
+	}
+
+	public void setRoleDAO(RoleDAOImpl roleDAO) {
+		this.roleDAO = roleDAO;
 	}
 
 	public void setClientDAO(ClientDAOImpl clientDAO) {

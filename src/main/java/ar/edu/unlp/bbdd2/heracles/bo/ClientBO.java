@@ -3,11 +3,13 @@
  */
 package ar.edu.unlp.bbdd2.heracles.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
+import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 
 /**
  *
@@ -44,5 +46,22 @@ public interface ClientBO {
 	 * 		Peso con el que se realizo el ejercicio.
 	 */
 	void calcelExercise (Client client, List<Integer> sets, List<Integer> reps, Integer weight) throws BusinessException;
+	
+	/**
+	 * Crea un nuevo cliente y lo retorna
+	 * 
+	 * @param name
+	 * 		Nombre del cliente
+	 * @param email
+	 * 		Email del cliente
+	 * @param birthday
+	 * 		cumpleaños/fecha de nacimiento
+	 * @param gender
+	 * 		Genero
+	 * @return
+	 * 		Un entrenador (Client)
+	 * @throws BusinessException
+	 */
+	public Client createClient (String name, String email, Date birthday, Gender gender) throws BusinessException;
 
 }

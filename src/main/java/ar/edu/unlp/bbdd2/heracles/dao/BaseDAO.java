@@ -76,6 +76,18 @@ public interface BaseDAO<T> {
 	 */
 	public void deleteAll (Collection<T> objects);
 	
+	/**
+	 * Borra una colleccion de objetos.
+	 * @param ids
+	 * 		Colección de ids de objetos a borrar.
+	 */
 	public void deleteAllByIds(Collection<Long> ids);
+
+	/**
+	 * Count
+	 * @return
+	 * 		la cantidad de elementos persistidos.
+	 */
+	int count();
 
 }
