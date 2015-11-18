@@ -12,18 +12,20 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">
-				<div class="panel-heading">Ejercicios</div>
+				<div class="panel-heading">Clientes</div>
 				<div class="panel-body">
 					<div class="dataTable_wrapper">
-						<table id="exercisesTable"
+						<table id="clientsTable"
 							class="table table-striped table-bordered table-hover"
 							cellspacing="0" width="100%">
 							<thead>
 								<tr>
 									<th class="no-sort id"></th>
-									<th>Nombre</th>
-									<th>Tipo</th>
-									<th>Descripci&oacute;n</th>
+									<th>Habilitado</th>
+									<th>Apellido y Nombre</th>
+									<th>Usuario</th>
+									<th>Email</th>
+									<th>Tel&eacute;fono</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -42,51 +44,54 @@
 		</div>
 	</div>
 	<br>
-	<form id="exerciseForm" method="POST" data-toggle="validator">
+	<form id="clientForm" action="/client/save" method="POST"
+		data-toggle="validator">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="form-group">
 							<input type="hidden" name="id" />
-							<input type="hidden" name="enabled" value="true"/>
 						</div>
 						<div class="form-group">
-							<label for="name">Nombre:</label> <input name="name"
+							<label for="name">Nombre:</label> <input type="text" name="name"
 								class="form-control" required />
 						</div>
 						<div class="form-group">
-							<label for="type">Tipo:</label> 
-							<select name="type" required>
+						<label for="surname">Apellido:</label> <input type="text"
+							name="surname" class="form-control" required />
+						</div>	
+						<div class="form-group">
+							<label for="birthday">Fecha Nac.:</label> <input id="birthday"
+								type="date" name="birthday" class="form-control" required />
+						</div>
+						<div class="form-group">
+							<label for="gender">Sexo:</label> <select name="gender" required>
 								<option value="">Seleccione..</option>
-								<c:forEach items="${excercisesTypes}" var="type">
-									<option value="${type}">${type.name}</option>
+								<c:forEach items="${genders}" var="gender">
+									<option value="${gender}">${gender.type}</option>
 								</c:forEach>
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="equipment">Herramienta:</label> 
-							<select	name="equipment" required>
-								<option value="">Seleccione..</option>
-								<c:forEach items="${equipments}" var="equipment">
-									<option value="${equipment}">${equipment.name}</option>
-								</c:forEach>
-							</select>
+							<label for="email">E-mail:</label> <input type="email"
+								name="email" class="form-control" />
 						</div>
 						<div class="form-group">
-							<label for="bodyParts">Partes Trabajadas:</label> 
-							<select	name="bodyParts" multiple="multiple" required>
-								<c:forEach items="${bodyParts}" var="bodyPart">
-									<option value="${bodyPart}">${bodyPart.name}</option>
-								</c:forEach>
-							</select>
+							<label for="cellPhone">Tel&eacute;fono:</label> <input
+								type="text" name="cellPhone" class="form-control" />
 						</div>
 						<div class="form-group">
-							<label for="description">Descripci&oacute;n:</label>
-							<textarea name="description" class="form-control" rows="3" required></textarea>
+							<label for="userName">Usuario:</label> <input type="text" name="userName"
+								class="form-control" required />
 						</div>
+						<div class="form-group">
+						<label for="password">Contrase&ntilde;a:</label> <input type="password"
+							name="password" class="form-control" required/>
+						</div>	
 						<button type="submit" class="btn btn-success">Aceptar</button>
-						<button type="button" class="btn btn-default" onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
+						<button type="button" class="btn btn-default"
+							onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
 					</div>
 				</div>
 			</div>
@@ -97,32 +102,55 @@
 <jsp:include page="../templates/includes/common_foot.jsp" />
 <script>
 	$(document).ready(function() {
-		dataTable = $('#exercisesTable').DataTable({
+		$( "#birthday" ).datepicker({
+			changeMonth: true,
+		    changeYear: true,
+		    yearRange: "-100:+0",
+		    dateFormat: 'dd/mm/yy'
+		});
+		 
+		dataTable = $('#clientsTable').DataTable({
 			'processing' : false,
 			'serverSide' : false,
-			'sAjaxSource' : '/exercises/list',
+			'sAjaxSource' : '/client/list',
 			'bJQueryUI' : true,
 			'autoWidth' : true,
 			'order' : [ [ 1, "asc" ] ],
 			'aoColumns' : [ {
 				'mData' : 'id'
 			}, {
+				'mData' : 'enabledUser'
+			}, {
 				'mData' : 'name'
+			},{
+				'mData' : 'userName'
+			},{
+				'mData' : 'email'
 			}, {
-				'mData' : 'type'
-			}, {
-				'mData' : 'description'
+				'mData' : 'cellPhone'
 			} ],
 			'columnDefs' : [ {
 				'targets' : 0,
 				'searchable' : false,
 				'ordenable' : false,
 				'className' : 'dt-body-center',
-				'render' : function(data, type,
-						row) {
+				'render' : function(data,type, row) {
 					return '<input name="col" type="radio" id=' + row.id + ' value=' + row.id + ' >';
 				}
-			} ],
+			},{
+				'targets' : 1,
+				'width': '10%',
+				'searchable' : false,
+				'className' : 'dt-body-center',
+				'render' : function(data,type, row) {
+					return (data === true) ? '<span class="glyphicon glyphicon-ok centerSpan"></span>' : '<span class="glyphicon glyphicon-remove centerSpan"></span>';;
+				}
+			},{
+                "render": function ( data, type, row ) {
+                    return row.surname + ', '+ data;
+                },
+                "targets": 2
+            }],
 			'language' : {
 				"lengthMenu" : "_MENU_ elementos por p&aacute;gina",
 				"zeroRecords" : "No se obtuvieron resultados",
@@ -132,12 +160,12 @@
 			}
 		});
 
-		$('#page-wrapper').on('click','#exercisesTable tr',function() {
-			$(this).find('input:radio').attr('checked',true);
+		$('#page-wrapper').on('click','#clientsTable tr',function() {
+			$(this).find('input:radio').attr('checked', true);
 		});
-	
-		$('#exerciseForm').submit(function(e) {
-			var frm = $('#exerciseForm');
+
+		$('#clientForm').submit(function(e) {
+			var frm = $('#clientForm');
 			e.preventDefault();
 			$.ajax({
 				type : frm.attr('method'),
@@ -153,27 +181,25 @@
 				}
 			});
 		});
-	
+
 		$('#btnAdd').click(function(e) {
 			toogle('myContent');
 			toogleButtons();
-			$('#exerciseForm')[0].reset();
-			$('#exerciseForm').attr('action', '/exercises/save');
+			$('#clientForm')[0].reset();
 		});
-	
+
 		$('#btnEdit').click(function(e) {
 			var id = $('input[type="radio"]:checked').val();
-			var frm = $('#exerciseForm');
-			frm.attr('action','/exercises/update');
+			var frm = $('#clientForm');
 			toogleButtons();
 			frm[0].reset();
-			if (typeof id === "undefined") {
+			if(typeof id === "undefined"){
 				toogleButtons();
-				alert("Por favor, seleccione un elemento de la lista");
-			} else {
+				alert("Por favor, seleccione un elemento de la lista");	
+			}else{
 				$.ajax({
 					type : "GET",
-					url : "/exercises/load/"+ id,
+					url : "client/" + id,
 					success : function(callback) {
 						frm.loadJSON(callback);
 						toogle('myContent');
@@ -182,21 +208,21 @@
 						alert("Error!");
 					}
 				});
-			};
+			};	
 		});
-	
-		$('#btnDelete').click(function() {
+		
+		$('#btnDelete').click(function(){
 			var id = $('input[type="radio"]:checked').val();
-			if (typeof id === "undefined") {
-				toogleButtons();
-				alert("Por favor, seleccione un elemento de la lista");
-			}else {
+			if(typeof id === "undefined"){
+				alert("Por favor, seleccione un elemento de la lista");	
+			}else{
 				$.ajax({
 					type : "POST",
-					url : "/exercises/remove/"+ id,
+					url : "/client/disable/"+ id,
 					success : function() {
-						var tr = $('input[type="radio"]:checked').parent().parent();
-						dataTable.row(tr).remove().draw(false);
+						dataTable.ajax.reload();
+					    //var tr = $('input[type="radio"]:checked').parent().parent();
+						//dataTable.row(tr).remove().draw(false);
 					},
 					error : function() {
 						alert("Error!");

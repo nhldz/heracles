@@ -144,10 +144,11 @@ public class TrainerBOImpl implements TrainerBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Trainer createTrainer(String name, String email, Date birthday, Gender gender) throws BusinessException {
+	public Trainer createTrainer(String name, String surname, String email, Date birthday, Gender gender)
+			throws BusinessException {
 		Trainer trainer = null;
 		if (this.findByEmail(email) == null) {
-			trainer = new Trainer(name, email, birthday, gender);
+			trainer = new Trainer(name, surname, email, birthday, gender);
 			trainer.setExercises(new ArrayList<Exercise>());
 			trainer.setRoutines(new ArrayList<Routine>());
 			trainer.setRegistrationDate(new Date());
@@ -164,6 +165,14 @@ public class TrainerBOImpl implements TrainerBO {
 			throw new BusinessException("El email ya existe");
 		}
 		return trainer;
+	}
+
+	@Override
+	public void trainerDisable(Long idL) {
+		Trainer trainer = this.getTrainerDAO().loadById(idL);
+		trainer.setEnabledUser(false);
+		this.getTrainerDAO().save(trainer);
+
 	}
 
 	public ClientDAOImpl getClientDAO() {

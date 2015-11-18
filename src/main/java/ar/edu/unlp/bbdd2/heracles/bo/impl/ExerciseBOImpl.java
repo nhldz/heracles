@@ -27,8 +27,8 @@ public class ExerciseBOImpl implements ExerciseBO {
 			exercise = new Exercise(name, type, equipment, bodyParts, description);
 			exercise.setOwner(owner);
 			this.getExerciseDAO().save(exercise);
-		//	owner.getExercises().add(exercise);
-		//	this.getTrainerDAO().saveOrUpdate(owner);
+			// owner.getExercises().add(exercise);
+			// this.getTrainerDAO().saveOrUpdate(owner);
 		} else {
 			throw new BusinessException(
 					"El nombre " + name + " ya se encuentra asigando al ejercicio " + exName.toString());
@@ -69,15 +69,31 @@ public class ExerciseBOImpl implements ExerciseBO {
 		return exercise;
 	}
 	
-	public Exercise save(Exercise exercise) throws NullPointerException, BusinessException {
+	@Override
+	public Exercise save(Exercise exercise) throws BusinessException {
 		this.getExerciseDAO().saveOrUpdate(exercise);
 		return exercise;
 	}
-	
+
 	@Override
 	public boolean validSave(Exercise exercise) {
 		Exercise ex = this.getExerciseDAO().findByName(exercise.getName());
-		return ((ex == null) || (ex.getId().equals(exercise.getId())));
+		return (ex == null);
+	}
+	
+	@Override
+	public boolean validUpdate(Exercise exercise) {
+		Exercise ex = this.getExerciseDAO().findByName(exercise.getName());
+		return ((ex == null) || ex.getId().equals(exercise.getId())) ;
+	}
+	
+	@Override
+	public Exercise loadById(Long id) {
+		return this.getExerciseDAO().loadById(id);
+	}
+
+	public void deleteExercise(Long id) {
+		this.getExerciseDAO().deleteById(id);
 	}
 
 	public List<Exercise> getAllExercises() {
@@ -99,9 +115,4 @@ public class ExerciseBOImpl implements ExerciseBO {
 	public void setTrainerDAO(TrainerDAOImpl trainerDAO) {
 		this.trainerDAO = trainerDAO;
 	}
-
-	public void deleteExercise(Long id) {
-		this.getExerciseDAO().deleteById(id);
-	}
-
 }

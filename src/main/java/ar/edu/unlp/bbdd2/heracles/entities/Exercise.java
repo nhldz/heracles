@@ -28,10 +28,12 @@ public class Exercise {
 	private Equipment equipment;
 
 	private List<BodyPart> bodyParts;
-	
+
 	private String description;
 
 	private Ref<Trainer> owner;
+
+	private boolean enabled;
 
 	public Exercise() {
 		super();
@@ -44,6 +46,7 @@ public class Exercise {
 		this.setEquipment(equipment);
 		this.setBodyParts(bodyParts);
 		this.setDescription(description);
+		this.setEnabled(true);
 	}
 
 	public static Objectify ofy() {
@@ -105,6 +108,14 @@ public class Exercise {
 
 	public void setOwner(Trainer owner) {
 		this.owner = Ref.create(owner);
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 }

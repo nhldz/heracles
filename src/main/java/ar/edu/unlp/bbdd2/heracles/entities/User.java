@@ -30,9 +30,11 @@ public abstract class User implements Serializable {
 	private Long id;
 	@Index
 	private String name;
+	private String surname;
 	@Index
 	private String email;
 	private String password;
+	private boolean enabledUser;
 	@Load
 	private List<Ref<Role>> roles;
 	private Date registrationDate;
@@ -43,12 +45,14 @@ public abstract class User implements Serializable {
 		super();
 	}
 
-	public User(String name, String email, Date birthday, Gender gender) {
+	public User(String name, String surname, String email, Date birthday, Gender gender) {
 		this();
 		this.name = name;
+		this.surname = surname;
 		this.email = email;
 		this.birthday = birthday;
 		this.gender = gender;
+		this.enabledUser = true;
 	}
 
 	public Long getId() {
@@ -65,6 +69,14 @@ public abstract class User implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
 	public String getEmail() {
@@ -105,6 +117,14 @@ public abstract class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isEnabledUser() {
+		return enabledUser;
+	}
+
+	public void setEnabledUser(boolean enabledUser) {
+		this.enabledUser = enabledUser;
 	}
 
 	public List<Role> getRoles() {

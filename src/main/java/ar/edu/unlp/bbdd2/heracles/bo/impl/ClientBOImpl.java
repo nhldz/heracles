@@ -102,10 +102,11 @@ public class ClientBOImpl implements ClientBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Client createClient(String name, String email, Date birthday, Gender gender) throws BusinessException {
+	public Client createClient(String name, String surname, String email, Date birthday, Gender gender)
+			throws BusinessException {
 		Client client = null;
 		if (clientDAO.loadByEmail(email) == null) {
-			client = new Client(name, email, birthday, gender);
+			client = new Client(name, surname, email, birthday, gender);
 			client.setRoutines(new ArrayList<Routine>());
 			client.setRegistrationDate(new Date());
 			Role role = roleDAO.loadByName(RoleName.CLIENT.getType());
@@ -121,6 +122,13 @@ public class ClientBOImpl implements ClientBO {
 			throw new BusinessException("El email ya existe");
 		}
 		return client;
+	}
+	
+	@Override
+	public void clientDisable(Long idL) {
+		Client client = this.getClientDAO().loadById(idL);
+		client.setEnabledUser(false);
+		this.getClientDAO().save(client);
 	}
 
 	public ClientDAOImpl getClientDAO() {
@@ -154,5 +162,4 @@ public class ClientBOImpl implements ClientBO {
 	public void setExSanpshotDAO(ExerciseSnapshotDAOImpl exSanpshotDAO) {
 		this.exSanpshotDAO = exSanpshotDAO;
 	}
-
 }

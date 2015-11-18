@@ -2,53 +2,92 @@ package ar.edu.unlp.bbdd2.heracles.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import ar.edu.unlp.bbdd2.heracles.bo.impl.ClientBOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Gender;
-import ar.edu.unlp.bbdd2.heracles.helper.DataTableObject;
+import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
 
+/**
+ *
+ * @author Matias Garcia <matiasagt@gmail.com>
+ *
+ */
 @Controller
+@RequestMapping("/client")
 public class ClientController {
 
 	@Autowired
 	private ClientBOImpl clientBO;
 
-	@RequestMapping("/clients")
-	public ModelAndView getClient() {
-		ModelAndView mv = new ModelAndView("trainer/clients");
+	/**
+	 * Pagina principal de clientes
+	 * 
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView clientIndex() {
+		ModelAndView mv = new ModelAndView("client/list");
 		mv.addObject("genders", Gender.values());
-		mv.addObject("exercisesJson", this.exercisesJson(this.getClientBO().getAllClients()));
-		return mv; 
+		return mv;
 	}
 
-	@RequestMapping(value = "/getClients", method = RequestMethod.GET)
+	/**
+	 * Retorna un json del cliente
+	 * 
+	 * @param response
+	 * @param id
+	 *            del cliente
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	public @ResponseBody void getClientById(HttpServletResponse response, @PathVariable("id") String id)
+			throws IOException {
+		response.setContentType("application/json");
+		Long idL = Long.valueOf(id);
+		PrintWriter out = response.getWriter();
+		Client client = this.getClientBO().getClientDAO().loadById(idL);
+		String json = JsonTransform.objectToJson(client);
+		out.print(json);
+	}
+
+	/**
+	 * Deshabilita un cliente
+	 * 
+	 * @param id
+	 *            del cliente a deshabilitar
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "disable/{id}", method = RequestMethod.POST)
+	@ResponseBody
+	public void disable(@PathVariable("id") String id) {
+		Long idL = new Long(id);
+		this.getClientBO().clientDisable(idL);
+	}
+
+	/**
+	 * Retorna un json con todos los clientes existentes
+	 * 
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "list", method = RequestMethod.GET)
 	public void getClients(HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
-		out.print(this.exercisesJson(this.getClientBO().getAllClients()));
-	}
-
-	private String exercisesJson(List<Client> clients) {
-		DataTableObject<Client> dataTableObject = new DataTableObject<Client>();
-		dataTableObject.setAaData(clients);
-		dataTableObject.setiTotalDisplayRecords(11);
-		dataTableObject.setiTotalRecords(clients.size());
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		String json = gson.toJson(dataTableObject);
-		return json;
+		String json = JsonTransform.listToJson(this.getClientBO().getAllClients());
+		out.print(json);
 	}
 
 	public ClientBOImpl getClientBO() {

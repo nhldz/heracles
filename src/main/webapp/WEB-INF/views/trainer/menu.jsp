@@ -212,8 +212,8 @@
 				<li><a href="index"><i class="fa fa-users fa-fw"></i>Usuarios<span
 						class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
-						<li><a id="clients" href="#">Clientes</a></li>
-						<li><a id="trainers" href="#">Profesores</a></li>
+						<li><a id="clients" href="/client">Clientes</a></li>
+						<li><a id="trainers" href="/trainer">Profesores</a></li>
 					</ul>
 				</li>
 			</ul>

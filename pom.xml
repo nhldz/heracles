@@ -12,7 +12,7 @@
 	<properties>
 		<app.id>heracles</app.id>
 		<app.version>1</app.version>
-		<appengine.version>1.9.26</appengine.version>
+		<appengine.version>1.9.24</appengine.version>
 		<spring.version>3.2.14.RELEASE</spring.version>
 		<gcloud.plugin.version>0.9.58.v20150505</gcloud.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
