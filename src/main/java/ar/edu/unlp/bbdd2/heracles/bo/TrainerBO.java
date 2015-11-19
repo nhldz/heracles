@@ -110,18 +110,11 @@ public interface TrainerBO {
 	/**
 	 * Crea un nuevo entrenador y lo retorna
 	 * 
-	 * @param name
-	 *            Nombre del entrenador
-	 * @param email
-	 *            Email del entrenador
-	 * @param birthday
-	 *            cumpleaños/fecha de nacimiento
-	 * @param gender
-	 *            Genero
+	 * @param  trainer
 	 * @return Un entrenador (Trainer)
 	 * @throws BusinessException
 	 */
-	public Trainer createTrainer(String name, String surname, String email, Date birthday, Gender gender)
+	public Trainer createTrainer(Trainer trainer)
 			throws BusinessException;
 
 	/**
@@ -130,5 +123,22 @@ public interface TrainerBO {
 	 * @param id
 	 *            del profesor a deshabilitar
 	 */
-	void trainerDisable(Long id);
+	public void trainerDisable(Long id);
+
+	/**
+	 * Retorna un profesor
+	 * 
+	 * @param id
+	 *            del profesor
+	 */
+	public Trainer getTrainerById(Long id);
+
+	/**
+	 * Retorna todos los profesores
+	 * 
+	 */
+	public List<Trainer> getAllTrainers();
+
+	
+	public void save(Trainer trainer);
 }

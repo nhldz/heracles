@@ -34,6 +34,7 @@ public abstract class User implements Serializable {
 	@Index
 	private String email;
 	private String password;
+	private String phone;
 	private boolean enabledUser;
 	@Load
 	private List<Ref<Role>> roles;
@@ -117,6 +118,14 @@ public abstract class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public boolean isEnabledUser() {

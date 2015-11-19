@@ -3,8 +3,8 @@ package ar.edu.unlp.bbdd2.heracles.bo.impl;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ExerciseBO;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseDAOImpl;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.ExerciseDAO;
+import ar.edu.unlp.bbdd2.heracles.dao.TrainerDAO;
 import ar.edu.unlp.bbdd2.heracles.entities.BodyPart;
 import ar.edu.unlp.bbdd2.heracles.entities.Equipment;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
@@ -13,8 +13,8 @@ import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 
 public class ExerciseBOImpl implements ExerciseBO {
 
-	private ExerciseDAOImpl exerciseDAO;
-	private TrainerDAOImpl trainerDAO;
+	private ExerciseDAO exerciseDAO;
+	private TrainerDAO trainerDAO;
 
 	/**
 	 * {@inheritDoc}
@@ -68,7 +68,7 @@ public class ExerciseBOImpl implements ExerciseBO {
 		}
 		return exercise;
 	}
-	
+
 	@Override
 	public Exercise save(Exercise exercise) throws BusinessException {
 		this.getExerciseDAO().saveOrUpdate(exercise);
@@ -80,15 +80,15 @@ public class ExerciseBOImpl implements ExerciseBO {
 		Exercise ex = this.getExerciseDAO().findByName(exercise.getName());
 		return (ex == null);
 	}
-	
+
 	@Override
 	public boolean validUpdate(Exercise exercise) {
 		Exercise ex = this.getExerciseDAO().findByName(exercise.getName());
-		return ((ex == null) || ex.getId().equals(exercise.getId())) ;
+		return ((ex == null) || ex.getId().equals(exercise.getId()));
 	}
-	
+
 	@Override
-	public Exercise loadById(Long id) {
+	public Exercise getExerciseById(Long id) {
 		return this.getExerciseDAO().loadById(id);
 	}
 
@@ -100,19 +100,19 @@ public class ExerciseBOImpl implements ExerciseBO {
 		return this.getExerciseDAO().loadAll();
 	}
 
-	public ExerciseDAOImpl getExerciseDAO() {
+	public ExerciseDAO getExerciseDAO() {
 		return exerciseDAO;
 	}
 
-	public void setExerciseDAO(ExerciseDAOImpl exerciseDAO) {
+	public void setExerciseDAO(ExerciseDAO exerciseDAO) {
 		this.exerciseDAO = exerciseDAO;
 	}
 
-	public TrainerDAOImpl getTrainerDAO() {
+	public TrainerDAO getTrainerDAO() {
 		return trainerDAO;
 	}
 
-	public void setTrainerDAO(TrainerDAOImpl trainerDAO) {
+	public void setTrainerDAO(TrainerDAO trainerDAO) {
 		this.trainerDAO = trainerDAO;
 	}
 }

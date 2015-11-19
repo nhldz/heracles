@@ -7,6 +7,8 @@ import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.EntitySubclass;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 
 /**
  * Entrenador
@@ -14,11 +16,13 @@ import com.googlecode.objectify.annotation.EntitySubclass;
  * @author Nahuel Diaz <nahd85@gmail.com>
  *
  */
+
+@Index
 @EntitySubclass(index = true)
 public class Trainer extends User {
 
 	private List<Ref<Exercise>> exercises;
-
+	@Load
 	private List<Ref<Routine>> routines;
 
 	public Trainer() {

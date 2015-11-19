@@ -10,8 +10,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import ar.edu.unlp.bbdd2.heracles.dao.TrainerDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.UserDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.User;
 
@@ -19,7 +19,7 @@ public class HeraclesAuthenticationProvider implements AuthenticationProvider {
 	
 	private UserDAOImpl userDAO;
 	private RoleDAOImpl roleDAO;
-	private TrainerDAOImpl trainerDAO;
+	private TrainerDAO trainerDAO;
 
 	@Override
 	public Authentication authenticate(Authentication authentication)
@@ -60,11 +60,11 @@ public class HeraclesAuthenticationProvider implements AuthenticationProvider {
 		this.roleDAO = roleDAO;
 	}
 
-	public TrainerDAOImpl getTrainerDAO() {
+	public TrainerDAO getTrainerDAO() {
 		return trainerDAO;
 	}
 
-	public void setTrainerDAO(TrainerDAOImpl trainerDAO) {
+	public void setTrainerDAO(TrainerDAO trainerDAO) {
 		this.trainerDAO = trainerDAO;
 	}
 	

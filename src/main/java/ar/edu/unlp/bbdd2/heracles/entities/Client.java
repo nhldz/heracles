@@ -15,7 +15,7 @@ import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
  * @author Nahuel Diaz <nahd85@gmail.com>
  *
  */
-@EntitySubclass
+@EntitySubclass(index = true)
 public class Client extends User {
 
 	@Load

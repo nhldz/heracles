@@ -18,9 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import ar.edu.unlp.bbdd2.heracles.bo.ExerciseBO;
+import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
-import ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseBOImpl;
-import ar.edu.unlp.bbdd2.heracles.bo.impl.TrainerBOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseType;
@@ -33,9 +33,9 @@ import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
 public class ExercisesControler {
 
 	@Autowired
-	private ExerciseBOImpl exerciseBO;
+	private ExerciseBO exerciseBO;
 	@Autowired
-	private TrainerBOImpl trainerBO;
+	private TrainerBO trainerBO;
 
 	/**
 	 * Pagina principal de ejercicios
@@ -65,7 +65,7 @@ public class ExercisesControler {
 		response.setContentType("application/json");
 		Long idL = Long.valueOf(id);
 		PrintWriter out = response.getWriter();
-		Exercise exc = this.getExerciseBO().getExerciseDAO().loadById(idL);
+		Exercise exc = this.getExerciseBO().getExerciseById(idL);
 		String json = JsonTransform.objectToJson(exc);
 		out.print(json);
 	}
@@ -79,8 +79,6 @@ public class ExercisesControler {
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public @ResponseBody void save(@ModelAttribute Exercise exercise, Model model) {
-		// UserService userService = UserServiceFactory.getUserService();
-		// String email = userService.getCurrentUser().getEmail();
 		Trainer owner = this.getTrainerBO().findByEmail("matias.trainer@email.com");
 		exercise.setOwner(owner);
 		String result = "exercises";
@@ -126,7 +124,7 @@ public class ExercisesControler {
 	@ResponseBody
 	public void remove(@PathVariable("id") String id) throws BusinessException {
 		Long idL = Long.valueOf(id);
-		Exercise exc = this.getExerciseBO().loadById(idL);
+		Exercise exc = this.getExerciseBO().getExerciseById(idL);
 		exc.setEnabled(false);
 		this.getExerciseBO().save(exc);
 	}
@@ -153,19 +151,19 @@ public class ExercisesControler {
 		return this.getExerciseBO().validUpdate(exercise);
 	}
 
-	public ExerciseBOImpl getExerciseBO() {
+	public ExerciseBO getExerciseBO() {
 		return exerciseBO;
 	}
 
-	public void setExerciseBO(ExerciseBOImpl exerciseBO) {
+	public void setExerciseBO(ExerciseBO exerciseBO) {
 		this.exerciseBO = exerciseBO;
 	}
 
-	public TrainerBOImpl getTrainerBO() {
+	public TrainerBO getTrainerBO() {
 		return trainerBO;
 	}
 
-	public void setTrainerBO(TrainerBOImpl trainerBO) {
+	public void setTrainerBO(TrainerBO trainerBO) {
 		this.trainerBO = trainerBO;
 	}
 

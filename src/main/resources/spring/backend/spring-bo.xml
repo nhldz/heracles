@@ -30,6 +30,7 @@
 	</bean>
 	
 	<bean id="routine.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.RoutineBOImpl">
+		<property name="routineDAO" ref="routine.dao"/>
 	</bean>
 	
 	<bean id="heraclesAuthenticationProvider" class="ar.edu.unlp.bbdd2.heracles.security.HeraclesAuthenticationProvider">

@@ -60,21 +60,21 @@ public interface ExerciseBO {
 	 * @return
 	 * @throws BusinessException
 	 */
-	Exercise save(Exercise exercise) throws BusinessException;
+	public Exercise save(Exercise exercise) throws BusinessException;
 
 	/**
 	 * Retorna si un ejercicio se puede guardar
 	 * 
 	 * @return true si el ejercicio se puede guardar
 	 */
-	boolean validSave(Exercise exercise);
+	public boolean validSave(Exercise exercise);
 
 	/**
 	 * Retorna si un ejercicio se puede actualizar
 	 * 
 	 * @return true si el ejercicio se puede actualizar
 	 */
-	boolean validUpdate(Exercise exercise);
+	public boolean validUpdate(Exercise exercise);
 
 	/**
 	 * Retorna un ejercicio
@@ -83,6 +83,6 @@ public interface ExerciseBO {
 	 *            del ejercicio
 	 * @return
 	 */
-	Exercise loadById(Long id);
+	public Exercise getExerciseById(Long id);
 
 }

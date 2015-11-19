@@ -26,4 +26,10 @@
 		$('#btnEdit').attr('disabled', bool);
 	};
 	
+	function formatDate(date) {
+		var javascriptDate = new Date(date);
+        javascriptDate = javascriptDate.getDate()+"/"+(javascriptDate.getMonth()+1)+"/"+javascriptDate.getFullYear();
+        return javascriptDate;
+	};
+	
 </script>

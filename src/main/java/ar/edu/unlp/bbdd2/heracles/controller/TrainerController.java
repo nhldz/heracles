@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
-import ar.edu.unlp.bbdd2.heracles.bo.impl.TrainerBOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
@@ -31,7 +31,7 @@ import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
 public class TrainerController {
 
 	@Autowired
-	private TrainerBOImpl trainerBO;
+	private TrainerBO trainerBO;
 
 	/**
 	 * Pagina principal de profesores
@@ -59,7 +59,7 @@ public class TrainerController {
 		response.setContentType("application/json");
 		Long idL = Long.valueOf(id);
 		PrintWriter out = response.getWriter();
-		Trainer trainer = this.getTrainerBO().getTrainerDAO().loadById(idL);
+		Trainer trainer = this.getTrainerBO().getTrainerById(idL);
 		String json = JsonTransform.objectToJson(trainer);
 		out.print(json);
 	}
@@ -74,7 +74,7 @@ public class TrainerController {
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public @ResponseBody void save(@ModelAttribute Trainer trainer, Model model) throws BusinessException {
-	//	this.getTrainerBO().save(trainer);
+		this.getTrainerBO().save(trainer);
 	}
 
 	/**
@@ -106,11 +106,11 @@ public class TrainerController {
 		out.print(json);
 	}
 
-	public TrainerBOImpl getTrainerBO() {
+	public TrainerBO getTrainerBO() {
 		return trainerBO;
 	}
 
-	public void setTrainerBO(TrainerBOImpl trainerBO) {
+	public void setTrainerBO(TrainerBO trainerBO) {
 		this.trainerBO = trainerBO;
 	}
 }
