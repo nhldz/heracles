@@ -104,7 +104,7 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>3.2.1.RELEASE</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -180,7 +180,8 @@
 					<version>${app.version}</version>
 					<!-- Comment in the below snippet to bind to all IPs instead of just 
 						localhost -->
-					<!-- address>0.0.0.0</address> <port>8080</port -->
+					<address>0.0.0.0</address>
+					<port>8080</port>
 					<!-- Comment in the below snippet to enable local debugging with a remote 
 						debugger like those included with Eclipse or IntelliJ -->
 					<jvmFlags>

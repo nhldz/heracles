@@ -126,7 +126,7 @@ public class ExercisesControler {
 	 */
 	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public ModelAndView delete (@PathVariable("id") String id){
+	public void delete (@PathVariable("id") String id){
 		Long idL = Long.valueOf(id);
 		Exercise exc = this.getExerciseBO().loadById(idL);
 		exc.setEnabled(false);

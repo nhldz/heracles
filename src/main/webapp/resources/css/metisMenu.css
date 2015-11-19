@@ -29,6 +29,10 @@ table thead th:first-child
     content: "\e079";
 }
 
+.centerSpan{
+	margin-left: 40%;
+}
+
 .active > a > .glyphicon.arrow:before {
     content: "\e114";
 }

@@ -1,9 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
 	<!-- Navigation -->
@@ -210,13 +207,13 @@
 <!-- 				</li> -->
 				<li><a href="/exercises" id="exercises"><i
 						class="fa fa-check fa-fw"></i> Ejercicios</a></li>
-				<li><a href="index" id="routines"><i
+				<li><a href="/index" id="routines"><i
 						class="fa fa-dashboard fa-fw"></i> Rutinas</a></li>
 				<li><a href="index"><i class="fa fa-users fa-fw"></i>Usuarios<span
 						class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
-						<li><a id="clients" href="#">Clientes</a></li>
-						<li><a id="trainers" href="#">Profesores</a></li>
+						<li><a id="clients" href="/client">Clientes</a></li>
+						<li><a id="trainers" href="/trainer">Profesores</a></li>
 					</ul>
 				</li>
 			</ul>
