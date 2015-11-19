@@ -10,6 +10,7 @@ import java.util.List;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 
 import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
@@ -27,8 +28,9 @@ public class Routine {
 	private String name;
 	private Date createDate;
 	private Date endDate;
+	@Index
 	private Ref<Trainer> trainer;
-	
+
 	@Load
 	private Ref<Client> client;
 	private Activity runActivity;
@@ -70,12 +72,15 @@ public class Routine {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}
+
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}

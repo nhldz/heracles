@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.unlp.bbdd2.heracles.bo.ExerciseBO;
+import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
-import ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseBOImpl;
-import ar.edu.unlp.bbdd2.heracles.bo.impl.TrainerBOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseType;
@@ -32,9 +32,9 @@ import ar.edu.unlp.bbdd2.heracles.security.UserPrincipal;
 public class ExercisesControler {
 
 	@Autowired
-	private ExerciseBOImpl exerciseBO;
+	private ExerciseBO exerciseBO;
 	@Autowired
-	private TrainerBOImpl trainerBO;
+	private TrainerBO trainerBO;
 
 	/**
 	 * Pagina principal de ejercicios
@@ -64,7 +64,7 @@ public class ExercisesControler {
 		response.setContentType("application/json");
 		Long idL = Long.valueOf(id);
 		PrintWriter out = response.getWriter();
-		Exercise exc = this.getExerciseBO().getExerciseDAO().loadById(idL);
+		Exercise exc = this.getExerciseBO().getExerciseById(idL);
 		String json = JsonTransform.objectToJson(exc);
 		out.print(json);
 	}
@@ -105,6 +105,8 @@ public class ExercisesControler {
 	 */
 	@RequestMapping(value = "/exercises", method = RequestMethod.PUT)
 	public @ResponseBody void update(@ModelAttribute Exercise exercise, Model model) {
+		Trainer owner = this.getTrainerBO().findByEmail("matias.trainer@email.com");
+		exercise.setOwner(owner);
 		String result = "exercises";
 		try {
 			this.getExerciseBO().updateExercise(exercise);
@@ -123,7 +125,7 @@ public class ExercisesControler {
 	@ResponseBody
 	public void delete (@PathVariable("id") String id){
 		Long idL = Long.valueOf(id);
-		Exercise exc = this.getExerciseBO().loadById(idL);
+		Exercise exc = this.getExerciseBO().getExerciseById(idL);
 		exc.setEnabled(false);
 		try {
 			this.getExerciseBO().save(exc);
@@ -146,28 +148,20 @@ public class ExercisesControler {
 		String json = JsonTransform.listToJson(this.getExerciseBO().getAllExercises());
 		out.print(json);
 	}
-	
-	private boolean validSave(Exercise exercise) {
-		return this.getExerciseBO().validSave(exercise);
-	}
-	
-	private boolean validUpdate(Exercise exercise) {
-		return this.getExerciseBO().validUpdate(exercise);
-	}
 
-	public ExerciseBOImpl getExerciseBO() {
+	public ExerciseBO getExerciseBO() {
 		return exerciseBO;
 	}
 
-	public void setExerciseBO(ExerciseBOImpl exerciseBO) {
+	public void setExerciseBO(ExerciseBO exerciseBO) {
 		this.exerciseBO = exerciseBO;
 	}
 
-	public TrainerBOImpl getTrainerBO() {
+	public TrainerBO getTrainerBO() {
 		return trainerBO;
 	}
 
-	public void setTrainerBO(TrainerBOImpl trainerBO) {
+	public void setTrainerBO(TrainerBO trainerBO) {
 		this.trainerBO = trainerBO;
 	}
 

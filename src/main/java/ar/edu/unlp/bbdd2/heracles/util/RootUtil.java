@@ -149,6 +149,7 @@ public class RootUtil {
 		try {
 			client = clientBO.createClient(name, surname, name + ".client@email.com", new Date(), Gender.FEMALE);
 			client.setPassword(pass);
+			client.setPhone("221-5637610");
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
@@ -156,14 +157,14 @@ public class RootUtil {
 	}
 
 	public Trainer createTrainer(String name, String surname, String pass) {
-		Trainer trainer = null;
+		Trainer trainer = new Trainer(name,surname, name + ".trainer@email.com",Utilities.formatDate(new Date()), Gender.MALE);
 		try {
-			trainer = trainerBO.createTrainer(name, surname, name + ".trainer@email.com", new Date(), Gender.MALE);
 			trainer.setPassword(pass);
+			trainer.setPhone("221-5637610");
+			trainer = trainerBO.createTrainer(trainer);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
-		this.getTrainerDAO().save(trainer);
 		return trainer;
 	}
 
