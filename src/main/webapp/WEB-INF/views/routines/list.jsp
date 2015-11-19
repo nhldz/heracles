@@ -12,19 +12,19 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="panel panel-default">
-				<div class="panel-heading">Clientes</div>
+				<div class="panel-heading">Rutinas</div>
 				<div class="panel-body">
 					<div class="dataTable_wrapper">
-						<table id="clientsTable"
+						<table id="routineTable"
 							class="table table-striped table-bordered table-hover"
 							cellspacing="0" width="100%">
 							<thead>
 								<tr>
 									<th class="no-sort id"></th>
-									<th>Habilitado</th>
-									<th>Apellido y Nombre</th>
-									<th>Email</th>
-									<th>Tel&eacute;fono</th>
+									<th>Nombre</th>
+									<th>Alumno</th>
+									<th>Inicio</th>
+									<th>Fin</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -43,50 +43,51 @@
 		</div>
 	</div>
 	<br>
-	<form id="clientForm" action="/client/save" method="POST"
-		data-toggle="validator">
+	<form id="routineForm" method="POST" data-toggle="validator">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="form-group">
 							<input type="hidden" name="id" />
+							<input type="hidden" name="enabled" value="true"/>
 						</div>
 						<div class="form-group">
-							<label for="name">Nombre:</label> <input type="text" name="name"
+							<label for="name">Nombre:</label> <input name="name"
 								class="form-control" required />
 						</div>
-						<div class="form-group">
-						<label for="surname">Apellido:</label> <input type="text"
-							name="surname" class="form-control" required />
-						</div>	
-						<div class="form-group">
-							<label for="birthday">Fecha Nac.:</label> <input id="birthday"
-								type="date" name="birthday" class="form-control" required />
-						</div>
-						<div class="form-group">
-							<label for="gender">Sexo:</label> <select name="gender" required>
-								<option value="">Seleccione..</option>
-								<c:forEach items="${genders}" var="gender">
-									<option value="${gender}">${gender.type}</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="phone">Tel&eacute;fono:</label> <input
-								type="text" name="phone" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="email">E-mail:</label> <input type="email"
-								name="email" class="form-control" />
-						</div>
-						<div class="form-group">
-						<label for="password">Contrase&ntilde;a:</label> <input type="password"
-							name="password" class="form-control" required/>
-						</div>	
+<!-- 						<div class="form-group"> -->
+<!-- 							<label for="type">Tipo:</label>  -->
+<!-- 							<select name="type" required> -->
+<!-- 								<option value="">Seleccione..</option> -->
+<%-- 								<c:forEach items="${excercisesTypes}" var="type"> --%>
+<%-- 									<option value="${type}">${type.name}</option> --%>
+<%-- 								</c:forEach> --%>
+<!-- 							</select> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<label for="equipment">Herramienta:</label>  -->
+<!-- 							<select	name="equipment" required> -->
+<!-- 								<option value="">Seleccione..</option> -->
+<%-- 								<c:forEach items="${equipments}" var="equipment"> --%>
+<%-- 									<option value="${equipment}">${equipment.name}</option> --%>
+<%-- 								</c:forEach> --%>
+<!-- 							</select> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<label for="bodyParts">Partes Trabajadas:</label>  -->
+<!-- 							<select	name="bodyParts" multiple="multiple" required> -->
+<%-- 								<c:forEach items="${bodyParts}" var="bodyPart"> --%>
+<%-- 									<option value="${bodyPart}">${bodyPart.name}</option> --%>
+<%-- 								</c:forEach> --%>
+<!-- 							</select> -->
+<!-- 						</div> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<label for="description">Descripci&oacute;n:</label> -->
+<!-- 							<textarea name="description" class="form-control" rows="3" required></textarea> -->
+<!-- 						</div> -->
 						<button type="submit" class="btn btn-success">Aceptar</button>
-						<button type="button" class="btn btn-default"
-							onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
+						<button type="button" class="btn btn-default" onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
 					</div>
 				</div>
 			</div>
@@ -97,54 +98,46 @@
 <jsp:include page="../templates/includes/common_foot.jsp" />
 <script>
 	$(document).ready(function() {
-		$( "#birthday" ).datepicker({
-			changeMonth: true,
-		    changeYear: true,
-		    yearRange: "-100:+0",
-		    dateFormat: 'dd/mm/yy'
-		});
-		 
-		dataTable = $('#clientsTable').DataTable({
+		dataTable = $('#routineTable').DataTable({
 			'processing' : false,
 			'serverSide' : false,
-			'sAjaxSource' : '/client/list',
+			'sAjaxSource' : '/routines/list',
 			'bJQueryUI' : true,
 			'autoWidth' : true,
 			'order' : [ [ 1, "asc" ] ],
 			'aoColumns' : [ {
 				'mData' : 'id'
-			},{
-				'mData' : 'enabledUser'
-			},{
+			}, {
 				'mData' : 'name'
-			},{
-				'mData' : 'email'
-			},{
-				'mData' : 'phone',
+			}, {
+				'mData' : 'client'
+			}, {
+				'mData' : 'createDate'
+			}, {
+				'mData' : 'endDate',
 				"defaultContent" : ""
-			} ],
+			}],
 			'columnDefs' : [ {
 				'targets' : 0,
 				'searchable' : false,
 				'ordenable' : false,
 				'className' : 'dt-body-center',
-				'render' : function(data,type, row) {
+				'render' : function(data, type,
+						row) {
 					return '<input name="col" type="radio" id=' + row.id + ' value=' + row.id + ' >';
 				}
 			},{
-				'targets' : 1,
-				'width': '10%',
-				'searchable' : false,
-				'className' : 'dt-body-center',
-				'render' : function(data,type, row) {
-					return (data === true) ? '<span class="glyphicon glyphicon-ok centerSpan"></span>' : '<span class="glyphicon glyphicon-remove centerSpan"></span>';;
-				}
+				"targets": 2,
+    			"render": function ( data, type, row ) {
+                    return data.surname + ', '+ data.name;
+                }
 			},{
-                "render": function ( data, type, row ) {
-                    return row.surname + ', '+ data;
-                },
-                "targets": 2
-            }],
+				'targets' : 3,
+				"sType": 'date',
+				'render' : function(data,type,row) {
+					return formatDate(data);
+				}
+			}],
 			'language' : {
 				"lengthMenu" : "_MENU_ elementos por p&aacute;gina",
 				"zeroRecords" : "No se obtuvieron resultados",
@@ -154,12 +147,12 @@
 			}
 		});
 
-		$('#page-wrapper').on('click','#clientsTable tr',function() {
-			$(this).find('input:radio').attr('checked', true);
+		$('#page-wrapper').on('click','#routinesTable tr',function() {
+			$(this).find('input:radio').attr('checked',true);
 		});
-
-		$('#clientForm').submit(function(e) {
-			var frm = $('#clientForm');
+	
+		$('#routineForm').submit(function(e) {
+			var frm = $('#routineForm');
 			e.preventDefault();
 			$.ajax({
 				type : frm.attr('method'),
@@ -175,49 +168,50 @@
 				}
 			});
 		});
-
+	
 		$('#btnAdd').click(function(e) {
 			toogle('myContent');
 			toogleButtons();
-			$('#clientForm')[0].reset();
+			$('#routineForm')[0].reset();
+			$('#routineForm').attr('action', '/routines/save');
 		});
-
+	
 		$('#btnEdit').click(function(e) {
 			var id = $('input[type="radio"]:checked').val();
-			var frm = $('#clientForm');
+			var frm = $('#routineForm');
+			frm.attr('action','/routines/update');
 			toogleButtons();
 			frm[0].reset();
-			if(typeof id === "undefined"){
+			if (typeof id === "undefined") {
 				toogleButtons();
-				alert("Por favor, seleccione un elemento de la lista");	
-			}else{
+				alert("Por favor, seleccione un elemento de la lista");
+			} else {
 				$.ajax({
 					type : "GET",
-					url : "client/" + id,
+					url : "/routines/load/"+ id,
 					success : function(callback) {
 						frm.loadJSON(callback);
-						$('#birthday').val(formatDate($('#birthday').val()));
 						toogle('myContent');
 					},
 					error : function() {
 						alert("Error!");
 					}
 				});
-			};	
+			};
 		});
-		
-		$('#btnDelete').click(function(){
+	
+		$('#btnDelete').click(function() {
 			var id = $('input[type="radio"]:checked').val();
-			if(typeof id === "undefined"){
-				alert("Por favor, seleccione un elemento de la lista");	
-			}else{
+			if (typeof id === "undefined") {
+				toogleButtons();
+				alert("Por favor, seleccione un elemento de la lista");
+			}else {
 				$.ajax({
 					type : "POST",
-					url : "/client/disable/"+ id,
+					url : "/routines/remove/"+ id,
 					success : function() {
-						dataTable.ajax.reload();
-					    //var tr = $('input[type="radio"]:checked').parent().parent();
-						//dataTable.row(tr).remove().draw(false);
+						var tr = $('input[type="radio"]:checked').parent().parent();
+						dataTable.row(tr).remove().draw(false);
 					},
 					error : function() {
 						alert("Error!");

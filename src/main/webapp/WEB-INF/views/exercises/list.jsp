@@ -42,11 +42,7 @@
 		</div>
 	</div>
 	<br>
-<<<<<<< HEAD
 	<form id="exerciseForm" action="/exercises" method="POST" data-toggle="validator">
-=======
-	<form id="exerciseForm" method="POST" data-toggle="validator">
->>>>>>> ecda84bd13782d8e9fa3f473b684233d49638235
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
 				<div class="panel panel-default">
@@ -54,44 +50,10 @@
 						<div class="form-group">
 							<input type="hidden" name="id" />
 							<input type="hidden" name="enabled" value="true"/>
-<<<<<<< HEAD
 						</div>
 						<div class="form-group">
-							<label for="name">Nombre:</label> <input name="name"
-								class="form-control" required />
-						</div>
-						<div class="form-group">
-							<label for="type">Tipo:</label> 
-							<select name="type" required>
-								<option value="">Seleccione..</option>
-								<c:forEach items="${excercisesTypes}" var="type">
-									<option value="${type}">${type.name}</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="equipment">Herramienta:</label> 
-							<select	name="equipment" required>
-								<option value="">Seleccione..</option>
-								<c:forEach items="${equipments}" var="equipment">
-									<option value="${equipment}">${equipment.name}</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="bodyParts">Partes Trabajadas:</label> 
-							<select	name="bodyParts" multiple="multiple" required>
-								<c:forEach items="${bodyParts}" var="bodyPart">
-									<option value="${bodyPart}">${bodyPart.name}</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div class="form-group">
-=======
-						</div>
-						<div class="form-group">
-							<label for="name">Nombre:</label> <input name="name"
-								class="form-control" required />
+							<label for="name">Nombre:</label> 
+							<input name="name" class="form-control" required >
 						</div>
 						<div class="form-group">
 							<label for="type">Tipo:</label> 
@@ -120,7 +82,6 @@
 							</select>
 						</div>
 						<div class="form-group">
->>>>>>> ecda84bd13782d8e9fa3f473b684233d49638235
 							<label for="description">Descripci&oacute;n:</label>
 							<textarea name="description" class="form-control" rows="3" required></textarea>
 						</div>
@@ -131,126 +92,9 @@
 			</div>
 		</div>
 	</form>
-<<<<<<< HEAD
 </div>
 <jsp:include page="../templates/includes/common_foot.jsp" />
 <script src="resources/js/exercises.js"></script>
 
 </body>
 </html>
-=======
-</div>
-</div>
-<jsp:include page="../templates/includes/common_foot.jsp" />
-<script>
-	$(document).ready(function() {
-		dataTable = $('#exercisesTable').DataTable({
-			'processing' : false,
-			'serverSide' : false,
-			'sAjaxSource' : '/exercises/list',
-			'bJQueryUI' : true,
-			'autoWidth' : true,
-			'order' : [ [ 1, "asc" ] ],
-			'aoColumns' : [ {
-				'mData' : 'id'
-			}, {
-				'mData' : 'name'
-			}, {
-				'mData' : 'type'
-			}, {
-				'mData' : 'description'
-			} ],
-			'columnDefs' : [ {
-				'targets' : 0,
-				'searchable' : false,
-				'ordenable' : false,
-				'className' : 'dt-body-center',
-				'render' : function(data, type,
-						row) {
-					return '<input name="col" type="radio" id=' + row.id + ' value=' + row.id + ' >';
-				}
-			} ],
-			'language' : {
-				"lengthMenu" : "_MENU_ elementos por p&aacute;gina",
-				"zeroRecords" : "No se obtuvieron resultados",
-				"info" : "P&aacute;gina _PAGE_ de _PAGES_",
-				"infoEmpty" : "No se obtuvieron resultados",
-				"infoFiltered" : "(de _MAX_ elementos)"
-			}
-		});
-
-		$('#page-wrapper').on('click','#exercisesTable tr',function() {
-			$(this).find('input:radio').attr('checked',true);
-		});
-	
-		$('#exerciseForm').submit(function(e) {
-			var frm = $('#exerciseForm');
-			e.preventDefault();
-			$.ajax({
-				type : frm.attr('method'),
-				url : frm.attr('action'),
-				data : frm.serialize(),
-				success : function() {
-					dataTable.ajax.reload();
-					toogle('myContent');
-					toogleButtons();
-				},
-				error : function() {
-					alert("Error!");
-				}
-			});
-		});
-	
-		$('#btnAdd').click(function(e) {
-			toogle('myContent');
-			toogleButtons();
-			$('#exerciseForm')[0].reset();
-			$('#exerciseForm').attr('action', '/exercises/save');
-		});
-	
-		$('#btnEdit').click(function(e) {
-			var id = $('input[type="radio"]:checked').val();
-			var frm = $('#exerciseForm');
-			frm.attr('action','/exercises/update');
-			toogleButtons();
-			frm[0].reset();
-			if (typeof id === "undefined") {
-				toogleButtons();
-				alert("Por favor, seleccione un elemento de la lista");
-			} else {
-				$.ajax({
-					type : "GET",
-					url : "/exercises/load/"+ id,
-					success : function(callback) {
-						frm.loadJSON(callback);
-						toogle('myContent');
-					},
-					error : function() {
-						alert("Error!");
-					}
-				});
-			};
-		});
-	
-		$('#btnDelete').click(function() {
-			var id = $('input[type="radio"]:checked').val();
-			if (typeof id === "undefined") {
-				toogleButtons();
-				alert("Por favor, seleccione un elemento de la lista");
-			}else {
-				$.ajax({
-					type : "POST",
-					url : "/exercises/remove/"+ id,
-					success : function() {
-						var tr = $('input[type="radio"]:checked').parent().parent();
-						dataTable.row(tr).remove().draw(false);
-					},
-					error : function() {
-						alert("Error!");
-					}
-				});
-			};
-		});
-	});
-</script>
->>>>>>> ecda84bd13782d8e9fa3f473b684233d49638235

@@ -34,16 +34,11 @@ public interface ExerciseBO {
 	/**
 	 * Edita o actualiza un ejercicio existente
 	 * 
-	 * @param exerciseId
-	 * @param name
-	 * @param type
-	 * @param equipment
-	 * @param bodyParts
-	 * @param description
+	 * @param exercise
+	 * 		Ejercicio que contiene las variables a actualizar.
 	 * @return
 	 */
-	public Exercise updateExercise(Long exerciseId, String name, ExerciseType type, Equipment equipment,
-			List<BodyPart> bodyParts, String description) throws NullPointerException, BusinessException;
+	public Exercise updateExercise(Exercise exercise) throws NullPointerException, BusinessException;
 
 	/**
 	 * Retorna todos los ejercicios cargados

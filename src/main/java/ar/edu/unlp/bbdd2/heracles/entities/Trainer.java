@@ -7,6 +7,7 @@ import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.EntitySubclass;
+import com.googlecode.objectify.annotation.Load;
 
 /**
  * Entrenador
@@ -17,8 +18,13 @@ import com.googlecode.objectify.annotation.EntitySubclass;
 @EntitySubclass(index = true)
 public class Trainer extends User {
 
-	private List<Ref<Exercise>> exercises;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4466417546084078351L;
 
+	private List<Ref<Exercise>> exercises;
+	@Load
 	private List<Ref<Routine>> routines;
 
 	public Trainer() {

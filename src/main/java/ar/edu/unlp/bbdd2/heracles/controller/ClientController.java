@@ -7,13 +7,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.unlp.bbdd2.heracles.bo.impl.ClientBOImpl;
+import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
+import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
@@ -28,7 +31,7 @@ import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
 public class ClientController {
 
 	@Autowired
-	private ClientBOImpl clientBO;
+	private ClientBO clientBO;
 
 	/**
 	 * Pagina principal de clientes
@@ -56,9 +59,22 @@ public class ClientController {
 		response.setContentType("application/json");
 		Long idL = Long.valueOf(id);
 		PrintWriter out = response.getWriter();
-		Client client = this.getClientBO().getClientDAO().loadById(idL);
+		Client client = this.getClientBO().getClientById(idL);
 		String json = JsonTransform.objectToJson(client);
 		out.print(json);
+	}
+	
+	/**
+	 * Guarda los cambios del formulario de cliente
+	 * 
+	 * @param client
+	 * @param model
+	 * @return
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(value = "save", method = RequestMethod.POST)
+	public @ResponseBody void save(@ModelAttribute Client client, Model model) throws BusinessException {
+	
 	}
 
 	/**
@@ -86,15 +102,15 @@ public class ClientController {
 	public void getClients(HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
-		String json = JsonTransform.listToJson(this.getClientBO().getAllClients());
+		String json = JsonTransform.listToJson(this.getClientBO().getAllEnabledClients());
 		out.print(json);
 	}
 
-	public ClientBOImpl getClientBO() {
+	public ClientBO getClientBO() {
 		return clientBO;
 	}
 
-	public void setClientBO(ClientBOImpl clientBO) {
+	public void setClientBO(ClientBO clientBO) {
 		this.clientBO = clientBO;
 	}
 

@@ -8,6 +8,7 @@ import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 
 /**
  * Representa el ejercicio y como debe realizarse.
@@ -31,6 +32,8 @@ public class Exercise {
 
 	private String description;
 
+	@Index
+	@Load
 	private Ref<Trainer> owner;
 
 	private boolean enabled;

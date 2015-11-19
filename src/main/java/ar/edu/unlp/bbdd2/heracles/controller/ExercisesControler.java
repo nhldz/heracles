@@ -74,10 +74,11 @@ public class ExercisesControler {
 	 * 
 	 * @param exercise
 	 * @param model
+	 * @return 
 	 * @return
 	 */
 	@RequestMapping(value = "/exercises", method = RequestMethod.POST)
-	public String add (@ModelAttribute Exercise exercise, Model model){
+	public @ResponseBody void add (@ModelAttribute Exercise exercise, Model model){
 		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String email = up.getEmail();
 		Trainer owner = this.getTrainerBO().findByEmail(email);
@@ -93,7 +94,6 @@ public class ExercisesControler {
 			result = "error/"+e.getMessage();
 		}
 		model.addAttribute("exercise", ex);
-		return result; 
 	}
 	
 	/**
@@ -105,14 +105,9 @@ public class ExercisesControler {
 	 */
 	@RequestMapping(value = "/exercises", method = RequestMethod.PUT)
 	public @ResponseBody void update(@ModelAttribute Exercise exercise, Model model) {
-		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String email = up.getEmail();
-		Trainer owner = this.getTrainerBO().findByEmail(email);
 		String result = "exercises";
 		try {
-			if (this.validUpdate(exercise)) {
-				this.getExerciseBO().save(exercise);
-			}
+			this.getExerciseBO().updateExercise(exercise);
 		} catch (BusinessException e) {
 			result = "error/" + e.getMessage();
 		}
@@ -130,7 +125,12 @@ public class ExercisesControler {
 		Long idL = Long.valueOf(id);
 		Exercise exc = this.getExerciseBO().loadById(idL);
 		exc.setEnabled(false);
-		this.getExerciseBO().save(exc);
+		try {
+			this.getExerciseBO().save(exc);
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**

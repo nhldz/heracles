@@ -25,14 +25,14 @@ public interface ClientBO {
 	 * @param client
 	 *            Cliente
 	 */
-	void startExercise(Client client, ExerciseConfiguration exercise) throws BusinessException;
+	public void startExercise(Client client, ExerciseConfiguration exercise) throws BusinessException;
 
 	/**
 	 * Detiene (stop) el ejercicio que actualmente esta haciendo el cliente. s
 	 * 
 	 * @param client
 	 */
-	void stopExercise(Client client) throws BusinessException;
+	public void stopExercise(Client client) throws BusinessException;
 
 	/**
 	 * Cancela el ejercicio que se esta haciendo actualmente.
@@ -46,7 +46,7 @@ public interface ClientBO {
 	 * @param weight
 	 *            Peso con el que se realizo el ejercicio.
 	 */
-	void calcelExercise(Client client, List<Integer> sets, List<Integer> reps, Integer weight) throws BusinessException;
+	public void calcelExercise(Client client, List<Integer> sets, List<Integer> reps, Integer weight) throws BusinessException;
 
 	/**
 	 * Crea un nuevo cliente y lo retorna
@@ -71,5 +71,21 @@ public interface ClientBO {
 	 * @param id
 	 *            del cliente a deshabilitar
 	 */
-	void clientDisable(Long id);
+	public void clientDisable(Long id);
+
+	/**
+	 * Retorna un cliente
+	 * 
+	 * @param id
+	 *            del cliente
+	 * @return
+	 */
+	public Client getClientById(Long id);
+
+	/**
+	 * Retorna la lista de clientes habilitados
+	 * 
+	 * @return
+	 */
+	public List<Client> getAllEnabledClients();
 }

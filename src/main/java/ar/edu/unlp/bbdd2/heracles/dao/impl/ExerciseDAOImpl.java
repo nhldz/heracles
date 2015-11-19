@@ -1,8 +1,9 @@
 package ar.edu.unlp.bbdd2.heracles.dao.impl;
 
+import ar.edu.unlp.bbdd2.heracles.dao.ExerciseDAO;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 
-public class ExerciseDAOImpl extends BaseDAOImpl<Exercise> {
+public class ExerciseDAOImpl extends BaseDAOImpl<Exercise> implements ExerciseDAO {
 
 	public ExerciseDAOImpl(Class<Exercise> classType) {
 		super();

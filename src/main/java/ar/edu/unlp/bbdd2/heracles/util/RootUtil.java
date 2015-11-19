@@ -226,6 +226,7 @@ public class RootUtil {
 			String pass = "123456";
 
 			List<BodyPart> bodysParts = new ArrayList<BodyPart>();
+			
 			bodysParts.add(BodyPart.BICEPS);
 			loadRoles();
 			Trainer trainer = createTrainer("nahuel", "Diaz", "123");
@@ -233,7 +234,7 @@ public class RootUtil {
 
 			for (int i = 0; i < 5; i++) {
 				Client client = createClient(clientName + i, surname + i, pass);
-				Trainer trainer2 = createTrainer(trianerName + i, surname + i, pass);
+				trainer = createTrainer(trianerName + i, surname + i, pass);
 				Exercise exercise = null;
 
 				try {
@@ -243,18 +244,18 @@ public class RootUtil {
 					exercise = this.getExerciseDAO().findByName(exName + i);
 					e.printStackTrace();
 				}
-				// Routine routine =
-				// this.getTrainerBO().createRoutine(routineName+i, trainer,
-				// client);
-				// Activity activity =
-				// this.getTrainerBO().createActivity(routine, activityName+i,
-				// "Actividad #"+i, null, null);
-				// List<Integer> sets = new ArrayList<Integer>();
-				// List<Integer> reps = new ArrayList<Integer>();
-				// sets.add(i);
-				// reps.add(i);
-				// this.getTrainerBO().createExConfiguration(exercise, activity,
-				// sets, reps, i, i);
+				 Routine routine =
+				 this.getTrainerBO().createRoutine(routineName+i, trainer,
+				 client);
+				 Activity activity =
+				 this.getTrainerBO().createActivity(routine, activityName+i,
+				 "Actividad #"+i, null, null);
+				 List<Integer> sets = new ArrayList<Integer>();
+				 List<Integer> reps = new ArrayList<Integer>();
+				 sets.add(i);
+				 reps.add(i);
+				 this.getTrainerBO().createExConfiguration(exercise, activity,
+				 sets, reps, i, i);
 
 			}
 			System.out.println("ROOT LOAD");

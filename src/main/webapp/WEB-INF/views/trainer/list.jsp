@@ -73,8 +73,8 @@
 							</select>
 						</div>
 						<div class="form-group">
-							<label for="cellPhone">Tel&eacute;fono:</label> <input
-								type="text" name="cellPhone" class="form-control" />
+							<label for="phone">Tel&eacute;fono:</label> <input
+								type="text" name="phone" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label for="email">E-mail:</label> <input type="email"
@@ -119,9 +119,10 @@
 				}, {
 					'mData' : 'name'
 				},{
-					'mData' : 'email'
+					'mData' : 'email',
+					'type' :  'email'
 				}, {
-					'mData' : 'cellPhone',
+					'mData' : 'phone',
 					"defaultContent" : ""
 				} ],
 				'columnDefs' : [ {
@@ -198,6 +199,7 @@
 					url : "trainer/load/" + id,
 					success : function(callback) {
 						frm.loadJSON(callback);
+						$('#birthday').val(formatDate($('#birthday').val()));
 						toogle('myContent');
 					},
 					error : function() {

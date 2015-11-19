@@ -207,7 +207,7 @@
 <!-- 				</li> -->
 				<li><a href="/exercises" id="exercises"><i
 						class="fa fa-check fa-fw"></i> Ejercicios</a></li>
-				<li><a href="/index" id="routines"><i
+				<li><a href="/routines" id="routines"><i
 						class="fa fa-dashboard fa-fw"></i> Rutinas</a></li>
 				<li><a href="index"><i class="fa fa-users fa-fw"></i>Usuarios<span
 						class="fa arrow"></span></a>

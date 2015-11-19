@@ -8,13 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
+import ar.edu.unlp.bbdd2.heracles.dao.ClientDAO;
+import ar.edu.unlp.bbdd2.heracles.dao.ExerciseDAO;
+import ar.edu.unlp.bbdd2.heracles.dao.TrainerDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.ClientDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
@@ -35,9 +35,9 @@ import ar.edu.unlp.bbdd2.heracles.entities.User;
  */
 public class TrainerBOImpl implements TrainerBO {
 
-	private ClientDAOImpl clientDAO;
-	private TrainerDAOImpl trainerDAO;
-	private ExerciseDAOImpl exerciseDAO;
+	private ClientDAO clientDAO;
+	private TrainerDAO trainerDAO;
+	private ExerciseDAO exerciseDAO;
 	private RoutineDAOImpl routineDAO;
 	private ExerciseConfigurationDAOImpl exConfDAO;
 	private ActivityDAOImpl activityDAO;
@@ -144,23 +144,22 @@ public class TrainerBOImpl implements TrainerBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Trainer createTrainer(String name, String surname, String email, Date birthday, Gender gender)
+	public Trainer createTrainer(Trainer trainer)
 			throws BusinessException {
-		Trainer trainer = null;
-		if (this.findByEmail(email) == null) {
-			trainer = new Trainer(name, surname, email, birthday, gender);
+		if (this.findByEmail(trainer.getEmail()) == null) {
 			trainer.setExercises(new ArrayList<Exercise>());
 			trainer.setRoutines(new ArrayList<Routine>());
 			trainer.setRegistrationDate(new Date());
+			trainer.setEnabledUser(true);
 			Role role = roleDAO.loadByName(RoleName.TRAINER.getType());
 			List<Role> roles = new ArrayList<Role>();
 			roles.add(role);
 			trainer.setRoles(roles);
-			trainerDAO.save(trainer);
+			this.getTrainerDAO().save(trainer);
 			List<User> users = role.getUsers();
 			users.add(trainer);
 			role.setUsers(users);
-			roleDAO.saveOrUpdate(role);
+			this.getRoleDAO().saveOrUpdate(role);
 		} else {
 			throw new BusinessException("El email ya existe");
 		}
@@ -168,34 +167,48 @@ public class TrainerBOImpl implements TrainerBO {
 	}
 
 	@Override
-	public void trainerDisable(Long idL) {
-		Trainer trainer = this.getTrainerDAO().loadById(idL);
+	public void trainerDisable(Long id) {
+		Trainer trainer = this.getTrainerDAO().loadById(id);
 		trainer.setEnabledUser(false);
 		this.getTrainerDAO().save(trainer);
-
+	}
+	
+	@Override
+	public Trainer getTrainerById(Long id) {
+		return this.getTrainerDAO().loadById(id);
+	}
+	
+	@Override
+	public List<Trainer> getAllTrainers() {
+		return this.getTrainerDAO().loadAll();
+	}
+	
+	@Override
+	public void save(Trainer trainer) {
+		this.getTrainerDAO().save(trainer);		
 	}
 
-	public ClientDAOImpl getClientDAO() {
+	public ClientDAO getClientDAO() {
 		return clientDAO;
 	}
 
-	public void setClientDAO(ClientDAOImpl clientDAO) {
+	public void setClientDAO(ClientDAO clientDAO) {
 		this.clientDAO = clientDAO;
 	}
 
-	public TrainerDAOImpl getTrainerDAO() {
+	public TrainerDAO getTrainerDAO() {
 		return trainerDAO;
 	}
 
-	public void setTrainerDAO(TrainerDAOImpl trainerDAO) {
+	public void setTrainerDAO(TrainerDAO trainerDAO) {
 		this.trainerDAO = trainerDAO;
 	}
 
-	public ExerciseDAOImpl getExerciseDAO() {
+	public ExerciseDAO getExerciseDAO() {
 		return exerciseDAO;
 	}
 
-	public void setExerciseDAO(ExerciseDAOImpl exerciseDAO) {
+	public void setExerciseDAO(ExerciseDAO exerciseDAO) {
 		this.exerciseDAO = exerciseDAO;
 	}
 
@@ -223,10 +236,6 @@ public class TrainerBOImpl implements TrainerBO {
 		this.activityDAO = activityDAO;
 	}
 
-	public List<Trainer> getAllTrainers() {
-		return this.getTrainerDAO().loadAll();
-	}
-
 	public RoleDAOImpl getRoleDAO() {
 		return roleDAO;
 	}
@@ -234,5 +243,4 @@ public class TrainerBOImpl implements TrainerBO {
 	public void setRoleDAO(RoleDAOImpl roleDAO) {
 		this.roleDAO = roleDAO;
 	}
-
 }

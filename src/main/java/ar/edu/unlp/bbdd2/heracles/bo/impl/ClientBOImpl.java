@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.ClientDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.ClientDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseSnapshotDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
@@ -26,7 +26,7 @@ import ar.edu.unlp.bbdd2.heracles.entities.User;
  */
 public class ClientBOImpl implements ClientBO {
 
-	private ClientDAOImpl clientDAO;
+	private ClientDAO clientDAO;
 	private RoleDAOImpl roleDAO;
 	private ExerciseConfigurationDAOImpl exConfDAO;
 	private ExerciseSnapshotDAOImpl exSanpshotDAO;
@@ -97,6 +97,11 @@ public class ClientBOImpl implements ClientBO {
 	public List<Client> getAllClients() {
 		return this.getClientDAO().loadAll();
 	}
+	
+	@Override
+	public Client getClientById(Long id) {
+		return this.getClientDAO().loadById(id);
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -105,7 +110,7 @@ public class ClientBOImpl implements ClientBO {
 	public Client createClient(String name, String surname, String email, Date birthday, Gender gender)
 			throws BusinessException {
 		Client client = null;
-		if (clientDAO.loadByEmail(email) == null) {
+		if (this.getClientDAO().loadByEmail(email) == null) {
 			client = new Client(name, surname, email, birthday, gender);
 			client.setRoutines(new ArrayList<Routine>());
 			client.setRegistrationDate(new Date());
@@ -130,9 +135,18 @@ public class ClientBOImpl implements ClientBO {
 		client.setEnabledUser(false);
 		this.getClientDAO().save(client);
 	}
+	
+	@Override
+	public List<Client> getAllEnabledClients() {
+		return this.getClientDAO().loadAll();
+	}
 
-	public ClientDAOImpl getClientDAO() {
+	public ClientDAO getClientDAO() {
 		return clientDAO;
+	}
+	
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
 	}
 
 	public RoleDAOImpl getRoleDAO() {
@@ -141,10 +155,6 @@ public class ClientBOImpl implements ClientBO {
 
 	public void setRoleDAO(RoleDAOImpl roleDAO) {
 		this.roleDAO = roleDAO;
-	}
-
-	public void setClientDAO(ClientDAOImpl clientDAO) {
-		this.clientDAO = clientDAO;
 	}
 
 	public ExerciseConfigurationDAOImpl getExConfDAO() {
