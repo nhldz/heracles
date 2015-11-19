@@ -1,4 +1,3 @@
-{$exercisesJson}
 <jsp:include page="../templates/includes/common_head.jsp" />
 <div id="wrapper">
 	<jsp:include page="../trainer/menu.jsp" />
@@ -21,8 +20,9 @@
 							<thead>
 								<tr>
 									<th class="no-sort id"></th>
-									<th>Name</th>
-									<th>Description</th>
+									<th>Nombre</th>
+									<th>Tipo</th>
+									<th>Descripci&oacute;n</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -41,128 +41,59 @@
 		</div>
 	</div>
 	<br>
-	<form id="exerciseForm" action="guardar" method="POST" data-toggle="validator">
+	<form id="exerciseForm" action="/exercises" method="POST" data-toggle="validator">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<div class="form-group">
-							<input type="hidden" name="id"/>
+							<input type="hidden" name="id" />
+							<input type="hidden" name="enabled" value="true"/>
 						</div>
 						<div class="form-group">
-							<label for="name">Nombre:</label>
-							<input name="name" class="form-control" required/>
+							<label for="name">Nombre:</label> <input name="name"
+								class="form-control" required />
 						</div>
 						<div class="form-group">
-							<label for="description">Descripción:</label>
+							<label for="type">Tipo:</label> 
+							<select name="type" required>
+								<option value="">Seleccione..</option>
+								<c:forEach items="${excercisesTypes}" var="type">
+									<option value="${type}">${type.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="equipment">Herramienta:</label> 
+							<select	name="equipment" required>
+								<option value="">Seleccione..</option>
+								<c:forEach items="${equipments}" var="equipment">
+									<option value="${equipment}">${equipment.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="bodyParts">Partes Trabajadas:</label> 
+							<select	name="bodyParts" multiple="multiple" required>
+								<c:forEach items="${bodyParts}" var="bodyPart">
+									<option value="${bodyPart}">${bodyPart.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="form-group">
+							<label for="description">Descripci&oacute;n:</label>
 							<textarea name="description" class="form-control" rows="3" required></textarea>
 						</div>
 						<button type="submit" class="btn btn-success">Aceptar</button>
-						<button type="button" class="btn btn-default"
-							onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
+						<button type="button" class="btn btn-default" onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>	
+	</form>
 </div>
 <jsp:include page="../templates/includes/common_foot.jsp" />
-<script>
-		$(document).ready(function() {
-			dataTable = $('#exercisesTable').DataTable({
-				'processing' : false,
-				'serverSide' : false,
-				'sAjaxSource' : '/getExercises',
-				'bJQueryUI' : true,
-				'autoWidth': true,
-				'order': [[ 1, "asc" ]],
-				'aoColumns' : [{
-					'mData' : 'id'
-				},{
-					'mData' : 'name'
-				},{
-					'mData' : 'description'
-				}],
-				'columnDefs': [{
-					'targets': 0,
-					'searchable':false,
-			        'ordenable':false,
-			        'className': 'dt-body-center',
-                    'render': function (data, type, row) {
-                        return '<input name="col" type="radio" id=' + row.id + ' value=' + row.id + ' >';
-                    }
-                }],
-				'language' : {
-					"lengthMenu" : "_MENU_ elementos por página",
-					"zeroRecords" : "No se obtuvieron resultados",
-					"info" : "Página _PAGE_ de _PAGES_",
-					"infoEmpty" : "No se obtuvieron resultados",
-					"infoFiltered" : "(de _MAX_ elementos)"
-				}
-			});
-						
-			$('#page-wrapper').on('click', '#exercisesTable tr', function() {
-				$(this).find('input:radio').attr('checked', true);
-			});
-
-			$('#exerciseForm').submit(function(e) {
-				var frm = $('#exerciseForm');
-				e.preventDefault();
-				$.ajax({
-					type : frm.attr('method'),
-					url : frm.attr('action'),
-					data : frm.serialize(),
-					success : function() {
-						dataTable.ajax.reload();
-						toogle('myContent');
-						toogleButtons();
-					},
-					error : function() {
-						alert("Error!");
-					}
-				});
-			});
-			
-			$('#btnAdd').click(function(e) {
-				toogle('myContent');
-				toogleButtons();
-				$('#exerciseForm')[0].reset();
-			});
-			
-			$('#btnEdit').click(function(e) {
-				var frm = $('#exerciseForm');
-				frm.method = "PUT";
-				toogleButtons();
-				frm[0].reset();
-				$.ajax({
-					type : "GET",
-					url : "/exercises/"+ $('input[type="radio"]:checked').val(),
-// 					data : "id=" + $('input[type="radio"]:checked').val(),
-					success : function(callback) {
-						frm.loadJSON(callback);
-						toogle('myContent');
-					},
-					error : function() {
-						alert("Error!");
-					}
-				});
-			});
-			
-			$('#btnDelete').click(function(){
-				$.ajax({
-					type : "DELETE",
-					url : "/exercises/"+ $('input[type="radio"]:checked').val(),
-					success : function() {
-					    var tr = $('input[type="radio"]:checked').parent().parent();
-						dataTable.row(tr).remove().draw(false);
-					},
-					error : function() {
-						alert("Error!");
-					}
-				});
-			});
-		});
-	</script>
+<script src="resources/js/exercises.js"></script>
 
 </body>
 </html>
