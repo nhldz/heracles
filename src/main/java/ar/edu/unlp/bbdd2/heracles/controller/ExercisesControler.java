@@ -2,101 +2,84 @@ package ar.edu.unlp.bbdd2.heracles.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.repackaged.com.google.gson.Gson;
-import com.google.appengine.repackaged.com.google.gson.GsonBuilder;
 
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseBOImpl;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.TrainerBOImpl;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
-import ar.edu.unlp.bbdd2.heracles.helper.DataTableObject;
+import ar.edu.unlp.bbdd2.heracles.entities.ExerciseType;
+import ar.edu.unlp.bbdd2.heracles.entities.Equipment;
+import ar.edu.unlp.bbdd2.heracles.entities.BodyPart;
+import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
+import ar.edu.unlp.bbdd2.heracles.security.UserPrincipal;
 
 
 @Controller
 public class ExercisesControler {
-	
+
 	@Autowired
 	private ExerciseBOImpl exerciseBO;
 	@Autowired
 	private TrainerBOImpl trainerBO;
-	
+
 	/**
-	 * Pagina prinicipal de ejercicios.
+	 * Pagina principal de ejercicios
+	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "/exercises", method = RequestMethod.GET)
 	public ModelAndView getExercises (){
 		ModelAndView mv = new ModelAndView("exercises/list");
-		mv.addObject("exercisesJson",this.exercisesJson(this.exerciseBO.getAllExercises()));
+		mv.addObject("excercisesTypes", ExerciseType.values());
+		mv.addObject("equipments", Equipment.values());
+		mv.addObject("bodyParts", BodyPart.values());
 		return mv;
 	}
-	
-	@RequestMapping(value = "/exercises/{name}", method = RequestMethod.GET)
-	public ModelAndView showMessage(
-			@PathVariable("name") String name) {
-		System.out.println("in controller exercise "+name);
- 
-		ModelAndView mv = new ModelAndView("exercise");
-		mv.addObject("exercise", this.getExerciseBO().getExerciseDAO().findByName(name));
-		return mv;
-	}
-	
-//	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.GET)
-//	public ModelAndView getExerciseById (
-//			@RequestParam(value = "id") String id){
-//		ModelAndView mv = new ModelAndView("exercise");
-//		mv.addObject("exercise", this.getExerciseBO().getExerciseDAO().loadById(new Long(id)));
-//		return mv;
-//	}
-	
+
 	/**
-	 * Elimina un ejercicio
+	 * Retorna un json del ejercicio
+	 * 
+	 * @param response
 	 * @param id
-	 * 		id del ejercicio a eliminar.
-	 * @return
+	 *            del ejercicio
+	 * @throws IOException
 	 */
-	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.DELETE)
-	public ModelAndView delete (
-			@PathVariable("id") String id){
-		Long idL = new Long(id);
-		ModelAndView mv = new ModelAndView("exercises/list");
-		this.getExerciseBO().deleteExercise(idL);
-		return mv;
-	}
-	
 	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.GET)
-	public void getExerciseById(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
+	public @ResponseBody void getExerciseById(HttpServletResponse response, @PathVariable("id") String id)
+			throws IOException {
 		response.setContentType("application/json");
-		Long idL = new Long(id);
-		PrintWriter out = response.getWriter();  
+		Long idL = Long.valueOf(id);
+		PrintWriter out = response.getWriter();
 		Exercise exc = this.getExerciseBO().getExerciseDAO().loadById(idL);
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		String json = gson.toJson(exc);
+		String json = JsonTransform.objectToJson(exc);
 		out.print(json);
 	}
 	
-	//TODO: edit de ejercicios, ver como hacerlos REST.
-	
-	@RequestMapping(value = "exercise", method = RequestMethod.POST)
+	/**
+	 * Action para crear/agregar un nuevo ejercicio.
+	 * 
+	 * @param exercise
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/exercises", method = RequestMethod.POST)
 	public String add (@ModelAttribute Exercise exercise, Model model){
-		UserService userService = UserServiceFactory.getUserService();
-		String email = userService.getCurrentUser().getEmail();
+		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String email = up.getEmail();
 		Trainer owner = this.getTrainerBO().findByEmail(email);
 		Exercise ex = null;
 		String result = "exercises/";
@@ -113,22 +96,63 @@ public class ExercisesControler {
 		return result; 
 	}
 	
-	@RequestMapping(value = "/getExercises", method = RequestMethod.GET)
-	public void getExercises(HttpServletResponse response) throws IOException {
-		response.setContentType("application/json");
-		PrintWriter out = response.getWriter();
-		
-		out.print(this.exercisesJson(this.exerciseBO.getAllExercises()));
+	/**
+	 * Action para actualizar un ejecicio
+	 * 
+	 * @param exercise
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/exercises", method = RequestMethod.PUT)
+	public @ResponseBody void update(@ModelAttribute Exercise exercise, Model model) {
+		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String email = up.getEmail();
+		Trainer owner = this.getTrainerBO().findByEmail(email);
+		String result = "exercises";
+		try {
+			if (this.validUpdate(exercise)) {
+				this.getExerciseBO().save(exercise);
+			}
+		} catch (BusinessException e) {
+			result = "error/" + e.getMessage();
+		}
 	}
 	
-	private String exercisesJson (List<Exercise> exercises){
-		DataTableObject<Exercise> dataTableObject = new DataTableObject<Exercise>();
-		dataTableObject.setAaData(exercises);
-		dataTableObject.setiTotalDisplayRecords(11);
-		dataTableObject.setiTotalRecords(exercises.size());
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		String json = gson.toJson(dataTableObject);
-		return json;
+	/**
+	 * Elimina un ejercicio
+	 * @param id
+	 * 		id del ejercicio a eliminar.
+	 * @return
+	 */
+	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.DELETE)
+	@ResponseBody
+	public ModelAndView delete (@PathVariable("id") String id){
+		Long idL = Long.valueOf(id);
+		Exercise exc = this.getExerciseBO().loadById(idL);
+		exc.setEnabled(false);
+		this.getExerciseBO().save(exc);
+	}
+	
+	/**
+	 * Retorna un json con todos los ejercicios existentes
+	 * 
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/exercises/list", method = RequestMethod.GET)
+	public void listExercises(HttpServletResponse response) throws IOException {
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		String json = JsonTransform.listToJson(this.getExerciseBO().getAllExercises());
+		out.print(json);
+	}
+	
+	private boolean validSave(Exercise exercise) {
+		return this.getExerciseBO().validSave(exercise);
+	}
+	
+	private boolean validUpdate(Exercise exercise) {
+		return this.getExerciseBO().validUpdate(exercise);
 	}
 
 	public ExerciseBOImpl getExerciseBO() {
@@ -146,5 +170,5 @@ public class ExercisesControler {
 	public void setTrainerBO(TrainerBOImpl trainerBO) {
 		this.trainerBO = trainerBO;
 	}
-	
+
 }

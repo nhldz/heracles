@@ -32,6 +32,12 @@ public enum Equipment {
 		return this.name;
 	}
 	
+
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
 	public final List<Equipment> getAll (){
 		List<Equipment> equipments = new ArrayList<Equipment>();
 		Equipment[] values = Equipment.values();

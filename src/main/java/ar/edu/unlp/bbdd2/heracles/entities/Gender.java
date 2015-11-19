@@ -28,4 +28,9 @@ public enum Gender {
 		return shortType;
 	}
 	
+	@Override
+	public String toString() {
+		return this.getType();
+	}
+	
 }

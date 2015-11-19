@@ -37,7 +37,6 @@ public class HeraclesAuthenticationProvider implements AuthenticationProvider {
 			}
 		}
 		return auth;
-		
 	}
 
 	@Override
