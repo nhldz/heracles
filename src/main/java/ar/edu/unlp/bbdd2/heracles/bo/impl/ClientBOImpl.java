@@ -25,7 +25,7 @@ import ar.edu.unlp.bbdd2.heracles.entities.User;
  *
  */
 public class ClientBOImpl implements ClientBO {
-	
+
 	private ClientDAOImpl clientDAO;
 	private RoleDAOImpl roleDAO;
 	private ExerciseConfigurationDAOImpl exConfDAO;
@@ -35,9 +35,9 @@ public class ClientBOImpl implements ClientBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void startExercise(Client client, ExerciseConfiguration exercise) throws BusinessException{
+	public void startExercise(Client client, ExerciseConfiguration exercise) throws BusinessException {
 		ExerciseConfiguration runExercise = client.getActualRoutine().getRunActivity().getRunExercise();
-		if (runExercise == null){
+		if (runExercise == null) {
 			ExerciseSnapshot snapshot = new ExerciseSnapshot();
 			snapshot.setStartDate(new Date());
 			snapshot.setState(ExerciseState.RUN);
@@ -46,11 +46,10 @@ public class ClientBOImpl implements ClientBO {
 			this.getExConfDAO().saveOrUpdate(exercise);
 			client.getActualRoutine().getRunActivity().setRunExercise(exercise);
 			this.getClientDAO().saveOrUpdate(client);
-		}else {
-			throw new BusinessException ("Actualmente se esta realizando el ejercicio: "+runExercise.getExercise().getName());
+		} else {
+			throw new BusinessException(
+					"Actualmente se esta realizando el ejercicio: " + runExercise.getExercise().getName());
 		}
-		
-
 	}
 
 	/**
@@ -59,15 +58,15 @@ public class ClientBOImpl implements ClientBO {
 	@Override
 	public void stopExercise(Client client) throws BusinessException {
 		ExerciseConfiguration runExercise = client.getActualRoutine().getRunActivity().getRunExercise();
-		if (runExercise != null){
-			ExerciseSnapshot snapshot = runExercise.getSnapshots().get(runExercise.getSnapshots().size()-1);
+		if (runExercise != null) {
+			ExerciseSnapshot snapshot = runExercise.getSnapshots().get(runExercise.getSnapshots().size() - 1);
 			snapshot.setState(ExerciseState.STOP);
 			snapshot.setEndDate(new Date());
 			this.getExSanpshotDAO().saveOrUpdate(snapshot);
 			runExercise = null;
-		}else {
-			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "+
-					client.getActualRoutine().getRunActivity().getName());
+		} else {
+			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "
+					+ client.getActualRoutine().getRunActivity().getName());
 		}
 	}
 
@@ -75,11 +74,11 @@ public class ClientBOImpl implements ClientBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void calcelExercise(Client client, List<Integer> sets,
-			List<Integer> reps, Integer weight) throws BusinessException {
+	public void calcelExercise(Client client, List<Integer> sets, List<Integer> reps, Integer weight)
+			throws BusinessException {
 		ExerciseConfiguration runExercise = client.getActualRoutine().getRunActivity().getRunExercise();
-		if (runExercise != null){
-			ExerciseSnapshot snapshot = runExercise.getSnapshots().get(runExercise.getSnapshots().size()-1);
+		if (runExercise != null) {
+			ExerciseSnapshot snapshot = runExercise.getSnapshots().get(runExercise.getSnapshots().size() - 1);
 			snapshot.setState(ExerciseState.CANCEL);
 			snapshot.setEndDate(new Date());
 			snapshot.setSets(sets);
@@ -89,20 +88,25 @@ public class ClientBOImpl implements ClientBO {
 			runExercise.getSnapshots().add(snapshot);
 			runExercise = null;
 			this.getExConfDAO().saveOrUpdate(runExercise);
-		}else {
-			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "+
-					client.getActualRoutine().getRunActivity().getName());
+		} else {
+			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "
+					+ client.getActualRoutine().getRunActivity().getName());
 		}
 	}
-	
+
+	public List<Client> getAllClients() {
+		return this.getClientDAO().loadAll();
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Client createClient(String name, String email, Date birthday, Gender gender) throws BusinessException {
+	public Client createClient(String name, String surname, String email, Date birthday, Gender gender)
+			throws BusinessException {
 		Client client = null;
-		if (clientDAO.loadByEmail(email) == null){
-			client = new Client(name, email, birthday, gender);
+		if (clientDAO.loadByEmail(email) == null) {
+			client = new Client(name, surname, email, birthday, gender);
 			client.setRoutines(new ArrayList<Routine>());
 			client.setRegistrationDate(new Date());
 			Role role = roleDAO.loadByName(RoleName.CLIENT.getType());
@@ -114,10 +118,17 @@ public class ClientBOImpl implements ClientBO {
 			users.add(client);
 			role.setUsers(users);
 			roleDAO.saveOrUpdate(role);
-		}else {
+		} else {
 			throw new BusinessException("El email ya existe");
 		}
 		return client;
+	}
+	
+	@Override
+	public void clientDisable(Long idL) {
+		Client client = this.getClientDAO().loadById(idL);
+		client.setEnabledUser(false);
+		this.getClientDAO().save(client);
 	}
 
 	public ClientDAOImpl getClientDAO() {
@@ -151,5 +162,4 @@ public class ClientBOImpl implements ClientBO {
 	public void setExSanpshotDAO(ExerciseSnapshotDAOImpl exSanpshotDAO) {
 		this.exSanpshotDAO = exSanpshotDAO;
 	}
-
 }

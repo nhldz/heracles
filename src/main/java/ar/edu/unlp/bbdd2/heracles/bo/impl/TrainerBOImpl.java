@@ -33,8 +33,8 @@ import ar.edu.unlp.bbdd2.heracles.entities.User;
  * @author Nahuel Diaz <nahd85@gmail.com>
  *
  */
-public class TrainerBOImpl implements TrainerBO{
-	
+public class TrainerBOImpl implements TrainerBO {
+
 	private ClientDAOImpl clientDAO;
 	private TrainerDAOImpl trainerDAO;
 	private ExerciseDAOImpl exerciseDAO;
@@ -42,11 +42,11 @@ public class TrainerBOImpl implements TrainerBO{
 	private ExerciseConfigurationDAOImpl exConfDAO;
 	private ActivityDAOImpl activityDAO;
 	private RoleDAOImpl roleDAO;
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public Activity createActivity (Routine routine,  String name, String description, Activity next, Activity previous){
+	public Activity createActivity(Routine routine, String name, String description, Activity next, Activity previous) {
 		Activity activity = new Activity();
 		activity.setName(name);
 		activity.setDescription(description);
@@ -57,44 +57,45 @@ public class TrainerBOImpl implements TrainerBO{
 		this.getRoutineDAO().saveOrUpdate(routine);
 		return activity;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public ExerciseConfiguration createExConfiguration (Exercise exercise, Activity activity, List<Integer> sets, List<Integer> reps, Integer rest, Integer weight) {
+	public ExerciseConfiguration createExConfiguration(Exercise exercise, Activity activity, List<Integer> sets,
+			List<Integer> reps, Integer rest, Integer weight) {
 		ExerciseConfiguration exConf = new ExerciseConfiguration(exercise, sets, reps, rest, weight);
 		this.getExConfDAO().save(exConf);
 		activity.getExercises().add(exConf);
 		this.getActivityDAO().save(activity);
 		return exConf;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public Routine createRoutine (String name, Trainer trainer, Client client){
+	public Routine createRoutine(String name, Trainer trainer, Client client) {
 		Routine routine = new Routine(name, trainer, client);
 		this.getRoutineDAO().save(routine);
 		this.getTrainerDAO().saveOrUpdate(trainer);
 		this.getClientDAO().saveOrUpdate(client);
 		return routine;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void assingRoutine(Client client, Routine routine) throws BusinessException {
-		if (routine.getClient() == null){
+		if (routine.getClient() == null) {
 			Routine actualRoutine = client.getActualRoutine();
-			if (actualRoutine != null){
+			if (actualRoutine != null) {
 				actualRoutine.setEndDate(new Date());
 				client.getRoutines().add(actualRoutine);
 			}
 			client.setActualRoutine(routine);
 			routine.setClient(client);
-		}else {
-			throw new BusinessException("La rutina ya esta asignada al cliente: "+routine.getClient().getName());
+		} else {
+			throw new BusinessException("La rutina ya esta asignada al cliente: " + routine.getClient().getName());
 		}
 	}
 
@@ -104,7 +105,7 @@ public class TrainerBOImpl implements TrainerBO{
 	@Override
 	public void copyRoutine(Client client, Routine routine) throws BusinessException {
 		Routine copyOfRoutine = new Routine(routine, client);
-		
+
 		for (Activity activity : routine.getActivities()) {
 			Activity copyActivity = new Activity();
 			copyActivity.setName(activity.getName());
@@ -120,33 +121,34 @@ public class TrainerBOImpl implements TrainerBO{
 	@Override
 	public void skipExercise(Client client) throws BusinessException {
 		ExerciseConfiguration exercise = client.getActualRoutine().getRunActivity().getRunExercise();
-		if (exercise !=null){
-			ExerciseSnapshot snapshot = exercise.getSnapshots().get((exercise.getSnapshots().size()-1));
+		if (exercise != null) {
+			ExerciseSnapshot snapshot = exercise.getSnapshots().get((exercise.getSnapshots().size() - 1));
 			snapshot.setEndDate(new Date());
 			snapshot.setState(ExerciseState.SKIP);
 			client.getActualRoutine().getRunActivity().setRunExercise(null);
-		}else {
-			throw new BusinessException("El cleinte "+ client.getName() +" no esta realizando ningun ejercicio");
+		} else {
+			throw new BusinessException("El cleinte " + client.getName() + " no esta realizando ningun ejercicio");
 		}
-		
+
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Trainer findByEmail (String email){
+	public Trainer findByEmail(String email) {
 		return this.getTrainerDAO().loadByEmail(email);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Trainer createTrainer (String name, String email, Date birthday, Gender gender) throws BusinessException{
+	public Trainer createTrainer(String name, String surname, String email, Date birthday, Gender gender)
+			throws BusinessException {
 		Trainer trainer = null;
-		if (this.findByEmail(email) == null){
-			trainer = new Trainer(name, email, birthday, gender);
+		if (this.findByEmail(email) == null) {
+			trainer = new Trainer(name, surname, email, birthday, gender);
 			trainer.setExercises(new ArrayList<Exercise>());
 			trainer.setRoutines(new ArrayList<Routine>());
 			trainer.setRegistrationDate(new Date());
@@ -159,12 +161,20 @@ public class TrainerBOImpl implements TrainerBO{
 			users.add(trainer);
 			role.setUsers(users);
 			roleDAO.saveOrUpdate(role);
-		}else {
+		} else {
 			throw new BusinessException("El email ya existe");
 		}
 		return trainer;
 	}
-	
+
+	@Override
+	public void trainerDisable(Long idL) {
+		Trainer trainer = this.getTrainerDAO().loadById(idL);
+		trainer.setEnabledUser(false);
+		this.getTrainerDAO().save(trainer);
+
+	}
+
 	public ClientDAOImpl getClientDAO() {
 		return clientDAO;
 	}
@@ -213,6 +223,10 @@ public class TrainerBOImpl implements TrainerBO{
 		this.activityDAO = activityDAO;
 	}
 
+	public List<Trainer> getAllTrainers() {
+		return this.getTrainerDAO().loadAll();
+	}
+
 	public RoleDAOImpl getRoleDAO() {
 		return roleDAO;
 	}
@@ -220,5 +234,5 @@ public class TrainerBOImpl implements TrainerBO{
 	public void setRoleDAO(RoleDAOImpl roleDAO) {
 		this.roleDAO = roleDAO;
 	}
-	
+
 }
