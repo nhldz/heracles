@@ -2,6 +2,7 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="resources/js/jquery-1.11.3.min.js"></script>
 <script src="resources/js/jquery.loadJSON.js"></script>
+<script src="resources/js/jquery-ui.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="resources/js/bootstrap.min.js"></script>
 <script src="resources/js/sb-admin-2.js"></script>
@@ -24,26 +25,5 @@
 		$('#btnDelete').attr('disabled', bool);
 		$('#btnEdit').attr('disabled', bool);
 	};
-
-// 	$(document).ready(function() {
-// 		$("#trainers").click(function() {
-// 			$("#page-wrapper").load("/trainers");
-// 			return false;
-// 		});
-
-// 		$("#exercises").click(function() {
-// 			$("#page-wrapper").load("/exercises");
-// 			return false;
-// 		});
-
-// 		$("#routines").click(function() {
-// 			$("#page-wrapper").load("/routines");
-// 			return false;
-// 		});
-
-// 		$("#clients").click(function() {
-// 			$("#page-wrapper").load("/clients");
-// 			return false;
-// 		});
-// 	});
+	
 </script>
