@@ -49,7 +49,7 @@ public class ExerciseBOImpl implements ExerciseBO {
 			String name = exercise.getName();
 			exerciseUpdate = this.getExerciseDAO().loadById(exercise.getId());
 			Exercise exName = this.getExerciseDAO().findByName(name);
-			if (exName == null || (exName.equals(exerciseUpdate.getName()))) {
+			if (exName == null || (exName.getName().equals(exerciseUpdate.getName()))) {
 				
 				name = exercise.getName();
 				if (name.replaceAll(" ", "").length() > 0) {
