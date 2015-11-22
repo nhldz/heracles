@@ -53,7 +53,7 @@
 						</div>
 						<div class="form-group">
 							<label for="name">Nombre:</label> 
-							<input name="name" class="form-control" required >
+							<input name="name" type="text" class="form-control" required >
 						</div>
 						<div class="form-group">
 							<label for="type">Tipo:</label> 
@@ -83,7 +83,7 @@
 						</div>
 						<div class="form-group">
 							<label for="description">Descripci&oacute;n:</label>
-							<textarea name="description" class="form-control" rows="3" required></textarea>
+							<input type="text" name="description" class="form-control" rows="3" required/>
 						</div>
 						<button type="submit" class="btn btn-success">Aceptar</button>
 						<button type="button" class="btn btn-default" onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
