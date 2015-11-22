@@ -59,7 +59,8 @@ public class ExercisesControler {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.GET)
-	public @ResponseBody void getExerciseById(HttpServletResponse response, @PathVariable("id") String id)
+	@ResponseBody
+	public void getExerciseById(HttpServletResponse response, @PathVariable("id") String id)
 			throws IOException {
 		response.setContentType("application/json");
 		Long idL = Long.valueOf(id);
@@ -104,9 +105,8 @@ public class ExercisesControler {
 	 * @return
 	 */
 	@RequestMapping(value = "/exercises", method = RequestMethod.PUT)
-	public @ResponseBody void update(@ModelAttribute Exercise exercise, Model model) {
-		Trainer owner = this.getTrainerBO().findByEmail("matias.trainer@email.com");
-		exercise.setOwner(owner);
+	@ResponseBody
+	public void update(@ModelAttribute Exercise exercise, Model model) {
 		String result = "exercises";
 		try {
 			this.getExerciseBO().updateExercise(exercise);
