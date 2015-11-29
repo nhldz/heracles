@@ -1,14 +1,14 @@
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="resources/js/jquery-1.11.3.min.js"></script>
-<script src="resources/js/jquery.loadJSON.js"></script>
-<script src="resources/js/jquery-ui.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-1.11.3.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/jquery.loadJSON.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/jquery-ui.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="resources/js/bootstrap.min.js"></script>
-<script src="resources/js/sb-admin-2.js"></script>
-<script src="resources/js/metisMenu.min.js"></script>
-<script src="resources/js/dataTables/jquery.dataTables.min.js"></script>
-<script src="resources/js/dataTables/dataTables.bootstrap.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/bootstrap.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/sb-admin-2.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/metisMenu.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/dataTables/jquery.dataTables.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/resources/js/dataTables/dataTables.bootstrap.min.js"></script>
 <script>
 	function toogle(idElement) {
 		var elem = $('#' + idElement);
