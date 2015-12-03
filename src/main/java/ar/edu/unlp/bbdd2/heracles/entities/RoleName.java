@@ -2,7 +2,7 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 public enum RoleName {
 	
-	CLIENT ("ROLE_CLIENT", "Rol cliente","/client/{name}"),
+	CLIENT ("ROLE_CLIENT", "Rol cliente","/client/{name}/profile"),
 	TRAINER ("ROLE_TRAINER", "Rol entrenador", "/index"),
 	ADMIN ("ROLE_ADMIN", "Rol administrador", "/admin");
 	
