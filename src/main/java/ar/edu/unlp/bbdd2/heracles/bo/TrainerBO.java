@@ -3,7 +3,6 @@
  */
 package ar.edu.unlp.bbdd2.heracles.bo;
 
-import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
@@ -11,7 +10,6 @@ import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
-import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 
@@ -80,7 +78,7 @@ public interface TrainerBO {
 	 * @param routine
 	 * @throws BusinessException
 	 */
-	void assingRoutine(Client client, Routine routine) throws BusinessException;
+	void assingRoutineToClient(Client client, Routine routine) throws BusinessException;
 
 	/**
 	 * Le asigna la copia de una rutina a un cliente.
