@@ -1,6 +1,5 @@
 <jsp:include page="../templates/includes/common_head.jsp" />
 <jsp:include page="../templates/includes/taglibs.jsp" />
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div id="wrapper">
 	<jsp:include page="../trainer/menu.jsp" />
 <div id="page-wrapper">
@@ -21,7 +20,7 @@
 							<thead>
 								<tr>
 									<th class="no-sort id"></th>
-									<th>Nombre</th>
+									<th>Nombre${userName}</th>
 									<th>Tipo</th>
 									<th>Descripci&oacute;n</th>
 								</tr>
