@@ -18,6 +18,11 @@ import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 @EntitySubclass(index = true)
 public class Client extends User {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 310120017977926069L;
+
 	@Load
 	private Ref<Routine> actualRoutine;
 
@@ -32,7 +37,11 @@ public class Client extends User {
 	}
 
 	public Routine getActualRoutine() {
-		return actualRoutine.get();
+		if (this.actualRoutine!=null){
+			return actualRoutine.get();
+		}else{
+			return null;
+		}
 	}
 
 	public void setActualRoutine(Routine actualRoutine) {
