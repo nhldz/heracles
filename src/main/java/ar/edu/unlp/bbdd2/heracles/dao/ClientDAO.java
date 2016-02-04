@@ -12,5 +12,14 @@ public interface ClientDAO extends BaseDAO<Client> {
 	 * @return
 	 */
 	public Client loadByEmail(String email);
+	
+	/**
+	 * Busca y retorna un cliente por bombre
+	 * 
+	 * @param email
+	 *            del cliente a buscar
+	 * @return
+	 */
+	public Client loadByName(String name);
 
 }
