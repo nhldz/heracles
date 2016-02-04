@@ -79,7 +79,8 @@ public class ExercisesControler {
 	 * @return
 	 */
 	@RequestMapping(value = "/exercises", method = RequestMethod.POST)
-	public @ResponseBody void add (@ModelAttribute Exercise exercise, Model model){
+	@ResponseBody
+	public void add (@ModelAttribute Exercise exercise, Model model){
 		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String email = up.getEmail();
 		Trainer owner = this.getTrainerBO().findByEmail(email);
