@@ -53,15 +53,50 @@ public class ClientController {
 	 *            del cliente
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public @ResponseBody void getClientById(HttpServletResponse response, @PathVariable("id") String id)
+//	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+//	@ResponseBody
+//	public void getClientById(HttpServletResponse response, @PathVariable("id") String id)
+//			throws IOException {
+//		response.setContentType("application/json");
+//		Long idL = Long.valueOf(id);
+//		PrintWriter out = response.getWriter();
+//		Client client = this.getClientBO().getClientById(idL);
+//		String json = JsonTransform.objectToJson(client);
+//		out.print(json);
+//	}
+	
+	/**
+	 * Retorna la pagina de inicio del cliente logueado
+	 * 
+	 * @param response
+	 * @param id
+	 *            del cliente
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "{name}", method = RequestMethod.GET)
+	public ModelAndView getClientByName(HttpServletResponse response, @PathVariable("name") String name)
 			throws IOException {
-		response.setContentType("application/json");
-		Long idL = Long.valueOf(id);
-		PrintWriter out = response.getWriter();
-		Client client = this.getClientBO().getClientById(idL);
-		String json = JsonTransform.objectToJson(client);
-		out.print(json);
+		ModelAndView mv  = new ModelAndView("client/profile");
+		Client client = this.getClientBO().getClientByName(name);
+		mv.addObject("client", client);
+		return mv;
+	}
+	
+	/**
+	 * Retorna la pagina del perfil del cliente logueado.
+	 * 
+	 * @param response
+	 * @param id
+	 *            del cliente
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "{name}/profile", method = RequestMethod.GET)
+	public ModelAndView clientProfile(HttpServletResponse response, @PathVariable("name") String name)
+			throws IOException {
+		ModelAndView mv  = new ModelAndView("client/profile");
+		Client client = this.getClientBO().getClientByName(name);
+		mv.addObject("client", client);
+		return mv;
 	}
 	
 	/**
