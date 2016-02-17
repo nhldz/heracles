@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
+import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
@@ -65,8 +66,14 @@ public class ClientRoutineControler {
 		PrintWriter out = response.getWriter();
 		List<Routine> routines = new ArrayList<Routine>();
 		routines.addAll(this.getRoutineBO().getClientRoutines(client));
-		routines.add(client.getActualRoutine());
-		String json = JsonTransform.listToJson(routines);
+		if (!routines.contains(client.getActualRoutine())){
+			routines.add(client.getActualRoutine());
+		}
+		List<RoutineDTO> routinesDTO = new ArrayList<RoutineDTO>();
+		for (Routine routine : routines) {
+			routinesDTO.add(new RoutineDTO(routine));
+		}
+		String json = JsonTransform.listToJson(routinesDTO);
 		out.print(json);
 	}
 
