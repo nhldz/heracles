@@ -84,7 +84,10 @@ public class TrainerBOImpl implements TrainerBO {
 		Routine actualRoutine = client.getActualRoutine();
 		if (actualRoutine != null) {
 			actualRoutine.setEndDate(new Date());
-			client.getRoutines().add(actualRoutine);
+			List<Routine> clientRoutines = client.getRoutines();
+			clientRoutines.add(actualRoutine);
+			client.setRoutines(clientRoutines);
+			this.getRoutineDAO().saveOrUpdate(actualRoutine);
 		}
 		client.setActualRoutine(routine);
 		routine.setClient(client);
