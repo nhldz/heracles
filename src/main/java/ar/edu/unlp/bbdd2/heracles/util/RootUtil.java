@@ -157,7 +157,7 @@ public class RootUtil {
 	}
 
 	public Trainer createTrainer(String name, String surname, String pass) {
-		Trainer trainer = new Trainer(name,surname, name + ".trainer@email.com",Utilities.formatDate(new Date()), Gender.MALE);
+		Trainer trainer = new Trainer(name,surname, name + ".trainer@email.com",new Date(), Gender.MALE);
 		try {
 			trainer.setPassword(pass);
 			trainer.setPhone("221-5637610");

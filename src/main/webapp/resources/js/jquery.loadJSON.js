@@ -137,6 +137,7 @@
                     break;
                 case 'text':
                 case 'hidden':
+                case 'email':
                     $(element).attr("value", value);
                     break;
                 case 'a':

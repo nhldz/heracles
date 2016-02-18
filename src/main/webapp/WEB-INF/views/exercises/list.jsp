@@ -86,7 +86,7 @@
 							<textarea name="description" class="form-control" rows="3" required></textarea>
 						</div>
 						<button type="submit" class="btn btn-success">Aceptar</button>
-						<button type="button" class="btn btn-default" onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
+						<button type="button" class="btn btn-default" onclick="clearForm(this.form);toogle('myContent'); toogleButtons();">Cerrar</button>
 					</div>
 				</div>
 			</div>
@@ -147,6 +147,7 @@
 					dataTable.ajax.reload();
 					toogle('myContent');
 					toogleButtons();
+					clearForm(frm[0]);
 				},
 				error : function() {
 					alert("Error!");
@@ -157,7 +158,6 @@
 		$('#btnAdd').click(function(e) {
 			toogle('myContent');
 			toogleButtons();
-			$('#exerciseForm')[0].reset();
 			$('#exerciseForm').attr('action', '/exercises/save');
 		});
 	
@@ -166,7 +166,6 @@
 			var frm = $('#exerciseForm');
 			frm.attr('action','/exercises/update');
 			toogleButtons();
-			frm[0].reset();
 			if (typeof id === "undefined") {
 				toogleButtons();
 				alert("Por favor, seleccione un elemento de la lista");
