@@ -21,7 +21,6 @@ import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseSnapshot;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
-import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.entities.Role;
 import ar.edu.unlp.bbdd2.heracles.entities.RoleName;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
@@ -77,23 +76,32 @@ public class TrainerBOImpl implements TrainerBO {
 		Routine routine = new Routine(name, trainer, client);
 		this.getRoutineDAO().save(routine);
 		this.getTrainerDAO().saveOrUpdate(trainer);
-		this.getClientDAO().saveOrUpdate(client);
+		assingRoutine(client, routine);
 		return routine;
+	}
+	
+	private void assingRoutine(Client client, Routine routine){
+		Routine actualRoutine = client.getActualRoutine();
+		if (actualRoutine != null) {
+			actualRoutine.setEndDate(new Date());
+			List<Routine> clientRoutines = client.getRoutines();
+			clientRoutines.add(actualRoutine);
+			client.setRoutines(clientRoutines);
+			this.getRoutineDAO().saveOrUpdate(actualRoutine);
+		}
+		client.setActualRoutine(routine);
+		routine.setClient(client);
+		this.getClientDAO().saveOrUpdate(client);
+		this.getRoutineDAO().saveOrUpdate(routine);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void assingRoutine(Client client, Routine routine) throws BusinessException {
+	public void assingRoutineToClient(Client client, Routine routine) throws BusinessException {
 		if (routine.getClient() == null) {
-			Routine actualRoutine = client.getActualRoutine();
-			if (actualRoutine != null) {
-				actualRoutine.setEndDate(new Date());
-				client.getRoutines().add(actualRoutine);
-			}
-			client.setActualRoutine(routine);
-			routine.setClient(client);
+			assingRoutine(client, routine);
 		} else {
 			throw new BusinessException("La rutina ya esta asignada al cliente: " + routine.getClient().getName());
 		}

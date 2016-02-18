@@ -1,7 +1,7 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
@@ -13,21 +13,27 @@
 <!-- 		<intercept-url pattern="/**" access="hasRole('ROLE_TRAINER')" /> -->
 		<intercept-url pattern="/index" access="hasRole('ROLE_TRAINER')" />
 		<intercept-url pattern="/exercises/**" access="hasRole('ROLE_TRAINER')" />
+		<intercept-url pattern="/client/**" access="hasRole('ROLE_CLIENT')" />
 
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
 
-		<form-login login-page="/login" default-target-url="/index"
-			authentication-failure-url="/login?error=true" username-parameter="j_username"
-			password-parameter="j_password" />
+		<form-login login-page="/login" 
+			default-target-url="/index"
+			authentication-failure-url="/login?error=true" 
+			username-parameter="j_username"
+			password-parameter="j_password" 
+			authentication-success-handler-ref="heraclesAuthenticationSuccessHandler"/>
 		<logout logout-success-url="/logout" />
 		<!-- enable csrf protection -->
 		<!-- <csrf/> -->
 	</http>
 
-	<!-- Select users and user_roles from database -->
 	<authentication-manager>
 		<authentication-provider ref="heraclesAuthenticationProvider" />
 	</authentication-manager>
+	
+	<beans:bean id="heraclesAuthenticationSuccessHandler" class="ar.edu.unlp.bbdd2.heracles.security.HeraclesAuthenticationSuccessHandler">
+	</beans:bean>
 
 </beans:beans>

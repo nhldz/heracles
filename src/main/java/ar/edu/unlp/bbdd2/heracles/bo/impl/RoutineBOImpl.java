@@ -76,6 +76,10 @@ public class RoutineBOImpl implements RoutineBO {
 		}
 		return activities;
 	}
+	
+	public List<Routine> getClientRoutines(Client client){
+		return this.getRoutineDAO().getClientRoutines(client);
+	}
 
 	@Override
 	public Routine getRoutineById(Long id) {

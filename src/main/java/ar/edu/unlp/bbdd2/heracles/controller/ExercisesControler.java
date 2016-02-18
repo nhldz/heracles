@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ExerciseBO;
 import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
@@ -27,9 +25,10 @@ import ar.edu.unlp.bbdd2.heracles.entities.ExerciseType;
 import ar.edu.unlp.bbdd2.heracles.entities.Equipment;
 import ar.edu.unlp.bbdd2.heracles.entities.BodyPart;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
+import ar.edu.unlp.bbdd2.heracles.security.UserPrincipal;
+
 
 @Controller
-@RequestMapping("/exercises")
 public class ExercisesControler {
 
 	@Autowired
@@ -42,8 +41,8 @@ public class ExercisesControler {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView excercisesIndex() {
+	@RequestMapping(value = "/exercises", method = RequestMethod.GET)
+	public ModelAndView getExercises (){
 		ModelAndView mv = new ModelAndView("exercises/list");
 		mv.addObject("excercisesTypes", ExerciseType.values());
 		mv.addObject("equipments", Equipment.values());
@@ -59,8 +58,9 @@ public class ExercisesControler {
 	 *            del ejercicio
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "load/{id}", method = RequestMethod.GET)
-	public @ResponseBody void getExerciseById(HttpServletResponse response, @PathVariable("id") String id)
+	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public void getExerciseById(HttpServletResponse response, @PathVariable("id") String id)
 			throws IOException {
 		response.setContentType("application/json");
 		Long idL = Long.valueOf(id);
@@ -69,86 +69,85 @@ public class ExercisesControler {
 		String json = JsonTransform.objectToJson(exc);
 		out.print(json);
 	}
-
+	
 	/**
-	 * Guarda los cambios del formulario de ejercicios
+	 * Action para crear/agregar un nuevo ejercicio.
+	 * 
+	 * @param exercise
+	 * @param model
+	 * @return 
+	 * @return
+	 */
+	@RequestMapping(value = "/exercises", method = RequestMethod.POST)
+	@ResponseBody
+	public void add (@ModelAttribute Exercise exercise, Model model){
+		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String email = up.getEmail();
+		Trainer owner = this.getTrainerBO().findByEmail(email);
+		Exercise ex = null;
+		String result = "exercises/";
+		try {
+			ex = this.getExerciseBO().createExercise(owner, exercise.getName(), exercise.getType(),
+					exercise.getEquipment(),
+					exercise.getBodyParts(),
+					exercise.getDescription());
+			result = result +"/id/"+ex.getId();
+		} catch (BusinessException e) {
+			result = "error/"+e.getMessage();
+		}
+		model.addAttribute("exercise", ex);
+	}
+	
+	/**
+	 * Action para actualizar un ejecicio
 	 * 
 	 * @param exercise
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public @ResponseBody void save(@ModelAttribute Exercise exercise, Model model) {
-		Trainer owner = this.getTrainerBO().findByEmail("matias.trainer@email.com");
-		exercise.setOwner(owner);
+	@RequestMapping(value = "/exercises", method = RequestMethod.PUT)
+	@ResponseBody
+	public void update(@ModelAttribute Exercise exercise, Model model) {
 		String result = "exercises";
 		try {
-			if (this.validSave(exercise)) {
-				this.getExerciseBO().save(exercise);
-			}
+			this.getExerciseBO().updateExercise(exercise);
 		} catch (BusinessException e) {
 			result = "error/" + e.getMessage();
 		}
 	}
 	
 	/**
-	 * Guarda los cambios del formulario de ejercicios
-	 * 
-	 * @param exercise
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public @ResponseBody void update(@ModelAttribute Exercise exercise, Model model) {
-		Trainer owner = this.getTrainerBO().findByEmail("matias.trainer@email.com");
-		String result = "exercises";
-		try {
-			if (this.validUpdate(exercise)) {
-				this.getExerciseBO().save(exercise);
-			}
-		} catch (BusinessException e) {
-			result = "error/" + e.getMessage();
-		}
-	}
-
-	/**
 	 * Elimina un ejercicio
-	 * 
 	 * @param id
-	 *            del ejercicio a eliminar
-	 * 
+	 * 		id del ejercicio a eliminar.
 	 * @return
-	 * @throws BusinessException
 	 */
-	@RequestMapping(value = "remove/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.DELETE)
 	@ResponseBody
-	public void remove(@PathVariable("id") String id) throws BusinessException {
+	public void delete (@PathVariable("id") String id){
 		Long idL = Long.valueOf(id);
 		Exercise exc = this.getExerciseBO().getExerciseById(idL);
 		exc.setEnabled(false);
-		this.getExerciseBO().save(exc);
+		try {
+			this.getExerciseBO().save(exc);
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
+	
 	/**
 	 * Retorna un json con todos los ejercicios existentes
 	 * 
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "list", method = RequestMethod.GET)
+	@RequestMapping(value = "/exercises/list", method = RequestMethod.GET)
 	public void listExercises(HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		String json = JsonTransform.listToJson(this.getExerciseBO().getAllExercises());
 		out.print(json);
-	}
-
-	private boolean validSave(Exercise exercise) {
-		return this.getExerciseBO().validSave(exercise);
-	}
-	
-	private boolean validUpdate(Exercise exercise) {
-		return this.getExerciseBO().validUpdate(exercise);
 	}
 
 	public ExerciseBO getExerciseBO() {

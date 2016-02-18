@@ -7,15 +7,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
-
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Load;
+
+import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 
 /**
+ * Clase que representa una rutina.
+ *
  *
  * @author Nahuel Diaz <nahd85@gmail.com>
  *
@@ -29,9 +30,9 @@ public class Routine {
 	private Date createDate;
 	private Date endDate;
 	@Index
-	private @Load(Trainer.class) Ref<Trainer> trainer;
+	private Ref<Trainer> trainer;
 
-	@Load
+	@Index
 	private Ref<Client> client;
 	private Activity runActivity;
 	private List<Ref<Activity>> activities;
@@ -51,14 +52,18 @@ public class Routine {
 		this.client = Ref.create(client);
 		this.activities = new ArrayList<Ref<Activity>>();
 	}
-
-	public Routine(String name, Trainer trainer, Client client) {
+	
+	public Routine(String name, Trainer trainer) {
 		this();
 		this.name = name;
 		this.setTrainer(trainer);
-		this.setClient(client);
 		this.setActivities(new ArrayList<Activity>());
 		this.createDate = new Date();
+	}
+
+	public Routine(String name, Trainer trainer, Client client) {
+		this(name, trainer);
+		this.setClient(client);
 	}
 
 	public Long getId() {

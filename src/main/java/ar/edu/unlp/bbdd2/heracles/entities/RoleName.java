@@ -2,16 +2,22 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 public enum RoleName {
 	
-	CLIENT ("ROLE_CLIENT", "Rol cliente"),
-	TRAINER ("ROLE_TRAINER", "Rol entrenador"),
-	ADMIN ("ROLE_ADMIN", "Rol administrador");
+	CLIENT ("ROLE_CLIENT", "Rol cliente","/client/{name}/profile"),
+	TRAINER ("ROLE_TRAINER", "Rol entrenador", "/index"),
+	ADMIN ("ROLE_ADMIN", "Rol administrador", "/admin");
 	
 	private final String type;
 	private final String description;
 	
-	RoleName (String type, String shortType){
+	/**
+	 * URL inicial para cada tipo de role 
+	 */
+	private final String defaultUrl;
+	
+	RoleName (String type, String shortType, String defaultUrl){
 		this.type = type;
 		this.description = shortType;
+		this.defaultUrl = defaultUrl;
 	}
 
 	public String getType() {
@@ -21,7 +27,9 @@ public enum RoleName {
 	public String getDescription() {
 		return description;
 	}
-	
-	
+
+	public String getDefaultUrl() {
+		return defaultUrl;
+	}
 
 }

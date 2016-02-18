@@ -157,7 +157,8 @@ public class RootUtil {
 	}
 
 	public Trainer createTrainer(String name, String surname, String pass) {
-		Trainer trainer = new Trainer(name,surname, name + ".trainer@email.com",new Date(), Gender.MALE);
+		Trainer trainer = new Trainer(name, surname, name + ".trainer@email.com", Utilities.formatDate(new Date()),
+				Gender.MALE);
 		try {
 			trainer.setPassword(pass);
 			trainer.setPhone("221-5637610");
@@ -224,9 +225,10 @@ public class RootUtil {
 			String surname = "Apellido";
 			String exName = "ExName";
 			String routineName = "RoutineName";
-			String pass = "123456";
+			String pass = "123";
 
 			List<BodyPart> bodysParts = new ArrayList<BodyPart>();
+
 			bodysParts.add(BodyPart.BICEPS);
 			loadRoles();
 			Trainer trainer = createTrainer("nahuel", "Diaz", "123");
@@ -234,7 +236,7 @@ public class RootUtil {
 
 			for (int i = 0; i < 5; i++) {
 				Client client = createClient(clientName + i, surname + i, pass);
-				Trainer trainer2 = createTrainer(trianerName + i, surname + i, pass);
+				trainer = createTrainer(trianerName + i, surname + i, pass);
 				Exercise exercise = null;
 
 				try {
@@ -244,18 +246,21 @@ public class RootUtil {
 					exercise = this.getExerciseDAO().findByName(exName + i);
 					e.printStackTrace();
 				}
-				 Routine routine =
-				 this.getTrainerBO().createRoutine(routineName+i, trainer,
-				 client);
-				 Activity activity =
-				 this.getTrainerBO().createActivity(routine, activityName+i,
-				 "Actividad #"+i, null, null);
-				 List<Integer> sets = new ArrayList<Integer>();
-				 List<Integer> reps = new ArrayList<Integer>();
-				 sets.add(i);
-				 reps.add(i);
-				 this.getTrainerBO().createExConfiguration(exercise, activity,
-				 sets, reps, i, i);
+
+				for (int rt = 0; rt < 5; rt++) {
+					Routine routine = this.getTrainerBO().createRoutine(routineName + i+"#"+ rt, trainer, client);
+					for (int act = 0; act < 5; act++) {
+						Activity activity = this.getTrainerBO().createActivity(routine, activityName + act,
+								"Actividad #" + act, null, null);
+						for (int exc = 0; exc < 5; exc++) {
+							List<Integer> sets = new ArrayList<Integer>();
+							List<Integer> reps = new ArrayList<Integer>();
+							sets.add(exc);
+							reps.add(exc);
+							this.getTrainerBO().createExConfiguration(exercise, activity, sets, reps, exc, exc);
+						}
+					}
+				}
 
 			}
 			System.out.println("ROOT LOAD");

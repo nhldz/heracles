@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ar.edu.unlp.bbdd2.heracles.bo;
 
 import java.util.List;
@@ -66,5 +63,14 @@ public interface RoutineBO {
 	 * @return
 	 */
 	List<Routine> getAllRoutines();
+	
+	/**
+	 * Retorna las rutinas que tiene un cliente.
+	 * 
+	 * @param client
+	 * 
+	 * @return
+	 */
+	List<Routine> getClientRoutines(Client client);
 
 }

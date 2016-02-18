@@ -5,14 +5,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="resources/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="resources/css/bootstrap.min.css" type="text/css">
-<link rel="stylesheet" href="resources/css/bootstrap-theme.css" type="text/css">
-<link href="resources/css/metisMenu.css" rel="stylesheet" type="text/css">
-<link href="resources/css/timeline.css" rel="stylesheet" type="text/css">
-<link href="resources/css/sb-admin-2.css" rel="stylesheet" type="text/css">
-<link href="resources/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="resources/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="${contextPath}/resources/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="${contextPath}/resources/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="${contextPath}/resources/css/bootstrap-theme.css" type="text/css">
+<link href="${contextPath}/resources/css/metisMenu.css" rel="stylesheet" type="text/css">
+<link href="${contextPath}/resources/css/timeline.css" rel="stylesheet" type="text/css">
+<link href="${contextPath}/resources/css/sb-admin-2.css" rel="stylesheet" type="text/css">
+<link href="${contextPath}/resources/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="${contextPath}/resources/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <title>Heracles</title>
 </head>
 <body>

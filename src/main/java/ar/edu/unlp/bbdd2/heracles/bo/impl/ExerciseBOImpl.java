@@ -1,5 +1,6 @@
 package ar.edu.unlp.bbdd2.heracles.bo.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ExerciseBO;
@@ -27,8 +28,13 @@ public class ExerciseBOImpl implements ExerciseBO {
 			exercise = new Exercise(name, type, equipment, bodyParts, description);
 			exercise.setOwner(owner);
 			this.getExerciseDAO().save(exercise);
-			// owner.getExercises().add(exercise);
-			// this.getTrainerDAO().saveOrUpdate(owner);
+			List<Exercise> ownerExercises = owner.getExercises();
+			if (ownerExercises == null){
+				ownerExercises = new ArrayList<Exercise>();
+			}
+			ownerExercises.add(exercise);
+			owner.setExercises(ownerExercises);
+			this.getTrainerDAO().saveOrUpdate(owner);
 		} else {
 			throw new BusinessException(
 					"El nombre " + name + " ya se encuentra asigando al ejercicio " + exName.toString());
@@ -37,28 +43,31 @@ public class ExerciseBOImpl implements ExerciseBO {
 	}
 
 	@Override
-	public Exercise updateExercise(Long exerciseId, String name, ExerciseType type, Equipment equipment,
-			List<BodyPart> bodyParts, String description) throws NullPointerException, BusinessException {
-		Exercise exercise = null;
-		if (exerciseId != null) {
-			exercise = this.getExerciseDAO().loadById(exerciseId);
+	public Exercise updateExercise(Exercise exercise) throws NullPointerException, BusinessException {
+		Exercise exerciseUpdate = null;
+		if (exercise.getId() != null) {
+			String name = exercise.getName();
+			exerciseUpdate = this.getExerciseDAO().loadById(exercise.getId());
 			Exercise exName = this.getExerciseDAO().findByName(name);
-			if ((exName == null)) {
-				if (name.replaceAll(" ", "").length() < 0) {
-					exercise.setName(name);
+			if (exName == null || (exName.getName().equals(exerciseUpdate.getName()))) {
+				
+				name = exercise.getName();
+				if (name.replaceAll(" ", "").length() > 0) {
+					exerciseUpdate.setName(name);
 				}
-				if (type != null) {
-					exercise.setType(type);
+				if (exercise.getType() != null) {
+					exerciseUpdate.setType(exercise.getType());
 				}
-				if (equipment != null) {
-					exercise.setEquipment(equipment);
+				if (exercise.getEquipment() != null) {
+					exerciseUpdate.setEquipment(exercise.getEquipment());
 				}
-				if (!bodyParts.isEmpty()) {
-					exercise.setBodyParts(bodyParts);
+				if (!exercise.getBodyParts().isEmpty()) {
+					exerciseUpdate.setBodyParts(exercise.getBodyParts());
 				}
-				if (description != null) {
-					exercise.setDescription(description);
+				if (exercise.getDescription() != null) {
+					exerciseUpdate.setDescription(exercise.getDescription());
 				}
+				this.getExerciseDAO().saveOrUpdate(exerciseUpdate);
 			} else {
 				throw new BusinessException(
 						"El nombre " + name + " ya se encuentra asigando al ejercicio " + exName.toString());
@@ -66,7 +75,7 @@ public class ExerciseBOImpl implements ExerciseBO {
 		} else {
 			throw new NullPointerException("El id del ejercicio no puede ser nulo");
 		}
-		return exercise;
+		return exerciseUpdate;
 	}
 
 	@Override

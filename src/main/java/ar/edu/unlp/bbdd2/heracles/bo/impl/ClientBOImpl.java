@@ -140,6 +140,14 @@ public class ClientBOImpl implements ClientBO {
 	public List<Client> getAllEnabledClients() {
 		return this.getClientDAO().loadAll();
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Client getClientByName(String name){
+		return this.getClientDAO().loadByName(name);
+	}
 
 	public ClientDAO getClientDAO() {
 		return clientDAO;

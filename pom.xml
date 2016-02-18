@@ -14,6 +14,7 @@
 		<app.version>1</app.version>
 		<appengine.version>1.9.24</appengine.version>
 		<spring.version>3.2.14.RELEASE</spring.version>
+		<spring.security.version>3.2.1.RELEASE</spring.security.version>
 		<gcloud.plugin.version>0.9.58.v20150505</gcloud.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -102,19 +103,25 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>3.2.1.RELEASE</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>3.2.1.RELEASE</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>3.2.1.RELEASE</version>
+			<version>${spring.security.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-taglibs</artifactId>
+		    <version>${spring.security.version}</version>
 		</dependency>
 
 		<!-- JUnit -->

@@ -88,4 +88,14 @@ public interface ClientBO {
 	 * @return
 	 */
 	public List<Client> getAllEnabledClients();
+	
+	/**
+	 * Retorna un cliente
+	 * 
+	 * @param name
+	 *        nombre del cliente
+	 * @return
+	 * 	El cleinte que tiene ese nombre
+	 */
+	public Client getClientByName(String name);
 }
