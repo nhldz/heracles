@@ -43,7 +43,7 @@
 		</div>
 	</div>
 	<br>
-	<form id="clientForm" action="/client/save" method="POST"
+	<form id="clientForm" action="/clients/save" method="POST"
 		data-toggle="validator">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
@@ -66,7 +66,7 @@
 						</div>
 						<div class="form-group">
 							<label for="gender">Sexo:</label> <select name="gender" required>
-								<option value="">Seleccione..</option>
+								<option value="0">Seleccione..</option>
 								<c:forEach items="${genders}" var="gender">
 									<option value="${gender}">${gender.type}</option>
 								</c:forEach>
@@ -86,7 +86,7 @@
 						</div>	
 						<button type="submit" class="btn btn-success">Aceptar</button>
 						<button type="button" class="btn btn-default"
-							onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
+							onclick="clearForm(this.form); toogle('myContent'); toogleButtons();">Cerrar</button>
 					</div>
 				</div>
 			</div>
@@ -107,7 +107,7 @@
 		dataTable = $('#clientsTable').DataTable({
 			'processing' : false,
 			'serverSide' : false,
-			'sAjaxSource' : '/client/list',
+			'sAjaxSource' : '/clients/list',
 			'bJQueryUI' : true,
 			'autoWidth' : true,
 			'order' : [ [ 1, "asc" ] ],
@@ -169,6 +169,7 @@
 					dataTable.ajax.reload();
 					toogle('myContent');
 					toogleButtons();
+					clearForm(frm[0]);
 				},
 				error : function() {
 					alert("Error!");
@@ -179,14 +180,12 @@
 		$('#btnAdd').click(function(e) {
 			toogle('myContent');
 			toogleButtons();
-			$('#clientForm')[0].reset();
 		});
 
 		$('#btnEdit').click(function(e) {
 			var id = $('input[type="radio"]:checked').val();
 			var frm = $('#clientForm');
 			toogleButtons();
-			frm[0].reset();
 			if(typeof id === "undefined"){
 				toogleButtons();
 				alert("Por favor, seleccione un elemento de la lista");	

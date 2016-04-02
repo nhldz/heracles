@@ -5,7 +5,6 @@ $(document).ready(function() {
 	dataTable = $('#routineTable').DataTable({
 		'processing' : false,
 		'serverSide' : false,
-//		'sAjaxSource' : '/client/{name}/routines/',
 		'sAjaxSource' : '/client/ClientName1/routines/list',
 		'bJQueryUI' : true,
 		'autoWidth' : true,
@@ -74,54 +73,10 @@ $(document).ready(function() {
 		});
 	});
 
-	$('#btnAdd').click(function(e) {
+	$('#btnView').click(function(e) {
 		toogle('myContent');
 		toogleButtons();
 		$('#routineForm')[0].reset();
 		$('#routineForm').attr('action', '/routines/save');
-	});
-
-	$('#btnEdit').click(function(e) {
-		var id = $('input[type="radio"]:checked').val();
-		var frm = $('#routineForm');
-		frm.attr('action','/routines/update');
-		toogleButtons();
-		frm[0].reset();
-		if (typeof id === "undefined") {
-			toogleButtons();
-			alert("Por favor, seleccione un elemento de la lista");
-		} else {
-			$.ajax({
-				type : "GET",
-				url : "/routines/load/"+ id,
-				success : function(callback) {
-					frm.loadJSON(callback);
-					toogle('myContent');
-				},
-				error : function() {
-					alert("Error!");
-				}
-			});
-		};
-	});
-
-	$('#btnDelete').click(function() {
-		var id = $('input[type="radio"]:checked').val();
-		if (typeof id === "undefined") {
-			toogleButtons();
-			alert("Por favor, seleccione un elemento de la lista");
-		}else {
-			$.ajax({
-				type : "POST",
-				url : "/routines/remove/"+ id,
-				success : function() {
-					var tr = $('input[type="radio"]:checked').parent().parent();
-					dataTable.row(tr).remove().draw(false);
-				},
-				error : function() {
-					alert("Error!");
-				}
-			});
-		};
 	});
 });

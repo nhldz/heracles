@@ -37,9 +37,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<button type="button" class="btn btn-success" id="btnAdd">Agregar</button>
-			<button type="button" class="btn btn-primary" id="btnEdit">Editar</button>
-			<button type="button" class="btn btn-danger" id="btnDelete">Borrar</button>
+			<button type="button" class="btn btn-success" id="btnView">Ver</button>
 		</div>
 	</div>
 	<br>

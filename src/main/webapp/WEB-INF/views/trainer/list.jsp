@@ -86,7 +86,7 @@
 						</div>	
 						<button type="submit" class="btn btn-success">Aceptar</button>
 						<button type="button" class="btn btn-default"
-							onclick="toogle('myContent'); toogleButtons();">Cerrar</button>
+							onclick="clearForm(this.form); toogle('myContent'); toogleButtons();">Cerrar</button>
 					</div>
 				</div>
 			</div>
@@ -172,6 +172,7 @@
 					dataTable.ajax.reload();
 					toogle('myContent');
 					toogleButtons();
+					clearForm(frm[0]);
 				},
 				error : function() {
 					alert("Error!");
@@ -182,14 +183,12 @@
 		$('#btnAdd').click(function(e) {
 			toogle('myContent');
 			toogleButtons();
-			$('#trainerForm')[0].reset();
 		});
 
 		$('#btnEdit').click(function(e) {
 			var id = $('input[type="radio"]:checked').val();
 			var frm = $('#trainerForm');
 			toogleButtons();
-			frm[0].reset();
 			if(typeof id === "undefined"){
 				toogleButtons();
 				alert("Por favor, seleccione un elemento de la lista");	
