@@ -27,7 +27,7 @@ import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
  *
  */
 @Controller
-@RequestMapping("/client")
+@RequestMapping("/clients")
 public class ClientController {
 
 	@Autowired
@@ -109,7 +109,7 @@ public class ClientController {
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public @ResponseBody void save(@ModelAttribute Client client, Model model) throws BusinessException {
-	
+		System.out.println(client);
 	}
 
 	/**

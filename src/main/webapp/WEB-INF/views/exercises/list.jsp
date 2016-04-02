@@ -1,5 +1,6 @@
 <jsp:include page="../templates/includes/common_head.jsp" />
 <jsp:include page="../templates/includes/taglibs.jsp" />
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div id="wrapper">
 	<jsp:include page="../trainer/menu.jsp" />
 <div id="page-wrapper">
@@ -91,6 +92,7 @@
 			</div>
 		</div>
 	</form>
+</div>
 </div>
 <jsp:include page="../templates/includes/common_foot.jsp" />
 <script src="resources/js/exercises.js"></script>
