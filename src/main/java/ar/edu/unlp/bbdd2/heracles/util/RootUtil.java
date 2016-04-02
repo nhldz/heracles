@@ -178,16 +178,8 @@ public class RootUtil {
 
 	public ExerciseConfiguration createExConf() {
 		ExerciseConfiguration exConf = new ExerciseConfiguration();
-		List<Integer> reps = new ArrayList<Integer>();
-		reps.add(1);
-		reps.add(2);
-		reps.add(3);
-		exConf.setReps(reps);
-		List<Integer> sets = new ArrayList<Integer>();
-		sets.add(1);
-		sets.add(2);
-		sets.add(3);
-		exConf.setSets(sets);
+		exConf.setReps(12);
+		exConf.setSets(3);
 		exConf.setWeigth(10);
 		return exConf;
 	}
@@ -253,11 +245,7 @@ public class RootUtil {
 						Activity activity = this.getTrainerBO().createActivity(routine, activityName + act,
 								"Actividad #" + act, null, null);
 						for (int exc = 0; exc < 5; exc++) {
-							List<Integer> sets = new ArrayList<Integer>();
-							List<Integer> reps = new ArrayList<Integer>();
-							sets.add(exc);
-							reps.add(exc);
-							this.getTrainerBO().createExConfiguration(exercise, activity, sets, reps, exc, exc);
+							this.getTrainerBO().createExConfiguration(exercise, activity, exc, exc, exc, exc);
 						}
 					}
 				}

@@ -60,8 +60,8 @@ public class TrainerBOImpl implements TrainerBO {
 	/**
 	 * {@inheritDoc}
 	 */
-	public ExerciseConfiguration createExConfiguration(Exercise exercise, Activity activity, List<Integer> sets,
-			List<Integer> reps, Integer rest, Integer weight) {
+	public ExerciseConfiguration createExConfiguration(Exercise exercise, Activity activity, Integer sets, Integer reps,
+			Integer rest, Integer weight) {
 		ExerciseConfiguration exConf = new ExerciseConfiguration(exercise, sets, reps, rest, weight);
 		this.getExConfDAO().save(exConf);
 		activity.getExercises().add(exConf);
@@ -79,8 +79,8 @@ public class TrainerBOImpl implements TrainerBO {
 		assingRoutine(client, routine);
 		return routine;
 	}
-	
-	private void assingRoutine(Client client, Routine routine){
+
+	private void assingRoutine(Client client, Routine routine) {
 		Routine actualRoutine = client.getActualRoutine();
 		if (actualRoutine != null) {
 			actualRoutine.setEndDate(new Date());
@@ -152,8 +152,7 @@ public class TrainerBOImpl implements TrainerBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Trainer createTrainer(Trainer trainer)
-			throws BusinessException {
+	public Trainer createTrainer(Trainer trainer) throws BusinessException {
 		if (this.findByEmail(trainer.getEmail()) == null) {
 			trainer.setExercises(new ArrayList<Exercise>());
 			trainer.setRoutines(new ArrayList<Routine>());
@@ -180,20 +179,20 @@ public class TrainerBOImpl implements TrainerBO {
 		trainer.setEnabledUser(false);
 		this.getTrainerDAO().save(trainer);
 	}
-	
+
 	@Override
 	public Trainer getTrainerById(Long id) {
 		return this.getTrainerDAO().loadById(id);
 	}
-	
+
 	@Override
 	public List<Trainer> getAllTrainers() {
 		return this.getTrainerDAO().loadAll();
 	}
-	
+
 	@Override
 	public void save(Trainer trainer) {
-		this.getTrainerDAO().save(trainer);		
+		this.getTrainerDAO().save(trainer);
 	}
 
 	public ClientDAO getClientDAO() {

@@ -46,7 +46,7 @@ public interface ClientBO {
 	 * @param weight
 	 *            Peso con el que se realizo el ejercicio.
 	 */
-	public void calcelExercise(Client client, List<Integer> sets, List<Integer> reps, Integer weight) throws BusinessException;
+	public void calcelExercise(Client client, Integer sets, Integer reps, Integer weight) throws BusinessException;
 
 	/**
 	 * Crea un nuevo cliente y lo retorna

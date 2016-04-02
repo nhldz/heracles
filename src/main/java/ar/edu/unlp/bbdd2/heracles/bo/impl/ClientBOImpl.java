@@ -74,7 +74,7 @@ public class ClientBOImpl implements ClientBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void calcelExercise(Client client, List<Integer> sets, List<Integer> reps, Integer weight)
+	public void calcelExercise(Client client, Integer sets, Integer reps, Integer weight)
 			throws BusinessException {
 		ExerciseConfiguration runExercise = client.getActualRoutine().getRunActivity().getRunExercise();
 		if (runExercise != null) {

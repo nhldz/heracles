@@ -20,17 +20,16 @@
 	</filter-mapping>
 
 	<!-- [START SpringMVC] -->
+	
 	<servlet>
 		<servlet-name>spring</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>spring</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-
+	
+	<listener>
+		<listener-class>ar.edu.unlp.bbdd2.heracles.helper.OfytHelper</listener-class>
+	</listener>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
@@ -39,9 +38,10 @@
 		</param-value>
 	</context-param>
 
-	<listener>
-		<listener-class>ar.edu.unlp.bbdd2.heracles.helper.OfytHelper</listener-class>
-	</listener>
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index</welcome-file>
