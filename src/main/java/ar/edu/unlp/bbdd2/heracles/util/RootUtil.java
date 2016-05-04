@@ -178,16 +178,8 @@ public class RootUtil {
 
 	public ExerciseConfiguration createExConf() {
 		ExerciseConfiguration exConf = new ExerciseConfiguration();
-		List<Integer> reps = new ArrayList<Integer>();
-		reps.add(1);
-		reps.add(2);
-		reps.add(3);
-		exConf.setReps(reps);
-		List<Integer> sets = new ArrayList<Integer>();
-		sets.add(1);
-		sets.add(2);
-		sets.add(3);
-		exConf.setSets(sets);
+		exConf.setReps(12);
+		exConf.setSets(3);
 		exConf.setWeigth(10);
 		return exConf;
 	}
