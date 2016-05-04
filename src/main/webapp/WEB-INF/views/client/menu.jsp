@@ -203,7 +203,7 @@
 				</li>
 				<li><a href="/client/${userName}/profile"><i class="fa fa-dashboard fa-fw"></i>
 						${userName}</a></li>
-				<li><a href="/client/${userName}/routines"><i class="fa fa-table fa-fw"></i>
+				<li><a href="/client/${userName}/routine"><i class="fa fa-table fa-fw"></i>
 						Rutinas</a></li>
 			</ul>
 		</div>

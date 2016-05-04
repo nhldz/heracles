@@ -1,5 +1,6 @@
 package ar.edu.unlp.bbdd2.heracles.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
@@ -32,6 +33,10 @@ public class Activity {
 //	private Activity nextActivity;
 //	private Activity previousActivity;
 	private List<Ref<ExerciseConfiguration>> exercises;
+	
+	public Activity() {
+		this.exercises = new ArrayList<Ref<ExerciseConfiguration>>();
+	}
 	
 	public Long getId() {
 		return id;

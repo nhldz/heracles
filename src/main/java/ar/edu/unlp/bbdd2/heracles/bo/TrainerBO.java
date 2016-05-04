@@ -67,8 +67,8 @@ public interface TrainerBO {
 	 *            Peso con el que se configura el ejercicio.
 	 * @return Configuración de ejercicio creada.
 	 */
-	public ExerciseConfiguration createExConfiguration(Exercise exercise, Activity activity, List<Integer> sets,
-			List<Integer> reps, Integer rest, Integer weight);
+	public ExerciseConfiguration createExConfiguration(Exercise exercise, Activity activity, Integer sets, Integer reps,
+			Integer rest, Integer weight);
 
 	/**
 	 * Asigna una rutina a un cliente, si la rutina no tiene un cliente. La
@@ -108,12 +108,11 @@ public interface TrainerBO {
 	/**
 	 * Crea un nuevo entrenador y lo retorna
 	 * 
-	 * @param  trainer
+	 * @param trainer
 	 * @return Un entrenador (Trainer)
 	 * @throws BusinessException
 	 */
-	public Trainer createTrainer(Trainer trainer)
-			throws BusinessException;
+	public Trainer createTrainer(Trainer trainer) throws BusinessException;
 
 	/**
 	 * Deshabilita un profesor
@@ -137,6 +136,5 @@ public interface TrainerBO {
 	 */
 	public List<Trainer> getAllTrainers();
 
-	
 	public void save(Trainer trainer);
 }

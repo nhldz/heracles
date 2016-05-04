@@ -13,7 +13,8 @@
 <!-- 		<intercept-url pattern="/**" access="hasRole('ROLE_TRAINER')" /> -->
 		<intercept-url pattern="/index" access="hasRole('ROLE_TRAINER')" />
 		<intercept-url pattern="/exercises/**" access="hasRole('ROLE_TRAINER')" />
-		<intercept-url pattern="/client/**" access="hasRole('ROLE_CLIENT')" />
+		<intercept-url pattern="/client/list" access="hasRole('ROLE_TRAINER')" />
+<!-- 		<intercept-url pattern="/client/**" access="hasRole('ROLE_CLIENT')" /> -->
 
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />

@@ -43,6 +43,30 @@
 		</div>
 	</div>
 	<br>
+	<form id="routineForm" method="POST" data-toggle="validator">
+		<div id="myContent" class="row hidden">
+			<div class="col-lg-4">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="form-group">
+							<input type="hidden" name="id" />
+							<input type="hidden" name="enabled" value="true"/>
+						</div>
+						<div class="form-group">
+							<label for="name">Nombre:</label> <input name="name"
+								class="form-control" required />
+						</div>
+						<div class="form-group">
+							<label for="description">Descripci&oacute;n:</label>
+							<textarea name="description" class="form-control" rows="3" required></textarea>
+						</div>
+						<button type="submit" class="btn btn-success">Aceptar</button>
+						<button type="button" class="btn btn-default" onclick="clearForm(this.form); toogle('myContent'); toogleButtons();">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>
 </div>
 <jsp:include page="../templates/includes/common_foot.jsp" />

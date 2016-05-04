@@ -253,11 +253,7 @@ public class RootUtil {
 						Activity activity = this.getTrainerBO().createActivity(routine, activityName + act,
 								"Actividad #" + act, null, null);
 						for (int exc = 0; exc < 5; exc++) {
-							List<Integer> sets = new ArrayList<Integer>();
-							List<Integer> reps = new ArrayList<Integer>();
-							sets.add(exc);
-							reps.add(exc);
-							this.getTrainerBO().createExConfiguration(exercise, activity, sets, reps, exc, exc);
+							this.getTrainerBO().createExConfiguration(exercise, activity, exc, exc, exc, exc);
 						}
 					}
 				}

@@ -42,6 +42,7 @@ public class Routine {
 	 */
 	public Routine() {
 		super();
+		this.activities = new ArrayList<Ref<Activity>>();
 	}
 
 	public Routine(Routine routine, Client client) {

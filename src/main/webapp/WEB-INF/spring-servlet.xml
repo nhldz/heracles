@@ -19,7 +19,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
 				expression="ar.edu.unlp.bbdd2.heracles.controller.LoginController" />
 	</context:component-scan>
 	
-	<import resource="classpath:spring/backend/spring-controller.xml" />
+	<import resource="classpath:/spring/backend/spring-controller.xml" />
 
 	<!-- Configuration defining views files -->
 

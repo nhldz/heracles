@@ -25,13 +25,12 @@ public class ExerciseConfiguration {
 	/**
 	 * Series
 	 */
-	private List<Integer> sets;
+	private Integer sets;
 	
 	/**
 	 * Repeticiones
 	 */
-	@Load
-	private List<Integer> reps;
+	private Integer reps;
 	
 	/**
 	 * Descanzo
@@ -52,7 +51,7 @@ public class ExerciseConfiguration {
 		super();
 	}
 	
-	public ExerciseConfiguration (Exercise exercise, List<Integer> sets, List<Integer> reps, Integer rest, Integer weight) {
+	public ExerciseConfiguration (Exercise exercise, Integer sets, Integer reps, Integer rest, Integer weight) {
 		this();
 		this.setExercise(exercise);
 		this.setSets(sets);
@@ -70,22 +69,6 @@ public class ExerciseConfiguration {
 		this.id = id;
 	}
 
-	public List<Integer> getSets() {
-		return this.sets;
-	}
-
-	public void setSets(List<Integer> sets) {
-		this.sets = sets;
-	}
-
-	public List<Integer> getReps() {
-		return this.reps;
-	}
-
-	public void setReps(List<Integer> reps) {
-		this.reps = reps;
-	}
-
 	public Integer getRest() {
 		return rest;
 	}
@@ -101,7 +84,7 @@ public class ExerciseConfiguration {
 	public void setWeigth(Integer weigth) {
 		this.weigth = weigth;
 	}
-
+					
 	public Exercise getExercise() {
 		return exercise.get();
 	}
@@ -116,6 +99,22 @@ public class ExerciseConfiguration {
 
 	public void setSnapshots(List<ExerciseSnapshot> snapshots) {
 		this.snapshots = RefHelper.ref(snapshots);
+	}
+
+	public Integer getSets() {
+		return sets;
+	}
+
+	public void setSets(Integer sets) {
+		this.sets = sets;
+	}
+
+	public Integer getReps() {
+		return reps;
+	}
+
+	public void setReps(Integer reps) {
+		this.reps = reps;
 	}
 
 }

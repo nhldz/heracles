@@ -21,7 +21,7 @@
 							<thead>
 								<tr>
 									<th class="no-sort id"></th>
-									<th>Nombre${userName}</th>
+									<th>Nombre</th>
 									<th>Tipo</th>
 									<th>Descripci&oacute;n</th>
 								</tr>

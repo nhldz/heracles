@@ -27,7 +27,7 @@ import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
  *
  */
 @Controller
-@RequestMapping("/clients")
+@RequestMapping("/client")
 public class ClientController {
 
 	@Autowired
@@ -53,18 +53,19 @@ public class ClientController {
 	 *            del cliente
 	 * @throws IOException
 	 */
-//	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-//	@ResponseBody
-//	public void getClientById(HttpServletResponse response, @PathVariable("id") String id)
-//			throws IOException {
-//		response.setContentType("application/json");
-//		Long idL = Long.valueOf(id);
-//		PrintWriter out = response.getWriter();
-//		Client client = this.getClientBO().getClientById(idL);
-//		String json = JsonTransform.objectToJson(client);
-//		out.print(json);
-//	}
-	
+	// @RequestMapping(value = "{id}", method = RequestMethod.GET)
+	// @ResponseBody
+	// public void getClientById(HttpServletResponse response,
+	// @PathVariable("id") String id)
+	// throws IOException {
+	// response.setContentType("application/json");
+	// Long idL = Long.valueOf(id);
+	// PrintWriter out = response.getWriter();
+	// Client client = this.getClientBO().getClientById(idL);
+	// String json = JsonTransform.objectToJson(client);
+	// out.print(json);
+	// }
+
 	/**
 	 * Retorna la pagina de inicio del cliente logueado
 	 * 
@@ -76,12 +77,12 @@ public class ClientController {
 	@RequestMapping(value = "{name}", method = RequestMethod.GET)
 	public ModelAndView getClientByName(HttpServletResponse response, @PathVariable("name") String name)
 			throws IOException {
-		ModelAndView mv  = new ModelAndView("client/profile");
+		ModelAndView mv = new ModelAndView("client/profile");
 		Client client = this.getClientBO().getClientByName(name);
 		mv.addObject("client", client);
 		return mv;
 	}
-	
+
 	/**
 	 * Retorna la pagina del perfil del cliente logueado.
 	 * 
@@ -93,23 +94,23 @@ public class ClientController {
 	@RequestMapping(value = "{name}/profile", method = RequestMethod.GET)
 	public ModelAndView clientProfile(HttpServletResponse response, @PathVariable("name") String name)
 			throws IOException {
-		ModelAndView mv  = new ModelAndView("client/profile");
+		ModelAndView mv = new ModelAndView("client/profile");
 		Client client = this.getClientBO().getClientByName(name);
 		mv.addObject("client", client);
 		return mv;
 	}
-	
+
 	/**
 	 * Guarda los cambios del formulario de cliente
 	 * 
 	 * @param client
 	 * @param model
 	 * @return
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public @ResponseBody void save(@ModelAttribute Client client, Model model) throws BusinessException {
-		System.out.println(client);
+
 	}
 
 	/**
@@ -148,5 +149,4 @@ public class ClientController {
 	public void setClientBO(ClientBO clientBO) {
 		this.clientBO = clientBO;
 	}
-
 }
