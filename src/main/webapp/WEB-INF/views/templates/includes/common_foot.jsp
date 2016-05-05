@@ -9,6 +9,7 @@
 <script src="${contextPath}/resources/js/metisMenu.min.js"></script>
 <script src="${contextPath}/resources/js/dataTables/jquery.dataTables.min.js"></script>
 <script src="${contextPath}/resources/js/dataTables/dataTables.bootstrap.min.js"></script>
+<script src="${contextPath}/resources/js/bootstrap-combobox.js"></script>
 <script>
 	function toogle(idElement) {
 		var elem = $('#' + idElement);

@@ -41,7 +41,7 @@
 		</div>
 	</div>
 	<br>
-	<form id="clientForm" action="/client/save" method="POST"
+	<form id="clientForm" action="/client"
 		data-toggle="validator">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">

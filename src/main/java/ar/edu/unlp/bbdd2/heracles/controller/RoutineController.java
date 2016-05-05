@@ -2,11 +2,12 @@ package ar.edu.unlp.bbdd2.heracles.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
 import ar.edu.unlp.bbdd2.heracles.bo.ExerciseBO;
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
 import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
+import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
-import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
@@ -46,13 +48,20 @@ public class RoutineController {
 	private TrainerBO trainerBO;
 	
 	@Autowired
+	private ClientBO clientBO;
+	
+	@Autowired
 	private ExerciseBO exerciseBO;
 	
 	private Routine routine;
 	
 	private Activity activity;
 	
+	private List<Activity> activityList;
+	
 	private ExerciseConfiguration exerciseConf;
+	
+	private List<ExerciseConfiguration> exerciseConfList;
 
 	/**
 	 * Pagina principal de rutinas
@@ -93,50 +102,21 @@ public class RoutineController {
 	public ModelAndView create() throws BusinessException {
 		ModelAndView mv = new ModelAndView("routines/create");
 		setRoutine(new Routine());
+		mv.addObject("clients", clientBO.getAllEnabledClients());
 		mv.addObject("routine", getRoutine());
 		return mv;
 	}
-		
+			
 	/**
-	 * Guarda los cambios del formulario de rutinas
+	 * Agrega una nueva rutina
 	 * 
-	 * @param routine
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public @ResponseBody void save(@ModelAttribute Routine routine, Model model) {
-		// UserService userService = UserServiceFactory.getUserService();
-		// String email = userService.getCurrentUser().getEmail();
-//		Trainer owner = this.getTrainerBO().findByEmail("matias.trainer@email.com");
-//		exercise.setOwner(owner);
-//		String result = "exercises";
-//		try {
-//			if (this.validSave(exercise)) {
-//				this.getExerciseBO().save(exercise);
-//			}
-//		} catch (BusinessException e) {
-//			result = "error/" + e.getMessage();
-//		}
-	//	System.out.println(routine.getName());
+	 * @throws BusinessException 
+	 */   
+	@RequestMapping(value="/save", method=RequestMethod.POST, headers = {"Content-type=application/json"}, consumes={"application/json"})
+	public @ResponseBody void save(@RequestBody RoutineDTO routine) throws BusinessException {
+		System.out.println(routine.getName());
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * Direcciona a la jsp de creacion de actividad
@@ -148,7 +128,9 @@ public class RoutineController {
 		ModelAndView mv = new ModelAndView("routines/createActivity");
 		setActivity(new Activity());
 		mv.addObject("activity", getActivity());
+		setActivityList(new ArrayList<Activity>());
 		setExerciseConf(new ExerciseConfiguration());
+		setExerciseConfList(new ArrayList<ExerciseConfiguration>());
 	    mv.addObject("exerciseConf", getExerciseConf());
 		mv.addObject("exercises", getExerciseBO().getAllExercises());
 		return mv;
@@ -162,7 +144,9 @@ public class RoutineController {
 	@RequestMapping(value="/addActivity", method=RequestMethod.POST)
 	public ModelAndView addActivity(@ModelAttribute Activity activity, Model model) throws BusinessException {
 		ModelAndView mv = new ModelAndView("routines/create");
-		getRoutine().getActivities().add(activity);
+		this.getActivity().getExercises().addAll(getExerciseConfList());
+		activity.getExercises().addAll(getExerciseConfList());
+		getActivityList().add(activity);
 		mv.addObject("routine", getRoutine());
 		return mv;
 	}
@@ -175,14 +159,23 @@ public class RoutineController {
 	@RequestMapping(value="addExcercise", method=RequestMethod.POST)
 	@ResponseBody
 	public void addExcercise(@ModelAttribute ExerciseConfiguration exerciseConfig, Model model) throws BusinessException {
-		exerciseConf.setExercise(getExerciseBO().getAllExercises().get(1));
-		getActivity().getExercises().add(exerciseConfig);
-		System.out.println("CANTIDAD DE ACTIVIDADES: " + activity.getExercises().size());
+		exerciseConfig.setExercise(getExerciseBO().getAllExercises().get(1));
+		exerciseConfig.setId(1L);
+		this.getExerciseConfList().add(exerciseConfig);
+		
+		activity.setExercises(this.getExerciseConfList());
+		activity.setId(1L);
+		this.getActivityList().add(activity);
+
+		routine.setActivities(this.getActivityList());
+		routine.setClient(this.getClientBO().getAllEnabledClients().get(0));
+		routine.setTrainer(this.getTrainerBO().getAllTrainers().get(0));
+		this.getRoutineBO().save(routine);
+		this.getRoutineBO().getAllRoutines();
 	}
 
 	
 	/**
-	 * Guarda los cambios del formulario de rutinas
 	 * 
 	 * @param routine
 	 * @param model
@@ -281,5 +274,29 @@ public class RoutineController {
 
 	public void setExerciseConf(ExerciseConfiguration exerciseConf) {
 		this.exerciseConf = exerciseConf;
+	}
+
+	public List<ExerciseConfiguration> getExerciseConfList() {
+		return exerciseConfList;
+	}
+
+	public void setExerciseConfList(List<ExerciseConfiguration> exerciseConfList) {
+		this.exerciseConfList = exerciseConfList;
+	}
+
+	public List<Activity> getActivityList() {
+		return activityList;
+	}
+
+	public void setActivityList(List<Activity> activityList) {
+		this.activityList = activityList;
+	}
+
+	public ClientBO getClientBO() {
+		return clientBO;
+	}
+
+	public void setClientBO(ClientBO clientBO) {
+		this.clientBO = clientBO;
 	}
 }

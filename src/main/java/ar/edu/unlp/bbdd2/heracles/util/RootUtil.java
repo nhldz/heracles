@@ -16,6 +16,7 @@ import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.BodyPart;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
@@ -146,10 +147,16 @@ public class RootUtil {
 
 	public Client createClient(String name, String surname, String pass) {
 		Client client = null;
+		ClientDTO clientDTO = null;
 		try {
-			client = clientBO.createClient(name, surname, name + ".client@email.com", new Date(), Gender.FEMALE);
-			client.setPassword(pass);
-			client.setPhone("221-5637610");
+			clientDTO = new ClientDTO();
+			clientDTO.setName(name);
+			clientDTO.setSurname(surname);
+			clientDTO.setPassword(pass);
+			clientDTO.setPhone("221-5637610");
+			clientDTO.setBirthday("2016-01-01");
+			clientDTO.setEmail(name + ".client@email.com");
+			client = clientBO.createClient(clientDTO);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}

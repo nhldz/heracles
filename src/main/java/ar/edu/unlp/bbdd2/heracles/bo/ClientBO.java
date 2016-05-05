@@ -3,13 +3,12 @@
  */
 package ar.edu.unlp.bbdd2.heracles.bo;
 
-import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
+import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
-import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 
 /**
  *
@@ -50,21 +49,23 @@ public interface ClientBO {
 
 	/**
 	 * Crea un nuevo cliente y lo retorna
-	 * 
-	 * @param name
-	 *            Nombre del cliente
-	 * @param email
-	 *            Email del cliente
-	 * @param birthday
-	 *            cumpleaños/fecha de nacimiento
-	 * @param gender
-	 *            Genero
+	 * @param client
 	 * @return Un entrenador (Client)
 	 * @throws BusinessException
 	 */
-	public Client createClient(String name, String surname, String email, Date birthday, Gender gender)
+	public Client createClient(ClientDTO client)
 			throws BusinessException;
 
+	
+	/**
+	 * Actualiza la informacion de un cliente y lo retorna
+	 * @param client
+	 * @return Un entrenador (Client)
+	 * @throws BusinessException
+	 */
+	public Client updateClient(ClientDTO client)
+			throws BusinessException;
+	
 	/**
 	 * Deshabilita un cliente
 	 * 

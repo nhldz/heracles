@@ -9,15 +9,16 @@ import ar.edu.unlp.bbdd2.heracles.dao.ClientDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseSnapshotDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseSnapshot;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
-import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.entities.Role;
 import ar.edu.unlp.bbdd2.heracles.entities.RoleName;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.entities.User;
+import ar.edu.unlp.bbdd2.heracles.util.Utilities;
 
 /**
  *
@@ -107,11 +108,14 @@ public class ClientBOImpl implements ClientBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Client createClient(String name, String surname, String email, Date birthday, Gender gender)
+	public Client createClient(ClientDTO clientDTO)
 			throws BusinessException {
 		Client client = null;
-		if (this.getClientDAO().loadByEmail(email) == null) {
-			client = new Client(name, surname, email, birthday, gender);
+		if (this.getClientDAO().loadByEmail(clientDTO.getEmail()) == null) {
+			Date fecha = Utilities.formatDate(clientDTO.getBirthday());
+			client = new Client(clientDTO.getName(), clientDTO.getSurname(), clientDTO.getEmail(), fecha, clientDTO.getGender());
+			client.setPassword(clientDTO.getPassword());
+			client.setPhone(clientDTO.getPhone());
 			client.setRoutines(new ArrayList<Routine>());
 			client.setRegistrationDate(new Date());
 			Role role = roleDAO.loadByName(RoleName.CLIENT.getType());
@@ -126,6 +130,19 @@ public class ClientBOImpl implements ClientBO {
 		} else {
 			throw new BusinessException("El email ya existe");
 		}
+		return client;
+	}
+	
+	@Override
+	public Client updateClient(ClientDTO clientDTO) throws BusinessException {
+		Client client = clientDAO.loadById(clientDTO.getId());
+		client.setName(clientDTO.getName());
+		client.setSurname(clientDTO.getSurname());
+		client.setPhone(clientDTO.getPhone());
+		client.setBirthday(Utilities.formatDate(clientDTO.getBirthday()));
+		client.setEmail(clientDTO.getEmail());
+		client.setGender(clientDTO.getGender());
+		clientDAO.saveOrUpdate(client);
 		return client;
 	}
 	

@@ -40,20 +40,31 @@ $(document).ready(function() {
 //		}
 //	});
 									); //});
+	
+	$('#clients').combobox();
+		
+	$('#save').click(function(){
+		$("#groupActivity").removeClass('hidden');
+	});
 
 	$('#routineForm').submit(function(e) {
-		var frm = $('#activityForm');
+		var frm = $('#routineForm');
 		e.preventDefault();
 		$.ajax({
+			headers: { 
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json' 
+		    },
 			type : frm.attr('method'),
 			url : frm.attr('action'),
-			data : frm.serialize(),
+			data : JSON.stringify(frm.serialize()),
+			dataType: "json",
 			success : function() {
-				dataTable.ajax.reload();
+//				dataTable.ajax.reload();
 			},
 			error : function() {
 				alert("Error!");
 			}
 		});
-	});
+	});	
 });
