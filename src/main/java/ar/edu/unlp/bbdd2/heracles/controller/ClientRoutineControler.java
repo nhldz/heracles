@@ -30,7 +30,7 @@ import ar.edu.unlp.bbdd2.heracles.security.UserPrincipal;
  *
  */
 @Controller
-@RequestMapping("/client/{name}")
+@RequestMapping("/client/{name}/routine")
 public class ClientRoutineControler {
 	
 	@Autowired
@@ -42,12 +42,14 @@ public class ClientRoutineControler {
 	 * Vista con el listado de rutinas de un cliente
 	 * @return
 	 */
-	@RequestMapping(value = "/routines", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getClientRoutines(HttpServletResponse response, @PathVariable("name") String name) {
 		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		ModelAndView mv = null;
 		if (up.getName().equals(name)){
 			mv = new ModelAndView("/client/routines");
+			Client client = this.getClientBO().getClientById(up.getId());
+			mv.addObject("actualRoutine",client.getActualRoutine() );
 		}
 		return mv;
 	}
@@ -58,7 +60,7 @@ public class ClientRoutineControler {
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/routines/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public void listRoutines(HttpServletResponse response) throws IOException {
 		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Client client = this.getClientBO().getClientById(up.getId());
@@ -66,8 +68,9 @@ public class ClientRoutineControler {
 		PrintWriter out = response.getWriter();
 		List<Routine> routines = new ArrayList<Routine>();
 		routines.addAll(this.getRoutineBO().getClientRoutines(client));
-		if (!routines.contains(client.getActualRoutine())){
-			routines.add(client.getActualRoutine());
+		Routine actualRoutine = client.getActualRoutine();
+		if (routines.contains(actualRoutine)){
+			routines.remove(actualRoutine);
 		}
 		List<RoutineDTO> routinesDTO = new ArrayList<RoutineDTO>();
 		for (Routine routine : routines) {
@@ -75,6 +78,18 @@ public class ClientRoutineControler {
 		}
 		String json = JsonTransform.listToJson(routinesDTO);
 		out.print(json);
+	}
+	
+	@RequestMapping(value="/{routine}")
+	public ModelAndView getClientRoutine (HttpServletResponse response, @PathVariable("name") String name, @PathVariable("routine") String routine){
+		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		ModelAndView mv = null;
+		if (up.getName().equals(name)){
+			mv = new ModelAndView("/client/routine");
+			Routine rt = this.getRoutineBO().getRoutineById(Long.valueOf(routine));
+			mv.addObject("routine", rt);
+		}
+		return mv;
 	}
 
 	public ClientBO getClientBO() {

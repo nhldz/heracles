@@ -22,6 +22,7 @@ public class RoutineDTO {
 	
 	public RoutineDTO (Routine routine){
 		this();
+		this.id = routine.getId();
 		this.name = routine.getName();
 		this.createDate = routine.getCreateDate();
 		this.endDate = routine.getEndDate();

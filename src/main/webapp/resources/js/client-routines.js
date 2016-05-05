@@ -5,8 +5,7 @@ $(document).ready(function() {
 	dataTable = $('#routineTable').DataTable({
 		'processing' : false,
 		'serverSide' : false,
-//		'sAjaxSource' : '/client/{name}/routines/',
-		'sAjaxSource' : '/client/ClientName1/routines/list',
+		'sAjaxSource' : '/client/ClientName1/routine/list',
 		'bJQueryUI' : true,
 		'autoWidth' : true,
 		'order' : [ [ 1, "asc" ] ],
@@ -21,17 +20,20 @@ $(document).ready(function() {
 		}, {
 			'mData' : 'endDate',
 			"defaultContent" : ""
-		}],
+		},{
+			"mData": null,
+		    "bSortable": false,
+		    "mRender": function(data, type, full) {
+	          return '<button type="button" class="btn btn-success btnView" value="'+data.id+'" >' + 'Ver' + '</button>';}
+	     }],
 		'columnDefs' : [ {
 			'targets' : 0,
 			'searchable' : false,
 			'ordenable' : false,
-			'className' : 'dt-body-center',
-			'render' : function(data, type,
-					row) {
-				return '<input name="col" type="radio" id=' + row.id + ' value=' + row.id + ' >';
-			}
-		},{
+			'render' : function(data, type, row) {
+				return '<input name="col" type="hidden" id=' + data + ' value=' + data + ' >';}
+		},
+		{
 			"targets": 2,
 			"render": function ( data, type, row ) {
                 return data.surname + ', '+ data.name;
@@ -52,76 +54,9 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#page-wrapper').on('click','#routinesTable tr',function() {
-		$(this).find('input:radio').attr('checked',true);
+	
+	dataTable.on('click', '.btnView', function(){
+		console.log($(this).value());
 	});
 
-	$('#routineForm').submit(function(e) {
-		var frm = $('#routineForm');
-		e.preventDefault();
-		$.ajax({
-			type : frm.attr('method'),
-			url : frm.attr('action'),
-			data : frm.serialize(),
-			success : function() {
-				dataTable.ajax.reload();
-				toogle('myContent');
-				toogleButtons();
-			},
-			error : function() {
-				alert("Error!");
-			}
-		});
-	});
-
-	$('#btnAdd').click(function(e) {
-		toogle('myContent');
-		toogleButtons();
-		$('#routineForm')[0].reset();
-		$('#routineForm').attr('action', '/routines/save');
-	});
-
-	$('#btnEdit').click(function(e) {
-		var id = $('input[type="radio"]:checked').val();
-		var frm = $('#routineForm');
-		frm.attr('action','/routines/update');
-		toogleButtons();
-		frm[0].reset();
-		if (typeof id === "undefined") {
-			toogleButtons();
-			alert("Por favor, seleccione un elemento de la lista");
-		} else {
-			$.ajax({
-				type : "GET",
-				url : "/routines/load/"+ id,
-				success : function(callback) {
-					frm.loadJSON(callback);
-					toogle('myContent');
-				},
-				error : function() {
-					alert("Error!");
-				}
-			});
-		};
-	});
-
-	$('#btnDelete').click(function() {
-		var id = $('input[type="radio"]:checked').val();
-		if (typeof id === "undefined") {
-			toogleButtons();
-			alert("Por favor, seleccione un elemento de la lista");
-		}else {
-			$.ajax({
-				type : "POST",
-				url : "/routines/remove/"+ id,
-				success : function() {
-					var tr = $('input[type="radio"]:checked').parent().parent();
-					dataTable.row(tr).remove().draw(false);
-				},
-				error : function() {
-					alert("Error!");
-				}
-			});
-		};
-	});
 });
