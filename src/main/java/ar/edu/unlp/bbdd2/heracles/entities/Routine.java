@@ -34,7 +34,7 @@ public class Routine {
 
 	@Index
 	private Ref<Client> client;
-	private Activity runActivity;
+	private Ref<Activity> runActivity;
 	private List<Ref<Activity>> activities;
 
 	/**
@@ -116,11 +116,11 @@ public class Routine {
 	}
 
 	public Activity getRunActivity() {
-		return runActivity;
+		return runActivity.get();
 	}
 
 	public void setRunActivity(Activity runActivity) {
-		this.runActivity = runActivity;
+		this.runActivity = Ref.create(runActivity);
 	}
 
 	public List<Activity> getActivities() {
