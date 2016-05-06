@@ -41,7 +41,7 @@
 		</div>
 	</div>
 	<br>
-	<form id="clientForm" action="/client/save" method="POST"
+	<form id="clientForm" action="/client"
 		data-toggle="validator">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
@@ -63,7 +63,7 @@
 								type="date" name="birthday" class="form-control" required />
 						</div>
 						<div class="form-group">
-							<label for="gender">Sexo:</label> <select name="gender" required>
+							<label for="gender">Sexo:</label> <select name="gender" required />
 								<option value="0">Seleccione..</option>
 								<c:forEach items="${genders}" var="gender">
 									<option value="${gender}">${gender.type}</option>
