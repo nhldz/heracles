@@ -64,8 +64,10 @@ public class TrainerBOImpl implements TrainerBO {
 			Integer rest, Integer weight) {
 		ExerciseConfiguration exConf = new ExerciseConfiguration(exercise, sets, reps, rest, weight);
 		this.getExConfDAO().save(exConf);
-		activity.getExercises().add(exConf);
-		this.getActivityDAO().save(activity);
+		List<ExerciseConfiguration> exerciseConf = activity.getExercises();
+		exerciseConf.add(exConf);
+		activity.setExercises(exerciseConf);
+		this.getActivityDAO().saveOrUpdate(activity);
 		return exConf;
 	}
 
@@ -80,6 +82,11 @@ public class TrainerBOImpl implements TrainerBO {
 		return routine;
 	}
 
+	/**
+	 * Asigna una rutina al cleinte.
+	 * Si este tiene una rutina actual se la remplaza por la nueva 
+	 * y a la actual se la agrega junto con las demas rutinas del cliente.
+	 */
 	private void assingRoutine(Client client, Routine routine) {
 		Routine actualRoutine = client.getActualRoutine();
 		if (actualRoutine != null) {
