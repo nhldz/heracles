@@ -19,11 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.unlp.bbdd2.heracles.bo.ExerciseBO;
 import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
-import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
-import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
-import ar.edu.unlp.bbdd2.heracles.entities.ExerciseType;
-import ar.edu.unlp.bbdd2.heracles.entities.Equipment;
 import ar.edu.unlp.bbdd2.heracles.entities.BodyPart;
+import ar.edu.unlp.bbdd2.heracles.entities.Equipment;
+import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
+import ar.edu.unlp.bbdd2.heracles.entities.ExerciseType;
+import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
 import ar.edu.unlp.bbdd2.heracles.security.UserPrincipal;
 

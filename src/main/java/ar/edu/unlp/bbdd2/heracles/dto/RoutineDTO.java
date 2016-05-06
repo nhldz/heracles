@@ -3,6 +3,7 @@ package ar.edu.unlp.bbdd2.heracles.dto;
 import java.util.Date;
 import java.util.List;
 
+import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 
 public class RoutineDTO {
@@ -13,7 +14,7 @@ public class RoutineDTO {
 	private Date endDate;
 	private TrainerDTO trainer;
 
-	private ClientDTO client;
+	private Client client;
 	private ActivityDTO runActivity;
 	private List<ActivityDTO> activities;
 	
@@ -26,7 +27,7 @@ public class RoutineDTO {
 		this.createDate = routine.getCreateDate();
 		this.endDate = routine.getEndDate();
 		this.trainer = new TrainerDTO(routine.getTrainer());
-		this.client = new ClientDTO(routine.getClient());
+		
 //		this.runActivity = new ActivityDTO(routine.getRunActivity());
 	}
 
@@ -70,11 +71,11 @@ public class RoutineDTO {
 		this.trainer = trainer;
 	}
 
-	public ClientDTO getClient() {
+	public Client getClient() {
 		return client;
 	}
 
-	public void setClient(ClientDTO client) {
+	public void setClient(Client client) {
 		this.client = client;
 	}
 

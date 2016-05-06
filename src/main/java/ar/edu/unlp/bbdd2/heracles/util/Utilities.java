@@ -25,5 +25,18 @@ public class Utilities {
 			return null;
 		}		
 	}
+	
+	public static Date formatDate(String date) {
+		try {
+			return getDateFormat().parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	public static String formatDateToString(Date date) {
+		return getDateFormat().format(date);		
+	}
 
 }

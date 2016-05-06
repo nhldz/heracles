@@ -65,7 +65,7 @@
 		});
 
 		$('#clientForm').submit(function(e) {
-			var frm = $('#clientForm');
+			var frm = $('#clientForm'); 
 			e.preventDefault();
 			$.ajax({
 				type : frm.attr('method'),
@@ -86,11 +86,14 @@
 		$('#btnAdd').click(function(e) {
 			toogle('myContent');
 			toogleButtons();
+			var frm = $('#clientForm');
+			frm.attr("method", "POST");
 		});
 
 		$('#btnEdit').click(function(e) {
 			var id = $('input[type="radio"]:checked').val();
 			var frm = $('#clientForm');
+			frm.attr("method", "PUT"); 
 			toogleButtons();
 			if(typeof id === "undefined"){
 				toogleButtons();
@@ -98,7 +101,7 @@
 			}else{
 				$.ajax({
 					type : "GET",
-					url : "client/" + id,
+					url : "client/update/" + id,
 					success : function(callback) {
 						frm.loadJSON(callback);
 						$('#birthday').val(formatDate($('#birthday').val()));

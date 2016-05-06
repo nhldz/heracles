@@ -72,7 +72,8 @@ $(document).ready(function() {
 			url : frm.attr('action'),
 			data : frm.serialize(),
 			success : function() {
-	    		$('exerciseDialog').modal('toggle');
+//	    		$('exerciseDialog').modal('toggle');
+	    		console.log("Se guardo")
 			},
 			error : function() {
 				alert("Error!");

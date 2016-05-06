@@ -13,6 +13,7 @@
 <link href="${contextPath}/resources/css/sb-admin-2.css" rel="stylesheet" type="text/css">
 <link href="${contextPath}/resources/css/dataTables/dataTables.bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${contextPath}/resources/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="${contextPath}/resources/css/bootstrap-combobox.css" type="text/css">
 <title>Heracles</title>
 </head>
 <body>

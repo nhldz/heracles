@@ -1,11 +1,11 @@
 package ar.edu.unlp.bbdd2.heracles.dto;
 
-import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.entities.Role;
 import ar.edu.unlp.bbdd2.heracles.entities.User;
+import ar.edu.unlp.bbdd2.heracles.util.Utilities;
 
 /**
  *  DTO del usuario.
@@ -25,8 +25,8 @@ public class UserDTO {
 	private String phone;
 	private boolean enabledUser;
 	private List<Role> roles;
-	private Date registrationDate;
-	private Date birthday;
+	private String registrationDate;
+	private String birthday;
 	private Gender gender;
 	
 	
@@ -44,8 +44,8 @@ public class UserDTO {
 		this.phone = user.getPhone();
 		this.enabledUser = user.isEnabledUser();
 //		this.roles = user.getRoles();
-		this.registrationDate = user.getRegistrationDate();
-		this.birthday = user.getBirthday();
+		this.registrationDate = Utilities.formatDateToString(user.getRegistrationDate());
+		this.birthday = Utilities.formatDateToString(user.getBirthday());
 		this.gender = user.getGender();
 	}
 	
@@ -97,16 +97,16 @@ public class UserDTO {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-	public Date getRegistrationDate() {
+	public String getRegistrationDate() {
 		return registrationDate;
 	}
-	public void setRegistrationDate(Date registrationDate) {
+	public void setRegistrationDate(String registrationDate) {
 		this.registrationDate = registrationDate;
 	}
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 	public Gender getGender() {
