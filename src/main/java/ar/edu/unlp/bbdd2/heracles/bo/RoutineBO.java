@@ -28,7 +28,7 @@ public interface RoutineBO {
 	 * 
 	 * @return Actividad
 	 */
-	Activity getActualActivity(Client client);
+	Activity getRunActivity(Client client);
 
 	/**
 	 * Retorna aquellas actividades que contienen ejercicios cancelados.
@@ -72,5 +72,18 @@ public interface RoutineBO {
 	 * @return
 	 */
 	List<Routine> getClientRoutines(Client client);
+	
+	/**
+	 * Setea en la rutina actual del cliente la actividad
+	 */
+	void setRunActivity (Client client, Activity activity);
+	
+	/**
+	 * Retorn un entero que representa el porcentaje de avance en en actividades.
+	 * 
+	 * @param routine
+	 * @return integer
+	 */
+	Integer progress (Routine routine);
 
 }

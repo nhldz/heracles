@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
+import ar.edu.unlp.bbdd2.heracles.dao.ClientDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.RoutineDAO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
@@ -25,6 +26,9 @@ public class RoutineBOImpl implements RoutineBO {
 
 	@Autowired
 	private RoutineDAO routineDAO;
+	
+	@Autowired
+	private ClientDAO clientDAO;
 
 	/**
 	 * {@inheritDoc}
@@ -37,11 +41,11 @@ public class RoutineBOImpl implements RoutineBO {
 			List<ExerciseConfiguration> exercises = activity.getExercises();
 			int exCount = 0;
 			for (ExerciseConfiguration exConf : exercises) {
-				if (exConf.getSnapshots().get(exConf.getSnapshots().size() - 1).getState().equals(ExerciseState.STOP)) {
+				if ((exConf.getSnapshots() != null) && (exConf.getSnapshots().get(exConf.getSnapshots().size() - 1).getState().equals(ExerciseState.STOP))) {
 					exCount++;
 				}
 			}
-			if (exCount == exercises.size()) {
+			if ((exCount != 0) && (exCount == exercises.size())) {
 				completeAct.add(activity);
 			}
 		}
@@ -52,7 +56,7 @@ public class RoutineBOImpl implements RoutineBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Activity getActualActivity(Client client) {
+	public Activity getRunActivity(Client client) {
 		return client.getActualRoutine().getRunActivity();
 	}
 
@@ -75,6 +79,16 @@ public class RoutineBOImpl implements RoutineBO {
 			}
 		}
 		return activities;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setRunActivity(Client client, Activity activity) {
+		Routine actualRoutine = client.getActualRoutine();
+		actualRoutine.setRunActivity(activity);
+		this.getRoutineDAO().saveOrUpdate(actualRoutine);
+		this.getClientDAO().saveOrUpdate(client);
 	}
 	
 	public List<Routine> getClientRoutines(Client client){
@@ -108,5 +122,25 @@ public class RoutineBOImpl implements RoutineBO {
 	public void setRoutineDAO(RoutineDAO routineDAO) {
 		this.routineDAO = routineDAO;
 	}
+
+	public ClientDAO getClientDAO() {
+		return clientDAO;
+	}
+
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+
+	@Override
+	public Integer progress(Routine routine) {
+		int activitiesSize = routine.getActivities().size();
+		int compleActivitiesSize = this.getCompleteActivities(routine).size();
+		int result = 0;
+		if (compleActivitiesSize > 0){
+			result = (compleActivitiesSize * 100 / activitiesSize);
+		}
+		return result;
+	}
+	
 
 }
