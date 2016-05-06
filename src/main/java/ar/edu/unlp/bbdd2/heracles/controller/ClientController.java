@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
+import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
@@ -46,27 +47,6 @@ public class ClientController {
 	}
 
 	/**
-	 * Retorna un json del cliente
-	 * 
-	 * @param response
-	 * @param id
-	 *            del cliente
-	 * @throws IOException
-	 */
-	// @RequestMapping(value = "{id}", method = RequestMethod.GET)
-	// @ResponseBody
-	// public void getClientById(HttpServletResponse response,
-	// @PathVariable("id") String id)
-	// throws IOException {
-	// response.setContentType("application/json");
-	// Long idL = Long.valueOf(id);
-	// PrintWriter out = response.getWriter();
-	// Client client = this.getClientBO().getClientById(idL);
-	// String json = JsonTransform.objectToJson(client);
-	// out.print(json);
-	// }
-
-	/**
 	 * Retorna la pagina de inicio del cliente logueado
 	 * 
 	 * @param response
@@ -81,6 +61,25 @@ public class ClientController {
 		Client client = this.getClientBO().getClientByName(name);
 		mv.addObject("client", client);
 		return mv;
+	}
+
+	/**
+	 * Retorna un json del cliente
+	 * 
+	 * @param response
+	 * @param id
+	 *            del cliente
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public void getClientById(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
+		response.setContentType("application/json");
+		Long idL = Long.valueOf(id);
+		PrintWriter out = response.getWriter();
+		Client client = this.getClientBO().getClientById(idL);
+		String json = JsonTransform.objectToJson(new ClientDTO(client));
+		out.print(json);
 	}
 
 	/**
@@ -101,16 +100,38 @@ public class ClientController {
 	}
 
 	/**
-	 * Guarda los cambios del formulario de cliente
+	 * Guarda un cliente
 	 * 
 	 * @param client
 	 * @param model
 	 * @return
-	 * @throws BusinessException
 	 */
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public @ResponseBody void save(@ModelAttribute Client client, Model model) throws BusinessException {
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseBody
+	public void save(@ModelAttribute ClientDTO client, Model model) {
+		try {
+			getClientBO().createClient(client);
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+	/**
+	 * Actualiza los datos de un cliente
+	 * 
+	 * @param client
+	 * @param model
+	 */
+	@RequestMapping(method = RequestMethod.PUT)
+	@ResponseBody
+	public void update(@ModelAttribute ClientDTO client, Model model) {
+		try {
+			getClientBO().updateClient(client);
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
