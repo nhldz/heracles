@@ -5,7 +5,6 @@ package ar.edu.unlp.bbdd2.heracles.entities;
 
 import java.util.Date;
 
-import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.EntitySubclass;
 import com.googlecode.objectify.annotation.Load;
 
@@ -23,7 +22,7 @@ public class ExerciseSnapshot extends ExerciseConfiguration {
 	private Date endDate;
 	
 	@Load
-	private Ref<ExerciseState> state;
+	private ExerciseState state;
 	
 	public Date getStartDate() {
 		return startDate;
@@ -38,10 +37,10 @@ public class ExerciseSnapshot extends ExerciseConfiguration {
 		this.endDate = endDate;
 	}
 	public ExerciseState getState() {
-		return state.get();
+		return state;
 	}
 	public void setState(ExerciseState state) {
-		this.state = Ref.create(state);
+		this.state = state;
 	}
 
 }
