@@ -16,6 +16,7 @@ import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.BodyPart;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
@@ -146,10 +147,16 @@ public class RootUtil {
 
 	public Client createClient(String name, String surname, String pass) {
 		Client client = null;
+		ClientDTO clientDTO = null;
 		try {
-			client = clientBO.createClient(name, surname, name + ".client@email.com", new Date(), Gender.FEMALE);
-			client.setPassword(pass);
-			client.setPhone("221-5637610");
+			clientDTO = new ClientDTO();
+			clientDTO.setName(name);
+			clientDTO.setSurname(surname);
+			clientDTO.setPassword(pass);
+			clientDTO.setPhone("221-5637610");
+			clientDTO.setBirthday("2016-01-01");
+			clientDTO.setEmail(name + ".client@email.com");
+			client = clientBO.createClient(clientDTO);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
@@ -226,10 +233,13 @@ public class RootUtil {
 			Trainer trainer = createTrainer("nahuel", "Diaz", "123");
 			trainer = createTrainer("matias", "Garcia", "123");
 
+			ExerciseConfiguration exConf = null;
+			Activity activity = null;
 			for (int i = 0; i < 5; i++) {
 				Client client = createClient(clientName + i, surname + i, pass);
 				trainer = createTrainer(trianerName + i, surname + i, pass);
 				Exercise exercise = null;
+				
 
 				try {
 					exercise = this.getExerciseBO().createExercise(trainer, exName + i, ExerciseType.AEROBIC,
@@ -238,16 +248,30 @@ public class RootUtil {
 					exercise = this.getExerciseDAO().findByName(exName + i);
 					e.printStackTrace();
 				}
-
+				//Se crean 5 rutinas y a esas 5 rutinas se les agrega 5 actividades
 				for (int rt = 0; rt < 5; rt++) {
 					Routine routine = this.getTrainerBO().createRoutine(routineName + i+"#"+ rt, trainer, client);
+					List<Activity> activities = new ArrayList<>();
 					for (int act = 0; act < 5; act++) {
-						Activity activity = this.getTrainerBO().createActivity(routine, activityName + act,
+						activity = this.getTrainerBO().createActivity(routine, activityName + act,
 								"Actividad #" + act, null, null);
-						for (int exc = 0; exc < 5; exc++) {
-							this.getTrainerBO().createExConfiguration(exercise, activity, exc, exc, exc, exc);
+						for (int exc = 0; exc < 1; exc++) {
+							exConf = this.getTrainerBO().createExConfiguration(exercise, activity, exc, exc, exc, exc);
 						}
+						activities.add(activity);
 					}
+					routine.setActivities(activities);
+					this.getRoutineDAO().saveOrUpdate(routine);
+					
+				}
+				//Para tener una actividad con ejercicios completos
+				try {
+					this.getRoutineBO().setRunActivity(client, activity);
+					this.getClientBO().startExercise(client, exConf);
+					this.getClientBO().stopExercise(client);
+				} catch (BusinessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 			}
