@@ -49,7 +49,9 @@ public class ClientRoutineControler {
 		if (up.getName().equals(name)){
 			mv = new ModelAndView("/client/routines");
 			Client client = this.getClientBO().getClientById(up.getId());
-			mv.addObject("actualRoutine",client.getActualRoutine() );
+			Routine actualRoutine = client.getActualRoutine();
+			mv.addObject("actualRoutine",actualRoutine);
+			mv.addObject("actualRoutineProgress",this.getRoutineBO().progress(actualRoutine));
 		}
 		return mv;
 	}
