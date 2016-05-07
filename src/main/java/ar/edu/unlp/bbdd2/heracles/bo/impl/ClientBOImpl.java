@@ -155,7 +155,7 @@ public class ClientBOImpl implements ClientBO {
 	@Override
 	public Client updateClient(ClientDTO clientDTO) throws BusinessException {
 		Client client = clientDAO.loadById(clientDTO.getId());
-		client.setName(clientDTO.getName());
+		client.setUsername(clientDTO.getName());
 		client.setSurname(clientDTO.getSurname());
 		client.setPhone(clientDTO.getPhone());
 		client.setBirthday(Utilities.formatDate(clientDTO.getBirthday()));

@@ -27,7 +27,7 @@
 						</p>
 						<p>
 							<ok>Entrenador:</ok>
-							${actualRoutine.trainer.name}
+							${actualRoutine.trainer.username}
 						</p>
 					</div>
 				</div>

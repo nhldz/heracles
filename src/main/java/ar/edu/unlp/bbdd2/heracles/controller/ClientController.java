@@ -95,7 +95,7 @@ public class ClientController {
 			throws IOException {
 		ModelAndView mv = new ModelAndView("client/profile");
 		Client client = this.getClientBO().getClientByName(name);
-		mv.addObject("client", client);
+		mv.addObject("user", client);
 		return mv;
 	}
 

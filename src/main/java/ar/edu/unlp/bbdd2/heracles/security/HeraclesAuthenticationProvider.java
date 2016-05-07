@@ -30,7 +30,7 @@ public class HeraclesAuthenticationProvider implements AuthenticationProvider {
 		Authentication auth = null;
 		if (user != null){
 			UserPrincipal up = new UserPrincipal(user);
-			if (user.getName().equals(name) && user.getPassword().equals(password)){
+			if (user.getUsername().equals(name) && user.getPassword().equals(password)){
 				List<GrantedAuthority> grantedAuths = new ArrayList<>();
 	            grantedAuths.add(new SimpleGrantedAuthority(user.getRoles().get(0).getName()));
 	            auth = new UsernamePasswordAuthenticationToken(up, password, grantedAuths);
