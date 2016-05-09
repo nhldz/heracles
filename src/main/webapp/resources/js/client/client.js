@@ -77,8 +77,8 @@
 					toogleButtons();
 					clearForm(frm[0]);
 				},
-				error : function() {
-					alert("Error!");
+				error : function(response) {
+					alert(response.statusText);
 				}
 			});
 		});
@@ -101,7 +101,7 @@
 			}else{
 				$.ajax({
 					type : "GET",
-					url : "client/update/" + id,
+					url : "client/load/" + id,
 					success : function(callback) {
 						frm.loadJSON(callback);
 						$('#birthday').val(formatDate($('#birthday').val()));

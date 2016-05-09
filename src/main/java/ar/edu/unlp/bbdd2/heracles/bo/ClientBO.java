@@ -49,23 +49,22 @@ public interface ClientBO {
 
 	/**
 	 * Crea un nuevo cliente y lo retorna
+	 * 
 	 * @param client
 	 * @return Un entrenador (Client)
 	 * @throws BusinessException
 	 */
-	public Client createClient(ClientDTO client)
-			throws BusinessException;
+	public Client createClient(ClientDTO client) throws BusinessException;
 
-	
 	/**
 	 * Actualiza la informacion de un cliente y lo retorna
+	 * 
 	 * @param client
 	 * @return Un entrenador (Client)
 	 * @throws BusinessException
 	 */
-	public Client updateClient(ClientDTO client)
-			throws BusinessException;
-	
+	public Client updateClient(ClientDTO client) throws BusinessException;
+
 	/**
 	 * Deshabilita un cliente
 	 * 
@@ -89,14 +88,13 @@ public interface ClientBO {
 	 * @return
 	 */
 	public List<Client> getAllEnabledClients();
-	
+
 	/**
 	 * Retorna un cliente
 	 * 
 	 * @param name
-	 *        nombre del cliente
-	 * @return
-	 * 	El cleinte que tiene ese nombre
+	 *            nombre del cliente
+	 * @return El cleinte que tiene ese nombre
 	 */
 	public Client getClientByName(String name);
 }

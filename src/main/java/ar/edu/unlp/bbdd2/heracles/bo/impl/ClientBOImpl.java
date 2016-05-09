@@ -146,23 +146,27 @@ public class ClientBOImpl implements ClientBO {
 			users.add(client);
 			role.setUsers(users);
 			roleDAO.saveOrUpdate(role);
+			return client;
 		} else {
 			throw new BusinessException("El email ya existe");
 		}
-		return client;
 	}
 	
 	@Override
 	public Client updateClient(ClientDTO clientDTO) throws BusinessException {
-		Client client = clientDAO.loadById(clientDTO.getId());
-		client.setName(clientDTO.getName());
-		client.setSurname(clientDTO.getSurname());
-		client.setPhone(clientDTO.getPhone());
-		client.setBirthday(Utilities.formatDate(clientDTO.getBirthday()));
-		client.setEmail(clientDTO.getEmail());
-		client.setGender(clientDTO.getGender());
-		clientDAO.saveOrUpdate(client);
-		return client;
+		if (this.getClientDAO().loadByEmail(clientDTO.getEmail()) == null) {
+			Client client = clientDAO.loadById(clientDTO.getId());
+			client.setName(clientDTO.getName());
+			client.setSurname(clientDTO.getSurname());
+			client.setPhone(clientDTO.getPhone());
+			client.setBirthday(Utilities.formatDate(clientDTO.getBirthday()));
+			client.setEmail(clientDTO.getEmail());
+			client.setGender(clientDTO.getGender());
+			getClientDAO().saveOrUpdate(client);
+			return client;
+		} else {
+			throw new BusinessException("El email ya existe");
+		}
 	}
 	
 	@Override

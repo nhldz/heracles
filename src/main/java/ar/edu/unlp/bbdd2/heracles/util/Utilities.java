@@ -10,7 +10,7 @@ public class Utilities {
 
 	private static SimpleDateFormat getDateFormat() {
 		if (dateFormat == null) {
-			dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		}
 		return dateFormat;
 

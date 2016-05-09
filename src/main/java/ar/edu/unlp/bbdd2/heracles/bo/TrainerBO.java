@@ -6,6 +6,7 @@ package ar.edu.unlp.bbdd2.heracles.bo;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
+import ar.edu.unlp.bbdd2.heracles.dto.TrainerDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
@@ -112,7 +113,7 @@ public interface TrainerBO {
 	 * @return Un entrenador (Trainer)
 	 * @throws BusinessException
 	 */
-	public Trainer createTrainer(Trainer trainer) throws BusinessException;
+	public Trainer createTrainer(TrainerDTO trainer) throws BusinessException;
 
 	/**
 	 * Deshabilita un profesor
@@ -136,5 +137,11 @@ public interface TrainerBO {
 	 */
 	public List<Trainer> getAllTrainers();
 
-	public void save(Trainer trainer);
+	/**
+	 * Actualiza los datos de un trainer
+	 * 
+	 * @param trainer
+	 */
+	public Trainer updateTrainer(TrainerDTO trainerDTO) throws BusinessException;;
+
 }

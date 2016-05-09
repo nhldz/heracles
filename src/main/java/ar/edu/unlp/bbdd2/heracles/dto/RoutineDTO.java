@@ -1,34 +1,30 @@
 package ar.edu.unlp.bbdd2.heracles.dto;
 
-import java.util.Date;
-import java.util.List;
-
-import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
+import ar.edu.unlp.bbdd2.heracles.util.Utilities;
 
 public class RoutineDTO {
-	
+
 	private Long id;
 	private String name;
-	private Date createDate;
-	private Date endDate;
-	private TrainerDTO trainer;
+	private String createDate;
+	private String endDate;
+	private Long trainerid;
+	private Long clientid;
+	// private ActivityDTO runActivity;
+	// private List<ActivityDTO> activities;
 
-	private Client client;
-	private ActivityDTO runActivity;
-	private List<ActivityDTO> activities;
-	
-	public RoutineDTO (){}
-	
-	public RoutineDTO (Routine routine){
+	public RoutineDTO() {
+	}
+
+	public RoutineDTO(Routine routine) {
 		this();
 		this.id = routine.getId();
 		this.name = routine.getName();
-		this.createDate = routine.getCreateDate();
-		this.endDate = routine.getEndDate();
-		this.trainer = new TrainerDTO(routine.getTrainer());
-		
-//		this.runActivity = new ActivityDTO(routine.getRunActivity());
+		this.createDate = Utilities.formatDateToString(routine.getCreateDate());
+		this.endDate = Utilities.formatDateToString(routine.getEndDate());
+		this.trainerid = routine.getTrainer().getId();
+		this.clientid = routine.getClient().getId();
 	}
 
 	public Long getId() {
@@ -47,52 +43,52 @@ public class RoutineDTO {
 		this.name = name;
 	}
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
-	public TrainerDTO getTrainer() {
-		return trainer;
+	public Long getTrainerid() {
+		return trainerid;
 	}
 
-	public void setTrainer(TrainerDTO trainer) {
-		this.trainer = trainer;
+	public void setTrainerid(Long trainerid) {
+		this.trainerid = trainerid;
 	}
 
-	public Client getClient() {
-		return client;
+	public Long getClientid() {
+		return clientid;
 	}
 
-	public void setClient(Client client) {
-		this.client = client;
+	public void setClientid(Long clientid) {
+		this.clientid = clientid;
 	}
 
-	public ActivityDTO getRunActivity() {
-		return runActivity;
-	}
+	// public ActivityDTO getRunActivity() {
+	// return runActivity;
+	// }
+	//
+	// public void setRunActivity(ActivityDTO runActivity) {
+	// this.runActivity = runActivity;
+	// }
+	//
+	// public List<ActivityDTO> getActivities() {
+	// return activities;
+	// }
+	//
+	// public void setActivities(List<ActivityDTO> activities) {
+	// this.activities = activities;
+	// }
 
-	public void setRunActivity(ActivityDTO runActivity) {
-		this.runActivity = runActivity;
-	}
-
-	public List<ActivityDTO> getActivities() {
-		return activities;
-	}
-
-	public void setActivities(List<ActivityDTO> activities) {
-		this.activities = activities;
-	}
-	
 }

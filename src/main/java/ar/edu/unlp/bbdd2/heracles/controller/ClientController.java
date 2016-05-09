@@ -71,7 +71,7 @@ public class ClientController {
 	 *            del cliente
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "load/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public void getClientById(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
 		response.setContentType("application/json");
@@ -105,16 +105,12 @@ public class ClientController {
 	 * @param client
 	 * @param model
 	 * @return
+	 * @throws BusinessException 
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public void save(@ModelAttribute ClientDTO client, Model model) {
-		try {
-			getClientBO().createClient(client);
-		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void save(@ModelAttribute ClientDTO client, Model model) throws BusinessException {
+		getClientBO().createClient(client);
 	}
 
 	/**
@@ -122,16 +118,12 @@ public class ClientController {
 	 * 
 	 * @param client
 	 * @param model
+	 * @throws BusinessException 
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
-	public void update(@ModelAttribute ClientDTO client, Model model) {
-		try {
-			getClientBO().updateClient(client);
-		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void update(@ModelAttribute ClientDTO client, Model model) throws BusinessException {
+		getClientBO().updateClient(client);
 	}
 
 	/**
