@@ -45,7 +45,7 @@ public class UserPrincipal implements Serializable {
 	}
 	
 	public UserPrincipal (User user){
-		this(user.getId(), user.getName(), user.getEmail(), user.getRoles(),
+		this(user.getId(), user.getUsername(), user.getEmail(), user.getRoles(),
 				user.getRegistrationDate(), user.getBirthday(),user.getGender());
 		this.userType = user.getClass();
 	}

@@ -13,8 +13,8 @@ public class UserDAOImpl extends BaseDAOImpl<User> {
 		return ofy().load().type(this.getType()).filter("email", email).first().now();
 	}
 	
-	public User loadByName (String name){
-		return ofy().load().type(this.getType()).filter("name", name).first().now();
+	public User loadByName (String username){
+		return ofy().load().type(this.getType()).filter("username", username).first().now();
 	}
 
 }

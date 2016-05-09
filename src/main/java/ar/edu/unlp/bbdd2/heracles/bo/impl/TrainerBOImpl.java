@@ -112,7 +112,7 @@ public class TrainerBOImpl implements TrainerBO {
 		if (routine.getClient() == null) {
 			assingRoutine(client, routine);
 		} else {
-			throw new BusinessException("La rutina ya esta asignada al cliente: " + routine.getClient().getName());
+			throw new BusinessException("La rutina ya esta asignada al cliente: " + routine.getClient().getUsername());
 		}
 	}
 
@@ -144,7 +144,7 @@ public class TrainerBOImpl implements TrainerBO {
 			snapshot.setState(ExerciseState.SKIP);
 			client.getActualRoutine().getRunActivity().setRunExercise(null);
 		} else {
-			throw new BusinessException("El cleinte " + client.getName() + " no esta realizando ningun ejercicio");
+			throw new BusinessException("El cleinte " + client.getUsername() + " no esta realizando ningun ejercicio");
 		}
 
 	}
@@ -190,7 +190,7 @@ public class TrainerBOImpl implements TrainerBO {
 	public Trainer updateTrainer(TrainerDTO trainerDTO) throws BusinessException{
 		if (this.findByEmail(trainerDTO.getEmail()) == null) {
 			Trainer trainer = getTrainerDAO().loadById(trainerDTO.getId());
-			trainer.setName(trainerDTO.getName());
+			trainer.setUsername(trainerDTO.getName());
 			trainer.setSurname(trainerDTO.getSurname());
 			trainer.setPhone(trainerDTO.getPhone());
 			trainer.setBirthday(Utilities.formatDate(trainerDTO.getBirthday()));

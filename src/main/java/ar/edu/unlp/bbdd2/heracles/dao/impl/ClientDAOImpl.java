@@ -23,7 +23,7 @@ public class ClientDAOImpl extends BaseDAOImpl<Client> implements ClientDAO{
 	 */
 	@Override
 	public Client loadByName(String name){
-		return ofy().load().type(this.getType()).filter("name", name).first().now();
+		return ofy().load().type(this.getType()).filter("username", name).first().now();
 	}
 	
 }

@@ -43,22 +43,23 @@ public class ClientBOImpl implements ClientBO {
 		Activity activity = client.getActualRoutine().getRunActivity();
 		try {
 			ExerciseConfiguration runExercise = activity.getRunExercise();
-			
-			if (runExercise.getSnapshots().get((runExercise.getSnapshots().size()-1)).getState() != ExerciseState.RUN){
+
+			if (runExercise.getSnapshots().get((runExercise.getSnapshots().size() - 1))
+					.getState() != ExerciseState.RUN) {
 				activity.setRunExercise(runExercise);
 				this.getActivityDAO().saveOrUpdate(activity);
-			}else {
+			} else {
 				throw new BusinessException(
 						"Actualmente se esta realizando el ejercicio: " + runExercise.getExercise().getName());
 			}
-			
+
 		} catch (NullPointerException e) {
 			ExerciseSnapshot snapshot = new ExerciseSnapshot();
 			snapshot.setStartDate(new Date());
 			snapshot.setState(ExerciseState.RUN);
 			this.getExSanpshotDAO().save(snapshot);
 			List<ExerciseSnapshot> snapshots = exercise.getSnapshots();
-			if (snapshots == null){
+			if (snapshots == null) {
 				snapshots = new ArrayList<ExerciseSnapshot>();
 			}
 			snapshots.add(snapshot);
@@ -94,8 +95,7 @@ public class ClientBOImpl implements ClientBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void calcelExercise(Client client, Integer sets, Integer reps, Integer weight)
-			throws BusinessException {
+	public void calcelExercise(Client client, Integer sets, Integer reps, Integer weight) throws BusinessException {
 		ExerciseConfiguration runExercise = client.getActualRoutine().getRunActivity().getRunExercise();
 		if (runExercise != null) {
 			ExerciseSnapshot snapshot = runExercise.getSnapshots().get(runExercise.getSnapshots().size() - 1);
@@ -117,7 +117,7 @@ public class ClientBOImpl implements ClientBO {
 	public List<Client> getAllClients() {
 		return this.getClientDAO().loadAll();
 	}
-	
+
 	@Override
 	public Client getClientById(Long id) {
 		return this.getClientDAO().loadById(id);
@@ -127,12 +127,12 @@ public class ClientBOImpl implements ClientBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Client createClient(ClientDTO clientDTO)
-			throws BusinessException {
+	public Client createClient(ClientDTO clientDTO) throws BusinessException {
 		Client client = null;
 		if (this.getClientDAO().loadByEmail(clientDTO.getEmail()) == null) {
 			Date fecha = Utilities.formatDate(clientDTO.getBirthday());
-			client = new Client(clientDTO.getName(), clientDTO.getSurname(), clientDTO.getEmail(), fecha, clientDTO.getGender());
+			client = new Client(clientDTO.getName(), clientDTO.getSurname(), clientDTO.getEmail(), fecha,
+					clientDTO.getGender());
 			client.setPassword(clientDTO.getPassword());
 			client.setPhone(clientDTO.getPhone());
 			client.setRoutines(new ArrayList<Routine>());
@@ -151,12 +151,12 @@ public class ClientBOImpl implements ClientBO {
 			throw new BusinessException("El email ya existe");
 		}
 	}
-	
+
 	@Override
 	public Client updateClient(ClientDTO clientDTO) throws BusinessException {
 		if (this.getClientDAO().loadByEmail(clientDTO.getEmail()) == null) {
 			Client client = clientDAO.loadById(clientDTO.getId());
-			client.setName(clientDTO.getName());
+			client.setUsername(clientDTO.getName());
 			client.setSurname(clientDTO.getSurname());
 			client.setPhone(clientDTO.getPhone());
 			client.setBirthday(Utilities.formatDate(clientDTO.getBirthday()));
@@ -168,31 +168,31 @@ public class ClientBOImpl implements ClientBO {
 			throw new BusinessException("El email ya existe");
 		}
 	}
-	
+
 	@Override
 	public void clientDisable(Long idL) {
 		Client client = this.getClientDAO().loadById(idL);
 		client.setEnabledUser(false);
 		this.getClientDAO().save(client);
 	}
-	
+
 	@Override
 	public List<Client> getAllEnabledClients() {
 		return this.getClientDAO().loadAll();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Client getClientByName(String name){
+	public Client getClientByName(String name) {
 		return this.getClientDAO().loadByName(name);
 	}
 
 	public ClientDAO getClientDAO() {
 		return clientDAO;
 	}
-	
+
 	public void setClientDAO(ClientDAO clientDAO) {
 		this.clientDAO = clientDAO;
 	}
@@ -228,5 +228,5 @@ public class ClientBOImpl implements ClientBO {
 	public void setActivityDAO(ActivityDAOImpl activityDAO) {
 		this.activityDAO = activityDAO;
 	}
-	
+
 }

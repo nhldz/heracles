@@ -10,7 +10,7 @@
 		</div>
 	</div>
 	<jsp:include page="../user/user_profile.jsp" >
-		<jsp:param value="${client}" name="user"/>
+		<jsp:param value="${user}" name="user"/>
 	</jsp:include>
 </div>
 <jsp:include page="../templates/includes/common_foot.jsp"/>

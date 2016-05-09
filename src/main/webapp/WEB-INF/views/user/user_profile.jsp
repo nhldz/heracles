@@ -11,18 +11,18 @@
 								class="img-circle">
 						</div>
 						<!-- /thumbnail -->
-						<h2>${user.name}${user.surname}</h2>
+						<h2>${user.username}${user.surname}</h2>
 					</div>
 					<div class="row">
 						<div class="col-lg-3">
 							<div class="cont3">
 								<p>
 									<ok>Username:</ok>
-									${user.name}
+									${user.username}
 								</p>
 								<p>
 									<ok>Mail:</ok>
-									${user.mail}
+									${user.email}
 								</p>
 								<p>
 									<ok>Location:</ok>
@@ -57,7 +57,7 @@
 					</div>
 					<!-- /inner row -->
 					<hr>
-					<button type="button" class="btn btn-primary">Editar</button>
+<!-- 					<button type="button" class="btn btn-primary">Editar</button> -->
 				</div>
 			</div>
 		</div>
