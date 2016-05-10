@@ -10,37 +10,38 @@
 			</div>
 		</div>
 		<div class="row">
-			<!-- 		<div class="col-lg-3"> -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title">Rutina Actual</h3>
-				</div>
-				<div class="panel-body">
-					<div class="cont3">
-						<p>
-							<ok>Nombre:</ok>
-							${actualRoutine.name}
-						</p>
-						<p>
-							<ok>Fecha creacion:</ok>
-							${actualRoutine.createDate}
-						</p>
-						<p>
-							<ok>Entrenador:</ok>
-							${actualRoutine.trainer.username}
-						</p>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Rutina Actual - ${actualRoutine.name}</h3>
+					</div>
+					<div class="panel-body">
+						<div class="cont3">
+							<p>
+								<ok>Fecha creacion:</ok>
+								${actualRoutine.createDate}
+							</p>
+							<p>
+								<ok>Entrenador:</ok>
+								${actualRoutine.trainer.username}
+							</p>
+							<ok>Progreso:</ok>
+								<div class="progress">
+									<div class="progress-bar" role="progressbar" aria-valuenow="60"
+									aria-valuemin="0" aria-valuemax="100" style="width: ${actualRoutineProgress}%;">
+									${actualRoutineProgress}</div>
+								</div>
+							</p>
+						</div>
+					</div>
+					<div class="btn-group" role="group" aria-label="...">
+						<a class="btn btn-default" href="/client/${actualRoutine.client.username}/routine/${actualRoutine.id}" role="button">Actividades de la Rutina</a>
+					</div>
+					<div class="panel-footer">
 					</div>
 				</div>
-				<div class="btn-group" role="group" aria-label="...">
-					<button type="button" class="btn btn-default">Middle</button>
-				</div>
-				<div class="panel-footer">
-					<div class="progress">
-						<div class="progress-bar" role="progressbar" aria-valuenow="60"
-							aria-valuemin="0" aria-valuemax="100" style="width: ${actualRoutineProgress}%;">
-							${actualRoutineProgress}</div>
-					</div>
-				</div>
+			</div>
+			<div class="col-md-6" >
 			</div>
 		</div>
 		<div class="row">
@@ -55,10 +56,10 @@
 								<thead>
 									<tr>
 										<th class="no-sort id"></th>
-										<th>Nombre</th>
+										<th>Nomber de rutina</th>
 										<th>Entrenador</th>
-										<th>Inicio</th>
-										<th>Fin</th>
+										<th>Fecha de inicio</th>
+										<th>Fecha de fin</th>
 									</tr>
 								</thead>
 								<tbody>
