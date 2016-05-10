@@ -6,6 +6,10 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<import resource="classpath:spring/backend/spring-dao.xml" />
+	
+	<bean id="activity.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ActivityBOImpl">
+		<property name="activityDAO" ref="activity.dao" />
+	</bean>
 
 	<bean id="trainer.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.TrainerBOImpl">
 		<property name="trainerDAO" ref="trainer.dao"/>
@@ -22,12 +26,17 @@
 		<property name="exerciseDAO" ref="exercise.dao"/>
 	</bean>
 	
+	<bean id="exerciseSnapshot.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseSnapshotBOImpl">
+		<property name="exerciseSnapshotDAO" ref="exerciseSnapshot.dao"/>
+	</bean>
+	
 	<bean id="client.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ClientBOImpl">
 		<property name="clientDAO" ref="client.dao"/>
 		<property name="exConfDAO" ref="exerciseConfiguration.dao"/>
 		<property name="exSanpshotDAO" ref="exerciseSnapshot.dao"/>
 		<property name="roleDAO" ref="role.dao"/>
 		<property name="activityDAO" ref="activity.dao"/>
+		<property name="exerciseSnapshotBO" ref="exerciseSnapshot.bo"/>
 	</bean>
 	
 	<bean id="routine.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.RoutineBOImpl">
