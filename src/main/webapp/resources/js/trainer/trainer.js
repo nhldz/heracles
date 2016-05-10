@@ -80,8 +80,8 @@
 					toogleButtons();
 					clearForm(frm[0]);
 				},
-				error : function() {
-					alert("Error!");
+				error : function(response) {
+					alert(response.statusText);
 				}
 			});
 		});
@@ -89,11 +89,14 @@
 		$('#btnAdd').click(function(e) {
 			toogle('myContent');
 			toogleButtons();
+			var frm = $('#clientForm');
+			frm.attr("method", "POST");
 		});
 
 		$('#btnEdit').click(function(e) {
 			var id = $('input[type="radio"]:checked').val();
 			var frm = $('#trainerForm');
+			frm.attr("method", "PUT"); 
 			toogleButtons();
 			if(typeof id === "undefined"){
 				toogleButtons();

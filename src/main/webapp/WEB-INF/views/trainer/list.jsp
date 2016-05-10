@@ -41,8 +41,8 @@
 		</div>
 	</div>
 	<br>
-	<form id="trainerForm" action="/trainer/save" method="POST"
-		data-toggle="validator">
+	<form id="trainerForm" action="/trainer" method="POST"
+		data-toggle="validator" autocomplete="off">
 		<div id="myContent" class="row hidden">
 			<div class="col-lg-4">
 				<div class="panel panel-default">
@@ -60,10 +60,10 @@
 						</div>	
 						<div class="form-group">
 							<label for="birthday">Fecha Nac.:</label> <input id="birthday"
-								type="date" name="birthday" class="form-control" required />
+								type="text" name="birthday" class="form-control" required />
 						</div>
 						<div class="form-group">
-							<label for="gender">Sexo:</label> <select name="gender" required>
+							<label for="gender">Sexo:</label> <select name="gender" class="form-control" required>
 								<option value="">Seleccione..</option>
 								<c:forEach items="${genders}" var="gender">
 									<option value="${gender}">${gender.type}</option>
@@ -75,10 +75,10 @@
 								type="text" name="phone" class="form-control" />
 						</div>
 						<div class="form-group">
-							<label for="email">E-mail:</label> <input type="email"
+							<label for="email">E-mail:</label> <input id="email" type="email"
 								name="email" class="form-control"/>
 						</div>
-						<div class="form-group">
+						<div id="pass" class="form-group">
 						<label for="password">Contrase&ntilde;a:</label> <input type="password"
 							name="password" class="form-control" required/>
 						</div>	

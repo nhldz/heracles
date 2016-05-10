@@ -3,6 +3,7 @@ package ar.edu.unlp.bbdd2.heracles.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,6 +54,8 @@ public class RoutineController {
 	private ExerciseBO exerciseBO;
 	
 	private Routine routine;
+	
+	private RoutineDTO routineDTO;
 	
 	private Activity activity;
 	
@@ -101,9 +103,10 @@ public class RoutineController {
 	@RequestMapping(value="/create", method=RequestMethod.GET)
 	public ModelAndView create() throws BusinessException {
 		ModelAndView mv = new ModelAndView("routines/create");
+		setRoutineDTO(new RoutineDTO());
 		setRoutine(new Routine());
 		mv.addObject("clients", clientBO.getAllEnabledClients());
-		mv.addObject("routine", getRoutine());
+		mv.addObject("routine", getRoutineDTO());
 		return mv;
 	}
 			
@@ -112,10 +115,16 @@ public class RoutineController {
 	 * 
 	 * @throws BusinessException 
 	 */   
-	@RequestMapping(value="/save", method=RequestMethod.POST, headers = {"Content-type=application/json"}, consumes={"application/json"})
-	public @ResponseBody void save(@RequestBody RoutineDTO routine) throws BusinessException {
-		System.out.println(routine.getName());
-
+	@RequestMapping(method=RequestMethod.POST)
+	@ResponseBody
+	public void createRoutine(@ModelAttribute RoutineDTO routineDTO, Model model) throws BusinessException {
+		UserPrincipal up = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		routineDTO.setTrainerid(up.getId());
+		getRoutine().setName(routineDTO.getName());
+		getRoutine().setClient(getClientBO().getClientById(routineDTO.getClientid()));
+		getRoutine().setTrainer(getTrainerBO().getTrainerById(routineDTO.getTrainerid()));
+		getRoutine().setCreateDate(new Date());
+	//	getRoutineBO().save(getRoutine());
 	}
 	
 	/**
@@ -258,6 +267,14 @@ public class RoutineController {
 
 	public void setRoutine(Routine routine) {
 		this.routine = routine;
+	}
+
+	public RoutineDTO getRoutineDTO() {
+		return routineDTO;
+	}
+
+	public void setRoutineDTO(RoutineDTO routineDTO) {
+		this.routineDTO = routineDTO;
 	}
 
 	public Activity getActivity() {

@@ -51,7 +51,7 @@ public class ClientBOImpl implements ClientBO {
 				this.addSnapshot(runExercise, snapshot);
 				activity.setRunExercise(runExercise);
 				this.getActivityDAO().saveOrUpdate(activity);
-			}else {
+			} else {
 				throw new BusinessException(
 						"Actualmente se esta realizando el ejercicio: " + runExercise.getExercise().getName());
 			}
@@ -213,7 +213,7 @@ public class ClientBOImpl implements ClientBO {
 	public ClientDAO getClientDAO() {
 		return clientDAO;
 	}
-	
+
 	public void setClientDAO(ClientDAO clientDAO) {
 		this.clientDAO = clientDAO;
 	}
@@ -257,5 +257,4 @@ public class ClientBOImpl implements ClientBO {
 	public void setExerciseSnapshotBO(ExerciseSnapshotBOImpl exerciseSnapshotBO) {
 		this.exerciseSnapshotBO = exerciseSnapshotBO;
 	}
-	
 }

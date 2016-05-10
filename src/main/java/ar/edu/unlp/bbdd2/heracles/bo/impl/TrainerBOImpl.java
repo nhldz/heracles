@@ -15,6 +15,7 @@ import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dto.TrainerDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
@@ -26,6 +27,7 @@ import ar.edu.unlp.bbdd2.heracles.entities.RoleName;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 import ar.edu.unlp.bbdd2.heracles.entities.User;
+import ar.edu.unlp.bbdd2.heracles.util.Utilities;
 
 /**
  *
@@ -159,12 +161,16 @@ public class TrainerBOImpl implements TrainerBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Trainer createTrainer(Trainer trainer) throws BusinessException {
-		if (this.findByEmail(trainer.getEmail()) == null) {
+	public Trainer createTrainer(TrainerDTO trainerDTO) throws BusinessException {
+		Trainer trainer = null;
+		if (this.findByEmail(trainerDTO.getEmail()) == null) {
+			Date fecha = Utilities.formatDate(trainerDTO.getBirthday());
+			trainer = new Trainer(trainerDTO.getName(), trainerDTO.getSurname(), trainerDTO.getEmail(), fecha, trainerDTO.getGender());
+			trainer.setPassword(trainerDTO.getPassword());
+			trainer.setPhone(trainerDTO.getPhone());
 			trainer.setExercises(new ArrayList<Exercise>());
 			trainer.setRoutines(new ArrayList<Routine>());
 			trainer.setRegistrationDate(new Date());
-			trainer.setEnabledUser(true);
 			Role role = roleDAO.loadByName(RoleName.TRAINER.getType());
 			List<Role> roles = new ArrayList<Role>();
 			roles.add(role);
@@ -174,10 +180,27 @@ public class TrainerBOImpl implements TrainerBO {
 			users.add(trainer);
 			role.setUsers(users);
 			this.getRoleDAO().saveOrUpdate(role);
+			return trainer;
 		} else {
 			throw new BusinessException("El email ya existe");
 		}
-		return trainer;
+	}
+	
+	@Override
+	public Trainer updateTrainer(TrainerDTO trainerDTO) throws BusinessException{
+		if (this.findByEmail(trainerDTO.getEmail()) == null) {
+			Trainer trainer = getTrainerDAO().loadById(trainerDTO.getId());
+			trainer.setUsername(trainerDTO.getName());
+			trainer.setSurname(trainerDTO.getSurname());
+			trainer.setPhone(trainerDTO.getPhone());
+			trainer.setBirthday(Utilities.formatDate(trainerDTO.getBirthday()));
+			trainer.setEmail(trainerDTO.getEmail());
+			trainer.setGender(trainerDTO.getGender());
+			getTrainerDAO().saveOrUpdate(trainer);
+			return trainer;
+		} else {
+			throw new BusinessException("El email ya existe");
+		}
 	}
 
 	@Override
@@ -195,11 +218,6 @@ public class TrainerBOImpl implements TrainerBO {
 	@Override
 	public List<Trainer> getAllTrainers() {
 		return this.getTrainerDAO().loadAll();
-	}
-
-	@Override
-	public void save(Trainer trainer) {
-		this.getTrainerDAO().save(trainer);
 	}
 
 	public ClientDAO getClientDAO() {

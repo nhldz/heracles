@@ -43,7 +43,6 @@ public class UserDTO {
 		this.password = null;
 		this.phone = user.getPhone();
 		this.enabledUser = user.isEnabledUser();
-//		this.roles = user.getRoles();
 		this.registrationDate = Utilities.formatDateToString(user.getRegistrationDate());
 		this.birthday = Utilities.formatDateToString(user.getBirthday());
 		this.gender = user.getGender();

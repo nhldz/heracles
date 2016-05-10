@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
+import ar.edu.unlp.bbdd2.heracles.dto.TrainerDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Gender;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
@@ -46,35 +47,49 @@ public class TrainerController {
 	}
 
 	/**
-	 * Retorna un json del profesor
+	 * Retorna un json del trainer
 	 * 
 	 * @param response
 	 * @param id
-	 *            del profesor
+	 *            del cliente
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "load/{id}", method = RequestMethod.GET)
-	public @ResponseBody void getTrainerById(HttpServletResponse response, @PathVariable("id") String id)
-			throws IOException {
+	@ResponseBody
+	public void getClientById(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
 		response.setContentType("application/json");
 		Long idL = Long.valueOf(id);
 		PrintWriter out = response.getWriter();
 		Trainer trainer = this.getTrainerBO().getTrainerById(idL);
-		String json = JsonTransform.objectToJson(trainer);
+		String json = JsonTransform.objectToJson(new TrainerDTO(trainer));
 		out.print(json);
 	}
-	
+
 	/**
-	 * Guarda los cambios del formulario de profesores
+	 * Guarda un trainer
 	 * 
 	 * @param trainer
 	 * @param model
 	 * @return
 	 * @throws BusinessException 
 	 */
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public @ResponseBody void save(@ModelAttribute Trainer trainer, Model model) throws BusinessException {
-		this.getTrainerBO().save(trainer);
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseBody
+	public void save(@ModelAttribute TrainerDTO trainer, Model model) throws BusinessException {
+		getTrainerBO().createTrainer(trainer);
+	}
+
+	/**
+	 * Actualiza los datos de un trainer
+	 * 
+	 * @param trainer
+	 * @param model
+	 * @throws BusinessException 
+	 */
+	@RequestMapping(method = RequestMethod.PUT)
+	@ResponseBody
+	public void update(@ModelAttribute TrainerDTO trainerDTO, Model model) throws BusinessException {
+		getTrainerBO().updateTrainer(trainerDTO);
 	}
 
 	/**
