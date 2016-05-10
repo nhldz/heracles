@@ -17,6 +17,7 @@ import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.TrainerDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
+import ar.edu.unlp.bbdd2.heracles.dto.TrainerDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.BodyPart;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
@@ -152,10 +153,11 @@ public class RootUtil {
 			clientDTO = new ClientDTO();
 			clientDTO.setName(name);
 			clientDTO.setSurname(surname);
-			clientDTO.setPassword(pass);
-			clientDTO.setPhone("221-5637610");
-			clientDTO.setBirthday("2016-01-01");
+			clientDTO.setPassword("123");
+			clientDTO.setPhone("123-456789");
+			clientDTO.setBirthday("01/01/1980");
 			clientDTO.setEmail(name + ".client@email.com");
+			clientDTO.setGender(Gender.FEMALE);
 			client = clientBO.createClient(clientDTO);
 		} catch (BusinessException e) {
 			e.printStackTrace();
@@ -164,12 +166,18 @@ public class RootUtil {
 	}
 
 	public Trainer createTrainer(String name, String surname, String pass) {
-		Trainer trainer = new Trainer(name, surname, name + ".trainer@email.com", Utilities.formatDate(new Date()),
-				Gender.MALE);
+		TrainerDTO trainerDTO = null;
+		Trainer trainer = null;		
 		try {
-			trainer.setPassword(pass);
-			trainer.setPhone("221-5637610");
-			trainer = trainerBO.createTrainer(trainer);
+			trainerDTO = new TrainerDTO();
+			trainerDTO.setName(name);
+			trainerDTO.setSurname(surname);
+			trainerDTO.setPassword("123");
+			trainerDTO.setPhone("123-456789");
+			trainerDTO.setBirthday("01/01/1980");
+			trainerDTO.setEmail(name + ".trainer@rmail.com");
+			trainerDTO.setGender(Gender.MALE);
+			trainer = trainerBO.createTrainer(trainerDTO);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 		}
@@ -214,6 +222,7 @@ public class RootUtil {
 		return role;
 	}
 
+//	@PostConstruct
 	public void rootLoad() {
 		int count = trainerDAO.count();
 		System.out.println("COUNT: " + count);

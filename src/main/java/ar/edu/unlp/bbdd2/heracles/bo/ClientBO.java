@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ar.edu.unlp.bbdd2.heracles.bo;
 
 import java.util.List;
@@ -45,27 +42,26 @@ public interface ClientBO {
 	 * @param weight
 	 *            Peso con el que se realizo el ejercicio.
 	 */
-	public void calcelExercise(Client client, Integer sets, Integer reps, Integer weight) throws BusinessException;
+	public void calcelExercise(Client client, Integer sets, Integer reps, Integer rest, Integer weight) throws BusinessException;
 
 	/**
 	 * Crea un nuevo cliente y lo retorna
+	 * 
 	 * @param client
 	 * @return Un entrenador (Client)
 	 * @throws BusinessException
 	 */
-	public Client createClient(ClientDTO client)
-			throws BusinessException;
+	public Client createClient(ClientDTO client) throws BusinessException;
 
-	
 	/**
 	 * Actualiza la informacion de un cliente y lo retorna
+	 * 
 	 * @param client
 	 * @return Un entrenador (Client)
 	 * @throws BusinessException
 	 */
-	public Client updateClient(ClientDTO client)
-			throws BusinessException;
-	
+	public Client updateClient(ClientDTO client) throws BusinessException;
+
 	/**
 	 * Deshabilita un cliente
 	 * 
@@ -89,14 +85,13 @@ public interface ClientBO {
 	 * @return
 	 */
 	public List<Client> getAllEnabledClients();
-	
+
 	/**
 	 * Retorna un cliente
 	 * 
 	 * @param name
-	 *        nombre del cliente
-	 * @return
-	 * 	El cleinte que tiene ese nombre
+	 *            nombre del cliente
+	 * @return El cleinte que tiene ese nombre
 	 */
 	public Client getClientByName(String name);
 }
