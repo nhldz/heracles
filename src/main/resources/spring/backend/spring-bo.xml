@@ -38,6 +38,7 @@
 		<property name="roleDAO" ref="role.dao"/>
 		<property name="activityDAO" ref="activity.dao"/>
 		<property name="userDAO" ref="user.dao"/>
+		<property name="exerciseSnapshotBO" ref="exerciseSnapshot.bo"/>
 	</bean>
 	
 	<bean id="routine.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.RoutineBOImpl">
