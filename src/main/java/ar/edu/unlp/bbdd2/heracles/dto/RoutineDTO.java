@@ -11,6 +11,8 @@ public class RoutineDTO {
 	private String endDate;
 	private Long trainerid;
 	private Long clientid;
+	private ClientDTO client;
+	private TrainerDTO trainer;
 	// private ActivityDTO runActivity;
 	// private List<ActivityDTO> activities;
 
@@ -22,9 +24,13 @@ public class RoutineDTO {
 		this.id = routine.getId();
 		this.name = routine.getName();
 		this.createDate = Utilities.formatDateToString(routine.getCreateDate());
-		this.endDate = Utilities.formatDateToString(routine.getEndDate());
+		if (routine.getEndDate() != null){
+			this.endDate = Utilities.formatDateToString(routine.getEndDate());
+		}
 		this.trainerid = routine.getTrainer().getId();
 		this.clientid = routine.getClient().getId();
+		this.client = new ClientDTO(routine.getClient());
+		this.trainer = new TrainerDTO(routine.getTrainer());
 	}
 
 	public Long getId() {
@@ -75,6 +81,22 @@ public class RoutineDTO {
 		this.clientid = clientid;
 	}
 
+	public ClientDTO getClient() {
+		return client;
+	}
+
+	public void setClient(ClientDTO client) {
+		this.client = client;
+	}
+
+	public TrainerDTO getTrainer() {
+		return trainer;
+	}
+
+	public void setTrainer(TrainerDTO trainer) {
+		this.trainer = trainer;
+	}
+	
 	// public ActivityDTO getRunActivity() {
 	// return runActivity;
 	// }
