@@ -7,6 +7,7 @@ import ar.edu.unlp.bbdd2.heracles.helper.RefHelper;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 
 /**
@@ -25,26 +26,32 @@ public class ExerciseConfiguration {
 	/**
 	 * Series
 	 */
+	@Index
 	private Integer sets;
 	
 	/**
 	 * Repeticiones
 	 */
+	@Index
 	private Integer reps;
 	
 	/**
 	 * Descanzo
 	 */
+	@Index
 	private Integer rest;
 	
 	/**
 	 * Peso
 	 */
+	@Index
 	private Integer weigth;
 	
 	@Load
+	@Index
 	private Ref<Exercise> exercise;
 	
+	@Index
 	private List<Ref<ExerciseSnapshot>> snapshots;
 	
 	public ExerciseConfiguration(){

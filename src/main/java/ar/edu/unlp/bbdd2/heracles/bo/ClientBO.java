@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ar.edu.unlp.bbdd2.heracles.bo;
 
 import java.util.List;
@@ -45,7 +42,7 @@ public interface ClientBO {
 	 * @param weight
 	 *            Peso con el que se realizo el ejercicio.
 	 */
-	public void calcelExercise(Client client, Integer sets, Integer reps, Integer weight) throws BusinessException;
+	public void calcelExercise(Client client, Integer sets, Integer reps, Integer rest, Integer weight) throws BusinessException;
 
 	/**
 	 * Crea un nuevo cliente y lo retorna

@@ -5,7 +5,7 @@ $(document).ready(function() {
 	dataTable = $('#routineTable').DataTable({
 		'processing' : false,
 		'serverSide' : false,
-		'sAjaxSource' : '/client/${userName}/routine/list',
+		'sAjaxSource' : '/client/ClientName1/routine/list',
 		'bJQueryUI' : true,
 		'autoWidth' : true,
 		'order' : [ [ 1, "asc" ] ],

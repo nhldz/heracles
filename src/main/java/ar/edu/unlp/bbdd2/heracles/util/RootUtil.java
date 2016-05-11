@@ -224,6 +224,7 @@ public class RootUtil {
 		return role;
 	}
 
+//	@PostConstruct
 	public void rootLoad() {
 		int count = trainerDAO.count();
 		System.out.println("COUNT: " + count);

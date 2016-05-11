@@ -36,6 +36,7 @@ public class ClientBOImpl implements ClientBO {
 	private ExerciseSnapshotDAOImpl exSanpshotDAO;
 	private ActivityDAO activityDAO;
 	private UserDAO userDAO;
+	private ExerciseSnapshotBOImpl exerciseSnapshotBO;
 
 	/**
 	 * {@inheritDoc}
@@ -45,9 +46,11 @@ public class ClientBOImpl implements ClientBO {
 		Activity activity = client.getActualRoutine().getRunActivity();
 		try {
 			ExerciseConfiguration runExercise = activity.getRunExercise();
+			this.updateLastSnapshot(runExercise);
 
-			if (runExercise.getSnapshots().get((runExercise.getSnapshots().size() - 1))
-					.getState() != ExerciseState.RUN) {
+			if (this.getExConfDAO().lastSnapshot(runExercise).getState() != ExerciseState.RUN){
+				ExerciseSnapshot snapshot = this.getExerciseSnapshotBO().start(runExercise);
+				this.addSnapshot(runExercise, snapshot);
 				activity.setRunExercise(runExercise);
 				this.getActivityDAO().saveOrUpdate(activity);
 			} else {
@@ -56,18 +59,8 @@ public class ClientBOImpl implements ClientBO {
 			}
 
 		} catch (NullPointerException e) {
-			ExerciseSnapshot snapshot = new ExerciseSnapshot();
-			snapshot.setStartDate(new Date());
-			snapshot.setState(ExerciseState.RUN);
-			this.getExSanpshotDAO().save(snapshot);
-			List<ExerciseSnapshot> snapshots = exercise.getSnapshots();
-			if (snapshots == null) {
-				snapshots = new ArrayList<ExerciseSnapshot>();
-			}
-			snapshots.add(snapshot);
-			exercise.setSnapshots(snapshots);
-			this.getExSanpshotDAO().save(snapshot);
-			this.getExConfDAO().saveOrUpdate(exercise);
+			ExerciseSnapshot snapshot = this.getExerciseSnapshotBO().start(exercise);
+			this.addSnapshot(exercise, snapshot);
 			client.getActualRoutine().getRunActivity().setRunExercise(exercise);
 			this.getClientDAO().saveOrUpdate(client);
 			activity.setRunExercise(exercise);
@@ -83,10 +76,15 @@ public class ClientBOImpl implements ClientBO {
 		Activity activity = client.getActualRoutine().getRunActivity();
 		ExerciseConfiguration runExercise = activity.getRunExercise();
 		if (runExercise != null) {
-			ExerciseSnapshot snapshot = runExercise.getSnapshots().get(runExercise.getSnapshots().size() - 1);
-			snapshot.setState(ExerciseState.STOP);
-			snapshot.setEndDate(new Date());
-			this.getExSanpshotDAO().saveOrUpdate(snapshot);
+			exConfDAO.lastSnapshot(runExercise);
+			ExerciseSnapshot lastSnapshot = exConfDAO.lastSnapshot(runExercise);
+			if (lastSnapshot.getEndDate() == null){
+				lastSnapshot.setEndDate(new Date());
+				exSanpshotDAO.saveOrUpdate(lastSnapshot);
+			}
+			ExerciseSnapshot snapshot = this.getExerciseSnapshotBO().stop(runExercise);
+			this.addSnapshot(runExercise, snapshot);
+			activityDAO.saveOrUpdate(activity);
 		} else {
 			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "
 					+ client.getActualRoutine().getRunActivity().getName());
@@ -97,16 +95,12 @@ public class ClientBOImpl implements ClientBO {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void calcelExercise(Client client, Integer sets, Integer reps, Integer weight) throws BusinessException {
+	public void calcelExercise(Client client, Integer sets, Integer reps, Integer rest, Integer weight)
+			throws BusinessException {
 		ExerciseConfiguration runExercise = client.getActualRoutine().getRunActivity().getRunExercise();
 		if (runExercise != null) {
-			ExerciseSnapshot snapshot = runExercise.getSnapshots().get(runExercise.getSnapshots().size() - 1);
-			snapshot.setState(ExerciseState.CANCEL);
-			snapshot.setEndDate(new Date());
-			snapshot.setSets(sets);
-			snapshot.setReps(reps);
-			snapshot.setWeigth(weight);
-			this.getExSanpshotDAO().saveOrUpdate(snapshot);
+			updateLastSnapshot(runExercise);
+			ExerciseSnapshot snapshot = this.getExerciseSnapshotBO().cancel(runExercise, sets, reps, rest, weight);
 			runExercise.getSnapshots().add(snapshot);
 			runExercise = null;
 			this.getExConfDAO().saveOrUpdate(runExercise);
@@ -114,6 +108,33 @@ public class ClientBOImpl implements ClientBO {
 			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "
 					+ client.getActualRoutine().getRunActivity().getName());
 		}
+	}
+
+	/**
+	 * Actualiza la fecha de finalización del ultimo snapshot en el ejerciocio
+	 * @param runExercise
+	 */
+	private void updateLastSnapshot (ExerciseConfiguration runExercise){
+		ExerciseSnapshot lastSnapshot = exConfDAO.lastSnapshot(runExercise);
+		if (lastSnapshot.getEndDate() == null){
+			lastSnapshot.setEndDate(new Date());
+			exSanpshotDAO.saveOrUpdate(lastSnapshot);
+		}
+	}
+	
+	/**
+	 * Permite agregar un nuevo snapshot a la configuración de ejercicios y los persiste.
+	 * @param exercise
+	 * 		Ejercicio en el que se quiere agregar el nuevo snapshot.
+	 */
+	private void addSnapshot (ExerciseConfiguration exercise, ExerciseSnapshot snapshot){
+		List<ExerciseSnapshot> snapshots = exercise.getSnapshots();
+		if (snapshots == null){
+			snapshots = new ArrayList<ExerciseSnapshot>();
+		}
+		snapshots.add(snapshot);
+		exercise.setSnapshots(snapshots);
+		exConfDAO.saveOrUpdate(exercise);
 	}
 
 	public List<Client> getAllClients() {
@@ -242,6 +263,14 @@ public class ClientBOImpl implements ClientBO {
 
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
+	}
+
+	public ExerciseSnapshotBOImpl getExerciseSnapshotBO() {
+		return exerciseSnapshotBO;
+	}
+
+	public void setExerciseSnapshotBO(ExerciseSnapshotBOImpl exerciseSnapshotBO) {
+		this.exerciseSnapshotBO = exerciseSnapshotBO;
 	}
 
 }

@@ -6,6 +6,10 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<import resource="classpath:spring/backend/spring-dao.xml" />
+	
+	<bean id="activity.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ActivityBOImpl">
+		<property name="activityDAO" ref="activity.dao" />
+	</bean>
 
 	<bean id="trainer.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.TrainerBOImpl">
 		<property name="trainerDAO" ref="trainer.dao"/>
@@ -21,6 +25,10 @@
 	<bean id="exercise.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseBOImpl">
 		<property name="trainerDAO" ref="trainer.dao"/>
 		<property name="exerciseDAO" ref="exercise.dao"/>
+	</bean>
+	
+	<bean id="exerciseSnapshot.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseSnapshotBOImpl">
+		<property name="exerciseSnapshotDAO" ref="exerciseSnapshot.dao"/>
 	</bean>
 	
 	<bean id="client.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ClientBOImpl">

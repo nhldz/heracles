@@ -24,10 +24,13 @@ public class Exercise {
 	@Index
 	private String name;
 
+	@Index
 	private ExerciseType type;
 
+	@Index
 	private Equipment equipment;
 
+	@Index
 	private List<BodyPart> bodyParts;
 
 	private String description;

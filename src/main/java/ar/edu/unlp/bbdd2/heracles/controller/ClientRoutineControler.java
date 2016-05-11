@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.unlp.bbdd2.heracles.bo.ActivityBO;
 import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
 import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
@@ -37,6 +38,8 @@ public class ClientRoutineControler {
 	private ClientBO clientBO;
 	@Autowired
 	private RoutineBO routineBO;
+	@Autowired
+	private ActivityBO activityBO;
 	
 	/**
 	 * Vista con el listado de rutinas de un cliente
@@ -89,7 +92,10 @@ public class ClientRoutineControler {
 		if (up.getName().equals(name)){
 			mv = new ModelAndView("/client/routine");
 			Routine rt = this.getRoutineBO().getRoutineById(Long.valueOf(routine));
-			mv.addObject("routine", rt);
+			mv.addObject("actualRoutine", rt);
+			mv.addObject("actualRoutineProgress",this.getRoutineBO().progress(rt));
+			mv.addObject("runActivity", rt.getRunActivity());
+			mv.addObject("runActivityProgress",this.getActivityBO().activityProggress(rt.getRunActivity()));
 		}
 		return mv;
 	}
@@ -108,6 +114,14 @@ public class ClientRoutineControler {
 
 	public void setRoutineBO(RoutineBO routineBO) {
 		this.routineBO = routineBO;
+	}
+
+	public ActivityBO getActivityBO() {
+		return activityBO;
+	}
+
+	public void setActivityBO(ActivityBO activityBO) {
+		this.activityBO = activityBO;
 	}
 	
 }
