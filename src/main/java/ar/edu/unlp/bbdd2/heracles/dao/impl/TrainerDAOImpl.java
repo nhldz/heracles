@@ -13,5 +13,9 @@ public class TrainerDAOImpl extends BaseDAOImpl<Trainer> implements TrainerDAO{
 	public Trainer loadByEmail (String email){
 		return ofy().load().type(this.getType()).filter("email", email).first().now();
 	}
+	
+	public Trainer loadByUserName (String userName){
+		return ofy().load().type(this.getType()).filter("userName", userName).first().now();
+	}
 
 }

@@ -14,18 +14,18 @@ import ar.edu.unlp.bbdd2.heracles.entities.Routine;
  */
 
 public class ClientDTO extends UserDTO {
-	
+
 	private Routine actualRoutine;
 
 	private List<Routine> routines;
-	
-	public ClientDTO (){
+
+	public ClientDTO() {
 	}
-	
-	public ClientDTO (Client client){
+
+	public ClientDTO(Client client) {
 		super(client);
-//		this.actualRoutine = client.getActualRoutine();
-//		this.routines = client.getRoutines();
+		// this.actualRoutine = client.getActualRoutine();
+		// this.routines = client.getRoutines();
 	}
 
 	public Routine getActualRoutine() {
@@ -43,7 +43,5 @@ public class ClientDTO extends UserDTO {
 	public void setRoutines(List<Routine> routines) {
 		this.routines = routines;
 	}
-	
-	
 
 }

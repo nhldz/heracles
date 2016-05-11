@@ -29,7 +29,8 @@ public abstract class User implements Serializable {
 	@Id
 	private Long id;
 	@Index
-	private String username;
+	private String userName;
+	private String name;
 	private String surname;
 	@Index
 	private String email;
@@ -46,9 +47,10 @@ public abstract class User implements Serializable {
 		super();
 	}
 
-	public User(String username, String surname, String email, Date birthday, Gender gender) {
+	public User(String username, String name, String surname, String email, Date birthday, Gender gender) {
 		this();
-		this.username = username;
+		this.userName = username;
+		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.birthday = birthday;
@@ -65,11 +67,19 @@ public abstract class User implements Serializable {
 	}
 
 	public String getUsername() {
-		return username;
+		return userName;
 	}
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.userName = username;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getSurname() {

@@ -21,6 +21,7 @@
 									<th class="no-sort id"></th>
 									<th>Habilitado</th>
 									<th>Apellido y Nombre</th>
+									<th>Usuario</th>
 									<th>Email</th>
 									<th>Tel&eacute;fono</th>
 								</tr>
@@ -57,7 +58,7 @@
 						<div class="form-group">
 						<label for="surname">Apellido:</label> <input type="text"
 							name="surname" class="form-control" required />
-						</div>	
+						</div>
 						<div class="form-group">
 							<label for="birthday">Fecha Nac.:</label> <input id="birthday"
 								type="text" name="birthday" class="form-control" required />
@@ -78,10 +79,14 @@
 							<label for="email">E-mail:</label> <input id="email" type="email"
 								name="email" class="form-control" />
 						</div>
+						<div class="form-group">
+							<label for="userName">Usuario:</label> <input id="userName" type="text" name="userName"
+								class="form-control" required />
+						</div>
 						<div id="pass" class="form-group">
 						<label for="password">Contrase&ntilde;a:</label> <input type="password"
-							name="password" class="form-control" required/>
-						</div>	
+							id="passInput" name="password" class="form-control" required/>
+						</div>
 						<button type="submit" class="btn btn-success">Aceptar</button>
 						<button type="button" class="btn btn-default"
 							onclick="clearForm(this.form); toogle('myContent'); toogleButtons();">Cerrar</button>

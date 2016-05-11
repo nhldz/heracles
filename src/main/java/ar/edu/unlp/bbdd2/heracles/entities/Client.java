@@ -32,8 +32,8 @@ public class Client extends User {
 		super();
 	}
 
-	public Client(String name, String surname, String email, Date birthday, Gender gender) {
-		super(name, surname, email, birthday, gender);
+	public Client(String userName, String name, String surname, String email, Date birthday, Gender gender) {
+		super(userName, name, surname, email, birthday, gender);
 	}
 
 	public Routine getActualRoutine() {

@@ -97,4 +97,14 @@ public interface ClientBO {
 	 * @return El cleinte que tiene ese nombre
 	 */
 	public Client getClientByName(String name);
+
+	/**
+	 * Retorna un cliente
+	 * 
+	 * @param userName
+	 *            nombre del cliente
+	 * @return El cleinte que tiene ese userName
+	 */
+	Client findByUserName(String userName);
+
 }

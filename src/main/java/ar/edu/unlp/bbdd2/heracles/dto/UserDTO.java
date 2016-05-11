@@ -18,6 +18,7 @@ import ar.edu.unlp.bbdd2.heracles.util.Utilities;
 public class UserDTO {
 	
 	private Long id;
+	private String userName;
 	private String name;
 	private String surname;
 	private String email;
@@ -37,7 +38,8 @@ public class UserDTO {
 	public UserDTO (User user) {
 		this();
 		this.id = user.getId();
-		this.name = user.getUsername();
+		this.userName = user.getUsername();
+		this.name = user.getName();
 		this.surname = user.getSurname();
 		this.email = user.getEmail();
 		this.password = null;
@@ -54,6 +56,14 @@ public class UserDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public String getName() {
 		return name;
 	}

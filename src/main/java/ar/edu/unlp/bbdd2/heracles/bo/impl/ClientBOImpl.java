@@ -5,11 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
+import ar.edu.unlp.bbdd2.heracles.dao.ActivityDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.ClientDAO;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.RoleDAO;
+import ar.edu.unlp.bbdd2.heracles.dao.UserDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseSnapshotDAOImpl;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
@@ -30,10 +31,11 @@ import ar.edu.unlp.bbdd2.heracles.util.Utilities;
 public class ClientBOImpl implements ClientBO {
 
 	private ClientDAO clientDAO;
-	private RoleDAOImpl roleDAO;
+	private RoleDAO roleDAO;
 	private ExerciseConfigurationDAOImpl exConfDAO;
 	private ExerciseSnapshotDAOImpl exSanpshotDAO;
-	private ActivityDAOImpl activityDAO;
+	private ActivityDAO activityDAO;
+	private UserDAO userDAO;
 
 	/**
 	 * {@inheritDoc}
@@ -123,16 +125,25 @@ public class ClientBOImpl implements ClientBO {
 		return this.getClientDAO().loadById(id);
 	}
 
+	@Override
+	public Client findByUserName(String userName) {
+		return (Client) this.getClientDAO().loadByUserName(userName);
+	}
+
+	private boolean existUserName(String userName) {
+		return this.getUserDAO().loadByUserName(userName) != null;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public Client createClient(ClientDTO clientDTO) throws BusinessException {
 		Client client = null;
-		if (this.getClientDAO().loadByEmail(clientDTO.getEmail()) == null) {
+		if (!this.existUserName(clientDTO.getUserName())) {
 			Date fecha = Utilities.formatDate(clientDTO.getBirthday());
-			client = new Client(clientDTO.getName(), clientDTO.getSurname(), clientDTO.getEmail(), fecha,
-					clientDTO.getGender());
+			client = new Client(clientDTO.getUserName(), clientDTO.getName(), clientDTO.getSurname(),
+					clientDTO.getEmail(), fecha, clientDTO.getGender());
 			client.setPassword(clientDTO.getPassword());
 			client.setPhone(clientDTO.getPhone());
 			client.setRoutines(new ArrayList<Routine>());
@@ -148,25 +159,21 @@ public class ClientBOImpl implements ClientBO {
 			roleDAO.saveOrUpdate(role);
 			return client;
 		} else {
-			throw new BusinessException("El email ya existe");
+			throw new BusinessException("El usuario ya existe");
 		}
 	}
 
 	@Override
 	public Client updateClient(ClientDTO clientDTO) throws BusinessException {
-		if (this.getClientDAO().loadByEmail(clientDTO.getEmail()) == null) {
-			Client client = clientDAO.loadById(clientDTO.getId());
-			client.setUsername(clientDTO.getName());
-			client.setSurname(clientDTO.getSurname());
-			client.setPhone(clientDTO.getPhone());
-			client.setBirthday(Utilities.formatDate(clientDTO.getBirthday()));
-			client.setEmail(clientDTO.getEmail());
-			client.setGender(clientDTO.getGender());
-			getClientDAO().saveOrUpdate(client);
-			return client;
-		} else {
-			throw new BusinessException("El email ya existe");
-		}
+		Client client = (Client) getUserDAO().loadById(clientDTO.getId());
+		client.setName(clientDTO.getName());
+		client.setSurname(clientDTO.getSurname());
+		client.setPhone(clientDTO.getPhone());
+		client.setBirthday(Utilities.formatDate(clientDTO.getBirthday()));
+		client.setEmail(clientDTO.getEmail());
+		client.setGender(clientDTO.getGender());
+		getClientDAO().saveOrUpdate(client);
+		return client;
 	}
 
 	@Override
@@ -197,11 +204,11 @@ public class ClientBOImpl implements ClientBO {
 		this.clientDAO = clientDAO;
 	}
 
-	public RoleDAOImpl getRoleDAO() {
+	public RoleDAO getRoleDAO() {
 		return roleDAO;
 	}
 
-	public void setRoleDAO(RoleDAOImpl roleDAO) {
+	public void setRoleDAO(RoleDAO roleDAO) {
 		this.roleDAO = roleDAO;
 	}
 
@@ -221,12 +228,20 @@ public class ClientBOImpl implements ClientBO {
 		this.exSanpshotDAO = exSanpshotDAO;
 	}
 
-	public ActivityDAOImpl getActivityDAO() {
+	public ActivityDAO getActivityDAO() {
 		return activityDAO;
 	}
 
-	public void setActivityDAO(ActivityDAOImpl activityDAO) {
+	public void setActivityDAO(ActivityDAO activityDAO) {
 		this.activityDAO = activityDAO;
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 
 }

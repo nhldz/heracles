@@ -22,8 +22,16 @@ public class ClientDAOImpl extends BaseDAOImpl<Client> implements ClientDAO{
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Client loadByUserName(String username){
+		return ofy().load().type(this.getType()).filter("userName", username).first().now();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Client loadByName(String name){
-		return ofy().load().type(this.getType()).filter("username", name).first().now();
+		return ofy().load().type(this.getType()).filter("name", name).first().now();
 	}
 	
 }

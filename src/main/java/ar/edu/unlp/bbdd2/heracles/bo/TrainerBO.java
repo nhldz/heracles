@@ -142,6 +142,13 @@ public interface TrainerBO {
 	 * 
 	 * @param trainer
 	 */
-	public Trainer updateTrainer(TrainerDTO trainerDTO) throws BusinessException;;
+	public Trainer updateTrainer(TrainerDTO trainerDTO) throws BusinessException;
+
+	/**
+	 * Retorna un profesor
+	 * 
+	 * @param userName
+	 */
+	Trainer findByUserName(String userName);
 
 }

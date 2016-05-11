@@ -151,7 +151,8 @@ public class RootUtil {
 		ClientDTO clientDTO = null;
 		try {
 			clientDTO = new ClientDTO();
-			clientDTO.setName(name);
+			clientDTO.setUserName(name);
+			clientDTO.setName(name);			
 			clientDTO.setSurname(surname);
 			clientDTO.setPassword("123");
 			clientDTO.setPhone("123-456789");
@@ -170,6 +171,7 @@ public class RootUtil {
 		Trainer trainer = null;		
 		try {
 			trainerDTO = new TrainerDTO();
+			trainerDTO.setUserName(name);
 			trainerDTO.setName(name);
 			trainerDTO.setSurname(surname);
 			trainerDTO.setPassword("123");

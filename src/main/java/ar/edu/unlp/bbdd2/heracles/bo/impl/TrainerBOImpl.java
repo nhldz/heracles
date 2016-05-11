@@ -8,12 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
+import ar.edu.unlp.bbdd2.heracles.dao.ActivityDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.ClientDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.ExerciseDAO;
+import ar.edu.unlp.bbdd2.heracles.dao.RoleDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.TrainerDAO;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.UserDAO;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ExerciseConfigurationDAOImpl;
-import ar.edu.unlp.bbdd2.heracles.dao.impl.RoleDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dto.TrainerDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
@@ -41,8 +42,9 @@ public class TrainerBOImpl implements TrainerBO {
 	private ExerciseDAO exerciseDAO;
 	private RoutineDAOImpl routineDAO;
 	private ExerciseConfigurationDAOImpl exConfDAO;
-	private ActivityDAOImpl activityDAO;
-	private RoleDAOImpl roleDAO;
+	private ActivityDAO activityDAO;
+	private RoleDAO roleDAO;
+	private UserDAO userDAO;
 
 	/**
 	 * {@inheritDoc}
@@ -85,9 +87,9 @@ public class TrainerBOImpl implements TrainerBO {
 	}
 
 	/**
-	 * Asigna una rutina al cleinte.
-	 * Si este tiene una rutina actual se la remplaza por la nueva 
-	 * y a la actual se la agrega junto con las demas rutinas del cliente.
+	 * Asigna una rutina al cleinte. Si este tiene una rutina actual se la
+	 * remplaza por la nueva y a la actual se la agrega junto con las demas
+	 * rutinas del cliente.
 	 */
 	private void assingRoutine(Client client, Routine routine) {
 		Routine actualRoutine = client.getActualRoutine();
@@ -161,11 +163,24 @@ public class TrainerBOImpl implements TrainerBO {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public Trainer findByUserName(String userName) {
+		return (Trainer) this.getUserDAO().loadByUserName(userName);
+	}
+
+	private boolean existUserName(String userName) {
+		return this.getUserDAO().loadByUserName(userName) != null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Trainer createTrainer(TrainerDTO trainerDTO) throws BusinessException {
 		Trainer trainer = null;
-		if (this.findByEmail(trainerDTO.getEmail()) == null) {
+		if (!this.existUserName(trainerDTO.getUserName())) {
 			Date fecha = Utilities.formatDate(trainerDTO.getBirthday());
-			trainer = new Trainer(trainerDTO.getName(), trainerDTO.getSurname(), trainerDTO.getEmail(), fecha, trainerDTO.getGender());
+			trainer = new Trainer(trainerDTO.getUserName(), trainerDTO.getName(), trainerDTO.getSurname(),
+					trainerDTO.getEmail(), fecha, trainerDTO.getGender());
 			trainer.setPassword(trainerDTO.getPassword());
 			trainer.setPhone(trainerDTO.getPhone());
 			trainer.setExercises(new ArrayList<Exercise>());
@@ -182,25 +197,21 @@ public class TrainerBOImpl implements TrainerBO {
 			this.getRoleDAO().saveOrUpdate(role);
 			return trainer;
 		} else {
-			throw new BusinessException("El email ya existe");
+			throw new BusinessException("El usuario ya existe");
 		}
 	}
-	
+
 	@Override
-	public Trainer updateTrainer(TrainerDTO trainerDTO) throws BusinessException{
-		if (this.findByEmail(trainerDTO.getEmail()) == null) {
-			Trainer trainer = getTrainerDAO().loadById(trainerDTO.getId());
-			trainer.setUsername(trainerDTO.getName());
-			trainer.setSurname(trainerDTO.getSurname());
-			trainer.setPhone(trainerDTO.getPhone());
-			trainer.setBirthday(Utilities.formatDate(trainerDTO.getBirthday()));
-			trainer.setEmail(trainerDTO.getEmail());
-			trainer.setGender(trainerDTO.getGender());
-			getTrainerDAO().saveOrUpdate(trainer);
-			return trainer;
-		} else {
-			throw new BusinessException("El email ya existe");
-		}
+	public Trainer updateTrainer(TrainerDTO trainerDTO) throws BusinessException {
+		Trainer trainer = (Trainer) getUserDAO().loadById(trainerDTO.getId());
+		trainer.setName(trainerDTO.getName());
+		trainer.setSurname(trainerDTO.getSurname());
+		trainer.setPhone(trainerDTO.getPhone());
+		trainer.setBirthday(Utilities.formatDate(trainerDTO.getBirthday()));
+		trainer.setEmail(trainerDTO.getEmail());
+		trainer.setGender(trainerDTO.getGender());
+		getTrainerDAO().saveOrUpdate(trainer);
+		return trainer;
 	}
 
 	@Override
@@ -260,19 +271,27 @@ public class TrainerBOImpl implements TrainerBO {
 		this.exConfDAO = exConfDAO;
 	}
 
-	public ActivityDAOImpl getActivityDAO() {
+	public ActivityDAO getActivityDAO() {
 		return activityDAO;
 	}
 
-	public void setActivityDAO(ActivityDAOImpl activityDAO) {
+	public void setActivityDAO(ActivityDAO activityDAO) {
 		this.activityDAO = activityDAO;
 	}
 
-	public RoleDAOImpl getRoleDAO() {
+	public RoleDAO getRoleDAO() {
 		return roleDAO;
 	}
 
-	public void setRoleDAO(RoleDAOImpl roleDAO) {
+	public void setRoleDAO(RoleDAO roleDAO) {
 		this.roleDAO = roleDAO;
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 }

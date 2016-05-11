@@ -26,7 +26,7 @@ public class HeraclesAuthenticationProvider implements AuthenticationProvider {
 			throws AuthenticationException {
 		String name = authentication.getName();
 		String password = authentication.getCredentials().toString();
-		User user = this.getUserDAO().loadByName(name);
+		User user = this.getUserDAO().loadByUserName(name);
 		Authentication auth = null;
 		if (user != null){
 			UserPrincipal up = new UserPrincipal(user);

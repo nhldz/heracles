@@ -9,7 +9,7 @@
 		    yearRange: "-100:+0",
 		    dateFormat: 'dd/mm/yy'
 		});
-		 
+
 		dataTable = $('#trainersTable').DataTable({
 				'type' : 'GET',
 				'processing' : false,
@@ -20,14 +20,16 @@
 				'order' : [ [ 1, "asc" ] ],
 				'aoColumns' : [ {
 					'mData' : 'id'
-				}, {
+				},{
 					'mData' : 'enabledUser'
-				}, {
+				},{
 					'mData' : 'name'
+				},{
+					'mData' : 'userName'
 				},{
 					'mData' : 'email',
 					'type' :  'email'
-				}, {
+				},{
 					'mData' : 'phone',
 					"defaultContent" : ""
 				} ],
@@ -45,7 +47,7 @@
 					'searchable' : false,
 					'className' : 'dt-body-center',
 					'render' : function(data,type, row) {
-						return (data === true) ? '<span class="glyphicon glyphicon-ok centerSpan"></span>' : '<span class="glyphicon glyphicon-remove centerSpan"></span>';;
+						return (data === true) ? '<span class="glyphicon glyphicon-ok centerSpan"></span>' : '<span class="glyphicon glyphicon-remove centerSpan"></span>';
 					}
 				},{
 	                "render": function ( data, type, row ) {
@@ -91,16 +93,22 @@
 			toogleButtons();
 			var frm = $('#clientForm');
 			frm.attr("method", "POST");
+			$("#userName").removeAttr('disabled');
+			$("#pass").show();
+			$("#passInput").attr('required','required');
 		});
 
 		$('#btnEdit').click(function(e) {
 			var id = $('input[type="radio"]:checked').val();
 			var frm = $('#trainerForm');
-			frm.attr("method", "PUT"); 
+			frm.attr("method", "PUT");
 			toogleButtons();
+			$("#userName").attr('disabled','disabled');
+			$("#pass").hide();
+			$("#passInput").removeAttr('required');
 			if(typeof id === "undefined"){
 				toogleButtons();
-				alert("Por favor, seleccione un elemento de la lista");	
+				alert("Por favor, seleccione un elemento de la lista");
 			}else{
 				$.ajax({
 					type : "GET",
@@ -114,13 +122,13 @@
 						alert("Error!");
 					}
 				});
-			};	
+			};
 		});
 
 		$('#btnDelete').click(function(){
 			var id = $('input[type="radio"]:checked').val();
 			if(typeof id === "undefined"){
-				alert("Por favor, seleccione un elemento de la lista");	
+				alert("Por favor, seleccione un elemento de la lista");
 			}else{
 				$.ajax({
 					type : "POST",

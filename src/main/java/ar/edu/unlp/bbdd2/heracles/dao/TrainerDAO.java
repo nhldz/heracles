@@ -12,4 +12,13 @@ public interface TrainerDAO extends BaseDAO<Trainer> {
 	 * @return
 	 */
 	public Trainer loadByEmail(String email);
+	
+	/**
+	 * Busca y retorna un profesor por userName
+	 * 
+	 * @param userName
+	 *            del profesor a buscar
+	 * @return
+	 */
+	public Trainer loadByUserName(String userName);
 }
