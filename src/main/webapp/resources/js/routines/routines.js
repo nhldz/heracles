@@ -3,7 +3,7 @@
  */
 
 $(document).ready(function() {
-	
+
 	dataTable = $('#routineTable').DataTable({
 		'processing' : false,
 		'serverSide' : false,
@@ -12,11 +12,11 @@ $(document).ready(function() {
 		'autoWidth' : true,
 		'order' : [[ 1, "asc" ]],
 		'aoColumns' : [
-		    {'mData' : 'id'}, 
+		    {'mData' : 'id'},
 		    {'mData' : 'name'},
 		    {'mData' : 'client'},
 		    {'mData' : 'createDate'},
-		    {'mData' : 'endDate', "defaultContent" : ""} 
+		    {'mData' : 'endDate', "defaultContent" : ""}
 		],
 		'columnDefs' : [{
 			'targets' :	0,
