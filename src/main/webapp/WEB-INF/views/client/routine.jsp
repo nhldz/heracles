@@ -1,6 +1,8 @@
 <jsp:include page="../templates/includes/common_head.jsp" />
 <jsp:include page="../templates/includes/taglibs.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="routineId" value="${actualRoutine.id}"/>
+<c:set var="userName" value="${actualRoutine.client.username}"/>
 <div id="wrapper">
 	<jsp:include page="../client/menu.jsp" />
 	<div id="page-wrapper">
@@ -79,8 +81,6 @@
 										<th class="no-sort id"></th>
 										<th>Nombre</th>
 										<th>Descripción</th>
-										<th>Inicio</th>
-										<th>Fin</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -100,4 +100,8 @@
 	</div>
 </div>
 <jsp:include page="../templates/includes/common_foot.jsp" />
-<%-- <script src="${contextPath}/resources/js/client-routines.js"></script> --%>
+<<script type="text/javascript">
+var routineId = ${routineId};
+var userName = "${userName}";
+</script>
+<script src="${contextPath}/resources/js/client-activities.js"></script>
