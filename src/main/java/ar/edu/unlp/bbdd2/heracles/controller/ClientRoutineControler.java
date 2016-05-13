@@ -18,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.unlp.bbdd2.heracles.bo.ActivityBO;
 import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
+import ar.edu.unlp.bbdd2.heracles.dto.ActivityDTO;
 import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
+import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
@@ -98,6 +100,27 @@ public class ClientRoutineControler {
 			mv.addObject("runActivityProgress",this.getActivityBO().activityProggress(rt.getRunActivity()));
 		}
 		return mv;
+	}
+	
+	@RequestMapping(value = "/{routine}/activities", method = RequestMethod.GET)
+	public void listRoutineActivities(HttpServletResponse response, @PathVariable("routine") String routine) throws IOException {
+		
+		Routine rt = this.getRoutineBO().getRoutineById(Long.valueOf(routine));
+		
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		List<Activity> activities = new ArrayList<Activity>();
+		activities.addAll(rt.getActivities());
+		Activity runActivity = rt.getRunActivity();
+		if (activities.contains(runActivity)){
+			activities.remove(runActivity);
+		}
+		List<ActivityDTO> activitiesDTO = new ArrayList<ActivityDTO>();
+		for (Activity activity : activities) {
+			activitiesDTO.add(new ActivityDTO(activity));
+		}
+		String json = JsonTransform.listToJson(activitiesDTO);
+		out.print(json);
 	}
 
 	public ClientBO getClientBO() {
