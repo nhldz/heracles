@@ -124,7 +124,7 @@ public class RoutineController {
 		getRoutine().setClient(getClientBO().getClientById(routineDTO.getClientid()));
 		getRoutine().setTrainer(getTrainerBO().getTrainerById(routineDTO.getTrainerid()));
 		getRoutine().setCreateDate(new Date());
-	//	getRoutineBO().save(getRoutine());
+		getRoutineBO().save(getRoutine());
 	}
 	
 	/**
