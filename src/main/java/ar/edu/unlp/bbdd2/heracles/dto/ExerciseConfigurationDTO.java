@@ -40,6 +40,8 @@ public class ExerciseConfigurationDTO {
 	}
 
 	public ExerciseConfigurationDTO(ExerciseConfiguration exercise) {
+		this.id = exercise.getId().toString();
+		this.exerciseName = exercise.getExercise().getName();
 		this.sets = exercise.getSets();
 		this.reps = exercise.getReps(); 
 		this.rest = exercise.getRest();

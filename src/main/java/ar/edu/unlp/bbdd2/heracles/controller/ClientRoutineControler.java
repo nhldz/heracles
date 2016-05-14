@@ -20,6 +20,7 @@ import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
 import ar.edu.unlp.bbdd2.heracles.bo.ExerciseConfigurationBO;
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dto.ActivityDTO;
 import ar.edu.unlp.bbdd2.heracles.dto.ExerciseConfigurationDTO;
 import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
@@ -49,6 +50,8 @@ public class ClientRoutineControler {
 	private ActivityBO activityBO;
 	@Autowired
 	private ExerciseConfigurationBO exerciseConfigurationBO;
+	@Autowired
+	private ActivityDAOImpl activityDAO;
 	
 	/**
 	 * Vista con el listado de rutinas de un cliente
@@ -103,8 +106,18 @@ public class ClientRoutineControler {
 			Routine rt = this.getRoutineBO().getRoutineById(Long.valueOf(routine));
 			mv.addObject("actualRoutine", rt);
 			mv.addObject("actualRoutineProgress",this.getRoutineBO().progress(rt));
-			mv.addObject("runActivity", rt.getRunActivity());
-			mv.addObject("runActivityProgress",this.getActivityBO().activityProggress(rt.getRunActivity()));
+			try {
+				Activity activity = rt.getRunActivity();
+				mv.addObject("runActivity", activity);
+				mv.addObject("runActivityProgress",this.getActivityBO().activityProggress(activity));
+			} catch (Exception e) {
+				List<Activity> activities = rt.getActivities();
+				Activity activity = activities.get(0);
+				rt.setRunActivity(activity);
+				this.activityDAO.save(activity);
+				mv.addObject("runActivity", null);
+				mv.addObject("runActivityProgress",null);
+			}
 		}
 		return mv;
 	}
@@ -126,7 +139,14 @@ public class ClientRoutineControler {
 		PrintWriter out = response.getWriter();
 		List<Activity> activities = new ArrayList<Activity>();
 		activities.addAll(rt.getActivities());
-		Activity runActivity = rt.getRunActivity();
+		Activity runActivity = null;
+		
+		//Sacar y solucionar activando una rutina con un actividad
+		try {
+			runActivity = rt.getRunActivity();
+		} catch (Exception e) {
+			runActivity = activities.get(0);
+		}
 		if (activities.contains(runActivity)){
 			activities.remove(runActivity);
 		}

@@ -12,7 +12,7 @@ $(document).ready(function() {
 		'aoColumns' : [ {
 			'mData' : 'exercise.id'
 		}, {
-			'mData' : 'exercise.name'
+			'mData' : 'exerciseName'
 		}, {
 			'mData' : 'exercise.type'
 		},{

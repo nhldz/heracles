@@ -54,7 +54,7 @@
 					<div class="cont3">
 						<p>
 							<ok>Descrpci&oacute;n:</ok>
-							${runExercise.name}
+							${runExercise.exerciseName}
 						</p>
 						<p>
 							<ok>Ejercicio que se esta realizando:</ok>
