@@ -80,13 +80,7 @@
 									<tr>
 										<th class="no-sort id"></th>
 										<th>Nombre</th>
-<<<<<<< HEAD
 										<th>Descripci&oacute;n</th>
-=======
-										<th>Descripción</th>
-										<th>Inicio</th>
-										<th>Fin</th>
->>>>>>> branch 'master' of https://github.com/nhldz/heracles.git
 									</tr>
 								</thead>
 								<tbody>

@@ -23,6 +23,7 @@ public class ActivityDTO {
 
 	public ActivityDTO(Activity activity) {
 		this();
+		this.id = activity.getId().toString();
 		this.name = activity.getName();
 		this.description = activity.getDescription();
 	//	this.routine = new RoutineDTO(activity.getRoutine());

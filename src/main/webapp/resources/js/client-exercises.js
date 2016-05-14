@@ -10,13 +10,13 @@ $(document).ready(function() {
 		'autoWidth' : true,
 		'order' : [ [ 1, "asc" ] ],
 		'aoColumns' : [ {
-			'mData' : 'id'
+			'mData' : 'exercise.id'
 		}, {
-			'mData' : 'name'
+			'mData' : 'exercise.name'
 		}, {
-			'mData' : 'type'
+			'mData' : 'exercise.type'
 		},{
-			'mData' : 'description'
+			'mData' : 'exercise.description'
 		},{
 			'mData' : 'sets'
 		},{

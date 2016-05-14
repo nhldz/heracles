@@ -1,6 +1,7 @@
 package ar.edu.unlp.bbdd2.heracles.dto;
 
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
+import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
 
 public class ExerciseConfigurationDTO {
 
@@ -31,6 +32,8 @@ public class ExerciseConfigurationDTO {
 	private String exerciseName;
 
 	private ExerciseDTO exercise;
+	
+	private ExerciseState lastState;
 	
 	public ExerciseConfigurationDTO() {
 	
@@ -110,4 +113,12 @@ public class ExerciseConfigurationDTO {
 		this.exerciseName = exerciseName;
 	}
 
+	public ExerciseState getLastState() {
+		return lastState;
+	}
+
+	public void setLastState(ExerciseState lastState) {
+		this.lastState = lastState;
+	}
+	
 }
