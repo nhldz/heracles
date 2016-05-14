@@ -2,6 +2,7 @@ package ar.edu.unlp.bbdd2.heracles.bo;
 
 import java.util.List;
 
+import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
@@ -46,7 +47,7 @@ public interface RoutineBO {
 	 */
 	Routine getRoutineById(Long id);
 
-	void save(Routine routine);
+	void save(RoutineDTO routine);
 
 	/**
 	 * Retorna las rutinas creadas por un profesor

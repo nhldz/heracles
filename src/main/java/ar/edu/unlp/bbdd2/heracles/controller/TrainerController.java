@@ -2,6 +2,8 @@ package ar.edu.unlp.bbdd2.heracles.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -117,8 +119,19 @@ public class TrainerController {
 	public void getClients(HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
-		String json = JsonTransform.listToJson(this.getTrainerBO().getAllTrainers());
+		List<TrainerDTO> listDTO = transformListDTO(this.getTrainerBO().getAllTrainers());
+		String json = JsonTransform.listToJson(listDTO);
 		out.print(json);
+	}
+
+	private List<TrainerDTO> transformListDTO(List<Trainer> trainers) {
+		List<TrainerDTO> listDTO = new ArrayList<TrainerDTO>();
+		for(Trainer trainer : trainers){
+			TrainerDTO trainerDTO = new TrainerDTO();
+			trainerDTO.loadDataForTheList(trainer);
+			listDTO.add(trainerDTO);
+		}
+		return listDTO;
 	}
 
 	public TrainerBO getTrainerBO() {

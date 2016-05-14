@@ -3,8 +3,8 @@ package ar.edu.unlp.bbdd2.heracles.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,8 +24,13 @@ import ar.edu.unlp.bbdd2.heracles.bo.ExerciseBO;
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
 import ar.edu.unlp.bbdd2.heracles.bo.TrainerBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
+import ar.edu.unlp.bbdd2.heracles.dto.ActivityDTO;
+import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
+import ar.edu.unlp.bbdd2.heracles.dto.ExerciseConfigurationDTO;
+import ar.edu.unlp.bbdd2.heracles.dto.ExerciseDTO;
 import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
+import ar.edu.unlp.bbdd2.heracles.entities.Exercise;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.entities.Trainer;
@@ -57,6 +62,12 @@ public class RoutineController {
 	
 	private RoutineDTO routineDTO;
 	
+	private ActivityDTO activityDTO;
+	
+	private ClientDTO clientDTO;
+	
+	private ExerciseDTO exerciseDTO;
+	
 	private Activity activity;
 	
 	private List<Activity> activityList;
@@ -85,12 +96,11 @@ public class RoutineController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "load/{id}", method = RequestMethod.GET)
-	public @ResponseBody void getRoutineById(HttpServletResponse response, @PathVariable("id") String id)
+	public @ResponseBody void getRoutineById(HttpServletResponse response, @PathVariable("id") Long id)
 			throws IOException {
 		response.setContentType("application/json");
-		Long idL = Long.valueOf(id);
 		PrintWriter out = response.getWriter();
-		Routine routine = this.getRoutineBO().getRoutineById(idL);
+		Routine routine = this.getRoutineBO().getRoutineById(id);
 		String json = JsonTransform.objectToJson(routine);
 		out.print(json);
 	}
@@ -104,121 +114,244 @@ public class RoutineController {
 	public ModelAndView create() throws BusinessException {
 		ModelAndView mv = new ModelAndView("routines/create");
 		setRoutineDTO(new RoutineDTO());
-		setRoutine(new Routine());
-		mv.addObject("clients", clientBO.getAllEnabledClients());
-		mv.addObject("routine", getRoutineDTO());
+		setActivityDTO(new ActivityDTO());
+		List<ExerciseDTO> listDTO = transformExerciseListDTO(getExerciseBO().getAllExercises());
+ 		mv.addObject("routine", getRoutineDTO());
+ 		mv.addObject("exercises", listDTO);
 		return mv;
 	}
-			
+				
 	/**
 	 * Agrega una nueva rutina
 	 * 
 	 * @throws BusinessException 
 	 */   
 	@RequestMapping(method=RequestMethod.POST)
-	@ResponseBody
-	public void createRoutine(@ModelAttribute RoutineDTO routineDTO, Model model) throws BusinessException {
-		UserPrincipal up = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ModelAndView createRoutine(@ModelAttribute RoutineDTO routineDTO, Model model) throws BusinessException {
+		ModelAndView mv = new ModelAndView("routines/list");
+		UserPrincipal up = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();		
 		routineDTO.setTrainerid(up.getId());
-		getRoutine().setName(routineDTO.getName());
-		getRoutine().setClient(getClientBO().getClientById(routineDTO.getClientid()));
-		getRoutine().setTrainer(getTrainerBO().getTrainerById(routineDTO.getTrainerid()));
-		getRoutine().setCreateDate(new Date());
-		getRoutineBO().save(getRoutine());
-	}
-	
-	/**
-	 * Direcciona a la jsp de creacion de actividad
-	 * 
-	 * @throws BusinessException 
-	 */
-	@RequestMapping(value="/createActivity", method=RequestMethod.GET)
-	public ModelAndView createActivity() throws BusinessException {
-		ModelAndView mv = new ModelAndView("routines/createActivity");
-		setActivity(new Activity());
-		mv.addObject("activity", getActivity());
-		setActivityList(new ArrayList<Activity>());
-		setExerciseConf(new ExerciseConfiguration());
-		setExerciseConfList(new ArrayList<ExerciseConfiguration>());
-	    mv.addObject("exerciseConf", getExerciseConf());
-		mv.addObject("exercises", getExerciseBO().getAllExercises());
+		routineDTO.setActivities(getRoutineDTO().getActivities());
+		getRoutineBO().save(routineDTO);
 		return mv;
 	}
-	
+			
 	/**
-	 * Direcciona a la jsp de creacion de actividad
-	 * 
-	 * @throws BusinessException 
-	 */
-	@RequestMapping(value="/addActivity", method=RequestMethod.POST)
-	public ModelAndView addActivity(@ModelAttribute Activity activity, Model model) throws BusinessException {
-		ModelAndView mv = new ModelAndView("routines/create");
-		this.getActivity().getExercises().addAll(getExerciseConfList());
-		activity.getExercises().addAll(getExerciseConfList());
-		getActivityList().add(activity);
-		mv.addObject("routine", getRoutine());
-		return mv;
-	}
-	
-	/**
-	 * Agrega una ejercicio a la lista de actividades
+	 * Agrega una actividad
 	 * 
 	 * @throws BusinessException 
 	 */   
-	@RequestMapping(value="addExcercise", method=RequestMethod.POST)
+	@RequestMapping(value="activity", method=RequestMethod.POST)
 	@ResponseBody
-	public void addExcercise(@ModelAttribute ExerciseConfiguration exerciseConfig, Model model) throws BusinessException {
-		exerciseConfig.setExercise(getExerciseBO().getAllExercises().get(1));
-		exerciseConfig.setId(1L);
-		this.getExerciseConfList().add(exerciseConfig);
-		
-		activity.setExercises(this.getExerciseConfList());
-		activity.setId(1L);
-		this.getActivityList().add(activity);
-
-		routine.setActivities(this.getActivityList());
-		routine.setClient(this.getClientBO().getAllEnabledClients().get(0));
-		routine.setTrainer(this.getTrainerBO().getAllTrainers().get(0));
-		this.getRoutineBO().save(routine);
-		this.getRoutineBO().getAllRoutines();
-	}
-
-	
-	/**
-	 * 
-	 * @param routine
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public @ResponseBody void update(@ModelAttribute Routine routine, Model model) {
-//		Trainer owner = this.getTrainerBO().findByEmail("matias.trainer@email.com");
-//		String result = "exercises";
-//		try {
-//			if (this.validUpdate(exercise)) {
-//				this.getExerciseBO().save(exercise);
-//			}
-//		} catch (BusinessException e) {
-//			result = "error/" + e.getMessage();
-//		}
+	public void addActivity(@ModelAttribute ActivityDTO activityDTO, Model model) throws BusinessException {
+		String uniqueID = UUID.randomUUID().toString();
+		getActivityDTO().setId(uniqueID);
+		getActivityDTO().setDescription(activityDTO.getDescription());
+		getActivityDTO().setName(activityDTO.getName());
+		getActivityDTO().setExerciseCount(getActivityDTO().getExercises().size());
+		getRoutineDTO().getActivities().add(getActivityDTO());
+		setActivityDTO(new ActivityDTO());
 	}
 	
 	/**
-	 * Elimina una Rutina
+	 * Actualiza una actividad
 	 * 
+	 * @throws BusinessException 
+	 */   
+	@RequestMapping(value="activity", method=RequestMethod.PUT)
+	@ResponseBody
+	public void updateActivity(@ModelAttribute ActivityDTO activityDTO, Model model) throws BusinessException {
+		ActivityDTO activity = findActivity(activityDTO.getId());
+		activity.setDescription(activityDTO.getDescription());
+		activity.setName(activityDTO.getName());
+		activity.setExerciseCount(getActivityDTO().getExercises().size());
+		activity.setExercises(getActivityDTO().getExercises());
+		setActivityDTO(new ActivityDTO());
+	}
+	
+	/**
+	 * Retorna un json de ejercicio
+	 * 
+	 * @param response
 	 * @param id
-	 *            de la rutina a eliminar
-	 * 
-	 * @return
-	 * @throws BusinessException
+	 *            de la rutina
+	 * @throws IOException
 	 */
-	@RequestMapping(value = "remove/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "activity/{id}", method = RequestMethod.GET)
+	public @ResponseBody void loadActivity(HttpServletResponse response, @PathVariable("id") String id)
+			throws IOException {
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		this.activityDTO = loadActivity(id);
+		String json = JsonTransform.objectToJson(activityDTO);
+		out.print(json);
+	}
+	
+	/**
+	 * Elimina una actividad
+	 * 
+	 * @throws BusinessException 
+	 */   
+	@RequestMapping(value="activity/{id}", method=RequestMethod.DELETE)
 	@ResponseBody
-	public void remove(@PathVariable("id") String id) throws BusinessException {
-		Long idL = Long.valueOf(id);
-		Routine routine = this.getRoutineBO().getRoutineById(idL);
-	//	routine.setEnabled(false);
-		this.getRoutineBO().save(routine);
+	public void removeActivity(@PathVariable("id") String id) throws BusinessException {
+		ActivityDTO activity = findActivity(id);
+		getRoutineDTO().getActivities().remove(activity);
+	}
+	
+	/**
+	 * Busca una actividad
+	 * 
+	 * @throws BusinessException 
+	 */   
+	private ActivityDTO findActivity(String id){
+		ActivityDTO activity = null;
+		for (ActivityDTO activityDTO : getRoutineDTO().getActivities()) {
+			if(activityDTO.getId().equalsIgnoreCase(id)){
+				activity = activityDTO;
+			}
+		}
+		return activity;
+	}
+	
+	/**
+	 * Carga una actividad
+	 * 
+	 * @throws BusinessException 
+	 */   
+	private ActivityDTO loadActivity(String id){
+		ActivityDTO activity = new ActivityDTO();
+		for (ActivityDTO activityDTO : getRoutineDTO().getActivities()) {
+			if(activityDTO.getId().equalsIgnoreCase(id)){
+				activity.setId(activityDTO.getId());
+				activity.setName(activityDTO.getName());
+				activity.setDescription(activityDTO.getDescription());
+				List<ExerciseConfigurationDTO> list = new ArrayList<ExerciseConfigurationDTO>();
+				for (ExerciseConfigurationDTO exConfDTO : activityDTO.getExercises()) {
+					ExerciseConfigurationDTO exConf = loadExercise(exConfDTO);					
+					list.add(exConf);
+				}
+				activity.setExercises(list);
+			}
+		}
+		return activity;
+	}
+	
+	private ExerciseConfigurationDTO loadExercise(ExerciseConfigurationDTO exConfDTO) {
+		ExerciseConfigurationDTO exConf = new ExerciseConfigurationDTO();
+		exConf.setId(exConfDTO.getId());
+		exConf.setExerciseName(exConfDTO.getExerciseName());
+		exConf.setExercise(exConfDTO.getExercise());
+		exConf.setExerciseId(exConfDTO.getExerciseId());
+		exConf.setReps(exConfDTO.getReps());
+		exConf.setRest(exConfDTO.getRest());
+		exConf.setSets(exConfDTO.getSets());
+		exConf.setWeigth(exConfDTO.getWeigth());
+		return exConf;
+	}
+
+	/**
+	 * Lista las actividades de una rutina que se esta creando o modificando
+	 * 
+	 * @throws BusinessException 
+	 */   
+	@RequestMapping(value="activityList", method=RequestMethod.GET)
+	@ResponseBody
+	public void activityList(HttpServletResponse response) throws IOException {
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		String json = JsonTransform.listToJson(getRoutineDTO().getActivities());
+		out.print(json);
+	}
+	
+	
+	/**
+	 * Agrega un ejercicio a la lista de actividades
+	 * 
+	 * @throws BusinessException 
+	 */   
+	@RequestMapping(value="exercise", method=RequestMethod.POST)
+	@ResponseBody
+	public void addExercise(@ModelAttribute ExerciseConfigurationDTO exerciseConfigDTO, Model model) throws BusinessException {
+		String uniqueID = UUID.randomUUID().toString();
+		Exercise exercise = exerciseBO.getExerciseById(exerciseConfigDTO.getExerciseId());
+		exerciseConfigDTO.setExercise(new ExerciseDTO(exercise));
+		exerciseConfigDTO.setId(uniqueID);
+		getActivityDTO().getExercises().add(exerciseConfigDTO);
+	}
+	
+	/**
+	 * Agrega un ejercicio a la lista de actividades
+	 * 
+	 * @throws BusinessException 
+	 */   
+	@RequestMapping(value="exercise", method=RequestMethod.PUT)
+	@ResponseBody
+	public void updateExercise(@ModelAttribute ExerciseConfigurationDTO exerciseConfigDTO, Model model) throws BusinessException {
+		ExerciseConfigurationDTO exConf = findExercise(exerciseConfigDTO.getId());
+		Exercise exercise = exerciseBO.getExerciseById(exerciseConfigDTO.getExerciseId());
+		exerciseConfigDTO.setExercise(new ExerciseDTO(exercise));
+		getActivityDTO().getExercises().remove(exConf);
+		getActivityDTO().getExercises().add(exerciseConfigDTO);
+	}
+	
+	/**
+	 * Retorna un json de ejercicio
+	 * 
+	 * @param response
+	 * @param id
+	 *            de la rutina
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "exercise/{id}", method = RequestMethod.GET)
+	public @ResponseBody void loadExercise(HttpServletResponse response, @PathVariable("id") String id)
+			throws IOException {
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		ExerciseConfigurationDTO exercise = findExercise(id);
+		String json = JsonTransform.objectToJson(exercise);
+		out.print(json);
+	}
+	
+	/**
+	 * Borra un ejercicio a la lista de actividades
+	 * 
+	 * @throws BusinessException 
+	 */   
+	@RequestMapping(value="exercise/{id}", method=RequestMethod.DELETE)
+	@ResponseBody
+	public void deleteExercise(@PathVariable("id") String id) throws BusinessException {
+		ExerciseConfigurationDTO exercise = findExercise(id);
+		getActivityDTO().getExercises().remove(exercise);
+	}
+	
+	/**
+	 * Lista los ejercicios de una acrtividad que se esta creando o modificando
+	 * 
+	 * @throws BusinessException 
+	 */   
+	@RequestMapping(value="exerciseList", method=RequestMethod.GET)
+	@ResponseBody
+	public void exerciseList(HttpServletResponse response) throws IOException {
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		String json = JsonTransform.listToJson(getActivityDTO().getExercises());
+		out.print(json);
+	}
+
+	/**
+	 * Busca un ejercicio
+	 * 
+	 * @throws BusinessException 
+	 */   
+	private ExerciseConfigurationDTO findExercise(String id){
+		ExerciseConfigurationDTO exercise = null;
+		for (ExerciseConfigurationDTO exerciseConfigDTO : getActivityDTO().getExercises()) {
+			if(exerciseConfigDTO.getId().equalsIgnoreCase(id)){
+				exercise = exerciseConfigDTO;
+			}
+		}
+		return exercise;
 	}
 	
 	/**
@@ -228,15 +361,52 @@ public class RoutineController {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "list", method = RequestMethod.GET)
-	public void getClients(HttpServletResponse response) throws IOException {
+	public void listRoutines(HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		UserPrincipal up = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Trainer trainer = this.getTrainerBO().getTrainerById(up.getId());
-		String json = JsonTransform.listToJson(this.getRoutineBO().getTrainerRoutines(trainer));
+		List<RoutineDTO> listDTO =  transformRoutineListDTO(this.getRoutineBO().getTrainerRoutines(trainer));
+		String json = JsonTransform.listToJson(listDTO);
 		out.print(json);
 	}
-
+	
+	/**
+	 * Recorre una lista de rutinas transformandola en lista de DTO
+	 * @param trainerRoutines
+	 * @return
+	 */
+	private List<RoutineDTO> transformRoutineListDTO(List<Routine> trainerRoutines) {
+		List<RoutineDTO> listDTO = new ArrayList<RoutineDTO>();
+		for(Routine routine : trainerRoutines){
+			RoutineDTO routineDTO = new RoutineDTO();
+			routineDTO.loadDataForTheList(routine);
+			listDTO.add(routineDTO);
+		}
+		return listDTO;
+	}
+	
+	/**
+	 * Recorre una lista de ejercicios transformandola en lista de DTO
+	 * 
+	 * @param exercises
+	 * @return
+	 */
+	private List<ExerciseDTO> transformExerciseListDTO(List<Exercise> exercises) {
+		List<ExerciseDTO> listDTO = new ArrayList<ExerciseDTO>();
+		for (Exercise exercise : exercises) {
+			listDTO.add(new ExerciseDTO(exercise));
+		}
+		return listDTO;
+	}
+	
+	@RequestMapping(value = "cleanActivity", method = RequestMethod.POST)
+	public @ResponseBody void cleanActivity()
+			throws IOException {
+		this.activityDTO = new ActivityDTO();
+	}
+	
+		
 	public RoutineBO getRoutineBO() {
 		return routineBO;
 	}
@@ -275,6 +445,30 @@ public class RoutineController {
 
 	public void setRoutineDTO(RoutineDTO routineDTO) {
 		this.routineDTO = routineDTO;
+	}
+
+	public ActivityDTO getActivityDTO() {
+		return activityDTO;
+	}
+
+	public void setActivityDTO(ActivityDTO activityDTO) {
+		this.activityDTO = activityDTO;
+	}
+
+	public ClientDTO getClientDTO() {
+		return clientDTO;
+	}
+
+	public void setClientDTO(ClientDTO clientDTO) {
+		this.clientDTO = clientDTO;
+	}
+
+	public ExerciseDTO getExerciseDTO() {
+		return exerciseDTO;
+	}
+
+	public void setExerciseDTO(ExerciseDTO exerciseDTO) {
+		this.exerciseDTO = exerciseDTO;
 	}
 
 	public Activity getActivity() {

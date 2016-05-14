@@ -55,7 +55,7 @@
 						</div>
 						<div class="form-group">
 							<label for="type">Tipo:</label> 
-							<select name="type" required>
+							<select name="type" class="form-control" required>
 								<option value="">Seleccione..</option>
 								<c:forEach items="${excercisesTypes}" var="type">
 									<option value="${type}">${type.name}</option>
@@ -64,7 +64,7 @@
 						</div>
 						<div class="form-group">
 							<label for="equipment">Herramienta:</label> 
-							<select	name="equipment" required>
+							<select	name="equipment" class="form-control" required>
 								<option value="">Seleccione..</option>
 								<c:forEach items="${equipments}" var="equipment">
 									<option value="${equipment}">${equipment.name}</option>
@@ -73,7 +73,7 @@
 						</div>
 						<div class="form-group">
 							<label for="bodyParts">Partes Trabajadas:</label> 
-							<select	name="bodyParts" multiple="multiple" required>
+							<select	name="bodyParts" multiple="multiple" class="form-control" required>
 								<c:forEach items="${bodyParts}" var="bodyPart">
 									<option value="${bodyPart}">${bodyPart.name}</option>
 								</c:forEach>

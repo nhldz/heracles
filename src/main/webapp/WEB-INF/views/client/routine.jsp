@@ -100,4 +100,4 @@
 	</div>
 </div>
 <jsp:include page="../templates/includes/common_foot.jsp" />
-<%-- <script src="${contextPath}/resources/js/client-routines.js"></script> --%>
+<script src="${contextPath}/resources/js/client-routines.js"></script>

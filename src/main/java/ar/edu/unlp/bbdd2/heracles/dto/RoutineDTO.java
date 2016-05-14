@@ -1,5 +1,9 @@
 package ar.edu.unlp.bbdd2.heracles.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.util.Utilities;
 
@@ -13,10 +17,11 @@ public class RoutineDTO {
 	private Long clientid;
 	private ClientDTO client;
 	private TrainerDTO trainer;
-	// private ActivityDTO runActivity;
-	// private List<ActivityDTO> activities;
+	//private ActivityDTO runActivity;
+	private List<ActivityDTO> activities;
 
 	public RoutineDTO() {
+		activities = new ArrayList<ActivityDTO>();
 	}
 
 	public RoutineDTO(Routine routine) {
@@ -31,6 +36,7 @@ public class RoutineDTO {
 		this.clientid = routine.getClient().getId();
 		this.client = new ClientDTO(routine.getClient());
 		this.trainer = new TrainerDTO(routine.getTrainer());
+		this.activities =  createListActivityDTO(routine.getActivities());
 	}
 
 	public Long getId() {
@@ -95,6 +101,39 @@ public class RoutineDTO {
 
 	public void setTrainer(TrainerDTO trainer) {
 		this.trainer = trainer;
+	}
+	
+	/**
+	 * Carga la informacion necesaria para visualizar la rutina en la lista
+	 * @param routine
+	 */
+	public void loadDataForTheList(Routine routine) {
+		this.id = routine.getId();
+		this.name = routine.getName();
+		this.createDate = Utilities.formatDateToString(routine.getCreateDate());
+		if (routine.getEndDate() != null){
+			this.endDate = Utilities.formatDateToString(routine.getEndDate());
+		}
+		this.client = new ClientDTO();
+		this.client.loadDataForTheList(routine.getClient());
+	}
+	
+	public List<ActivityDTO> createListActivityDTO(List<Activity> activities) {
+		List<ActivityDTO> listActivity = new ArrayList<ActivityDTO>();
+		for (Activity activity : activities) {
+			ActivityDTO activityDTO = new ActivityDTO(activity);
+			listActivity.add(activityDTO);
+		}
+		return listActivity;
+	}
+
+	
+	public List<ActivityDTO> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(List<ActivityDTO> activities) {
+		this.activities = activities;
 	}
 	
 	// public ActivityDTO getRunActivity() {

@@ -31,6 +31,7 @@ function clearForm(frm) {
 		case "textarea":
 		case "hidden":
 		case "email":
+		case "number":
 			frm[i].value = "";
 			break;
 		case "radio":

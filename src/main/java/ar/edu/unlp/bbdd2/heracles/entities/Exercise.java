@@ -10,6 +10,8 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 
+import ar.edu.unlp.bbdd2.heracles.dto.ExerciseDTO;
+
 /**
  * Representa el ejercicio y como debe realizarse.
  *
@@ -52,6 +54,16 @@ public class Exercise {
 		this.setEquipment(equipment);
 		this.setBodyParts(bodyParts);
 		this.setDescription(description);
+		this.setEnabled(true);
+	}
+
+	public Exercise(ExerciseDTO exerciseDTO) {
+		this();
+		this.setName(exerciseDTO.getName());
+		this.setType(exerciseDTO.getType());
+		this.setEquipment(exerciseDTO.getEquipment());
+		this.setBodyParts(exerciseDTO.getBodyParts());
+		this.setDescription(exerciseDTO.getDescription());
 		this.setEnabled(true);
 	}
 

@@ -148,9 +148,6 @@ $(document)
                 url: "/client/disable/" + id,
                 success: function() {
                   dataTable.ajax.reload();
-                  // var tr =
-                  // $('input[type="radio"]:checked').parent().parent();
-                  // dataTable.row(tr).remove().draw(false);
                 },
                 error: function() {
                   alert("Error!");
