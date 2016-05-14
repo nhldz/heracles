@@ -33,10 +33,10 @@
 							</p>
 						</div>
 					</div>
-					<div class="btn-group" role="group" aria-label="...">
-						<button type="button" class="btn btn-default">Middle</button>
-					</div>
-						<div class="panel-footer">
+<!-- 					<div class="btn-group" role="group" aria-label="..."> -->
+<!-- 						<button type="button" class="btn btn-default">Ver Detalle</button> -->
+<!-- 					</div> -->
+					<div class="panel-footer">
 					</div>
 				</div>
 			</div>
@@ -60,8 +60,8 @@
 					</div>
 				</div>
 				<div class="btn-group" role="group" aria-label="...">
-					<button type="button" class="btn btn-default">Middle</button>
-				</div>
+						<a class="btn btn-default" href="/client/${actualRoutine.client.username}/routine/${actualRoutine.id}/activity/${runActivity.id}" role="button">Ver Actividad</a>
+					</div>
 				<div class="panel-footer">
 				</div>
 				</div>
@@ -73,14 +73,14 @@
 					<div class="panel-heading">Actividades de la Rutina</div>
 					<div class="panel-body">
 						<div class="dataTable_wrapper">
-							<table id="routineTable"
+							<table id="activityTable"
 								class="table table-striped table-bordered table-hover"
 								cellspacing="0" width="100%">
 								<thead>
 									<tr>
 										<th class="no-sort id"></th>
 										<th>Nombre</th>
-										<th>Descripción</th>
+										<th>Descripci&oacute;n</th>
 									</tr>
 								</thead>
 								<tbody>
