@@ -5,7 +5,7 @@ $(document).ready(function() {
 	dataTable = $('#routineTable').DataTable({
 		'processing' : false,
 		'serverSide' : false,
-		'sAjaxSource' : '/client/ClientName1/routine/list',
+		'sAjaxSource' : '/client/'+userName+'/routine/'+routineId+'/activities',
 		'bJQueryUI' : true,
 		'autoWidth' : true,
 		'order' : [ [ 1, "asc" ] ],
@@ -14,12 +14,7 @@ $(document).ready(function() {
 		}, {
 			'mData' : 'name'
 		}, {
-			'mData' : 'trainer'
-		}, {
-			'mData' : 'createDate'
-		}, {
-			'mData' : 'endDate',
-			"defaultContent" : ""
+			'mData' : 'description'
 		},{
 			"mData": null,
 		    "bSortable": false,
@@ -36,14 +31,8 @@ $(document).ready(function() {
 		{
 			"targets": 2,
 			"render": function ( data, type, row ) {
-                return data.surname + ', '+ data.name;
+                return data;
             }
-		},{
-			'targets' : 3,
-			"sType": 'date',
-			'render' : function(data,type,row) {
-				return formatDate(data);
-			}
 		}],
 		'language' : {
 			"lengthMenu" : "_MENU_ elementos por p&aacute;gina",
