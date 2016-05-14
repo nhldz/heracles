@@ -30,7 +30,9 @@ public abstract class User implements Serializable {
 	private Long id;
 	@Index
 	private String userName;
+	@Index
 	private String name;
+	@Index
 	private String surname;
 	@Index
 	private String email;

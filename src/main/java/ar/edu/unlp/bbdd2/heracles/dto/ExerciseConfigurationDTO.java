@@ -1,130 +1,56 @@
 package ar.edu.unlp.bbdd2.heracles.dto;
 
-import java.util.List;
-
-import ar.edu.unlp.bbdd2.heracles.entities.BodyPart;
-import ar.edu.unlp.bbdd2.heracles.entities.Equipment;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
-import ar.edu.unlp.bbdd2.heracles.entities.ExerciseSnapshot;
-import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
-import ar.edu.unlp.bbdd2.heracles.entities.ExerciseType;
 
 public class ExerciseConfigurationDTO {
-	
-	private Long id;
-	
-	/**
-	 * Nombre del ejercicio
-	 */
-	private String name;
 
-	/**
-	 * Tipo de ejercicio
-	 */
-	private ExerciseType type;
+	private String id;
 
-	/**
-	 * Equipamiennto del ejericio
-	 */
-	private Equipment equipment;
-
-	/**
-	 * Partes del cuerpo utilizadas
-	 */
-	private List<BodyPart> bodyParts;
-
-	/**
-	 * Descripción del ejercicio
-	 */
-	private String description;
-	
 	/**
 	 * Series
 	 */
 	private Integer sets;
-	
+
 	/**
 	 * Repeticiones
 	 */
 	private Integer reps;
-	
+
 	/**
 	 * Descanzo
 	 */
 	private Integer rest;
-	
+
 	/**
 	 * Peso
 	 */
 	private Integer weigth;
+
+	private Long exerciseId;
 	
-	private List<ExerciseSnapshot> snapshots;
+	private String exerciseName;
+
+	private ExerciseDTO exercise;
 	
-	private ExerciseState lastState;
+	public ExerciseConfigurationDTO() {
 	
-	public ExerciseConfigurationDTO(){
-		super();
-	}
-	
-	public ExerciseConfigurationDTO(ExerciseConfiguration exerciseConfiguration){
-		this.id = exerciseConfiguration.getId();
-		this.name = exerciseConfiguration.getExercise().getName();
-		this.type = exerciseConfiguration.getExercise().getType();
-		this.equipment = exerciseConfiguration.getExercise().getEquipment();
-		this.bodyParts = exerciseConfiguration.getExercise().getBodyParts();
-		this.description = exerciseConfiguration.getExercise().getDescription();
-		this.sets = exerciseConfiguration.getSets();
-		this.reps = exerciseConfiguration.getReps();
-		this.rest = exerciseConfiguration.getRest();
-		this.weigth = exerciseConfiguration.getWeigth();
 	}
 
-	public Long getId() {
+	public ExerciseConfigurationDTO(ExerciseConfiguration exercise) {
+		this.sets = exercise.getSets();
+		this.reps = exercise.getReps(); 
+		this.rest = exercise.getRest();
+		this.weigth = exercise.getWeigth();
+		this.exerciseId = exercise.getExercise().getId();
+		this.exercise = new ExerciseDTO(exercise.getExercise());
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public ExerciseType getType() {
-		return type;
-	}
-
-	public void setType(ExerciseType type) {
-		this.type = type;
-	}
-
-	public Equipment getEquipment() {
-		return equipment;
-	}
-
-	public void setEquipment(Equipment equipment) {
-		this.equipment = equipment;
-	}
-
-	public List<BodyPart> getBodyParts() {
-		return bodyParts;
-	}
-
-	public void setBodyParts(List<BodyPart> bodyParts) {
-		this.bodyParts = bodyParts;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public Integer getSets() {
@@ -159,20 +85,29 @@ public class ExerciseConfigurationDTO {
 		this.weigth = weigth;
 	}
 
-	public List<ExerciseSnapshot> getSnapshots() {
-		return snapshots;
+	public ExerciseDTO getExercise() {
+		return exercise;
 	}
 
-	public void setSnapshots(List<ExerciseSnapshot> snapshots) {
-		this.snapshots = snapshots;
+	public void setExercise(ExerciseDTO exercise) {
+		this.exercise = exercise;
+		this.setExerciseName(exercise.getName());
 	}
 
-	public ExerciseState getLastState() {
-		return lastState;
+	public Long getExerciseId() {
+		return exerciseId;
 	}
 
-	public void setLastState(ExerciseState lastState) {
-		this.lastState = lastState;
+	public void setExerciseId(Long exerciseId) {
+		this.exerciseId = exerciseId;
 	}
-	
+
+	public String getExerciseName() {
+		return exerciseName;
+	}
+
+	public void setExerciseName(String exerciseName) {
+		this.exerciseName = exerciseName;
+	}
+
 }

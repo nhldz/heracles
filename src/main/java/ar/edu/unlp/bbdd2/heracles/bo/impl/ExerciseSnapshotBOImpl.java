@@ -23,6 +23,7 @@ public class ExerciseSnapshotBOImpl implements ExerciceSnapshotBO {
 	@Override
 	public ExerciseSnapshot start(ExerciseConfiguration exerciseConfiguration) {
 		ExerciseSnapshot snapshot =  new ExerciseSnapshot(exerciseConfiguration, ExerciseState.RUN);
+		snapshot.setEndDate(new Date());
 		this.getExerciseSnapshotDAO().save(snapshot);
 		return snapshot;
 	}

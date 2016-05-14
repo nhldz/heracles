@@ -49,9 +49,10 @@ public class ClientBOImpl implements ClientBO {
 			this.updateLastSnapshot(runExercise);
 
 			if (this.getExConfDAO().lastSnapshot(runExercise).getState() != ExerciseState.RUN){
-				ExerciseSnapshot snapshot = this.getExerciseSnapshotBO().start(runExercise);
-				this.addSnapshot(runExercise, snapshot);
-				activity.setRunExercise(runExercise);
+				updateLastSnapshot(runExercise);
+				ExerciseSnapshot snapshot = this.getExerciseSnapshotBO().start(exercise);
+				this.addSnapshot(exercise, snapshot);
+				activity.setRunExercise(exercise);
 				this.getActivityDAO().saveOrUpdate(activity);
 			} else {
 				throw new BusinessException(
@@ -108,6 +109,10 @@ public class ClientBOImpl implements ClientBO {
 			throw new BusinessException("Actualmente no se esta realizando ningun ejercicio en la actividad: "
 					+ client.getActualRoutine().getRunActivity().getName());
 		}
+	}
+	
+	public ExerciseState lastExerciseState (Client client, ExerciseConfiguration exercise) {
+		return this.getExConfDAO().lastSnapshot(exercise).getState();
 	}
 
 	/**

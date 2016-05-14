@@ -1,6 +1,7 @@
 package ar.edu.unlp.bbdd2.heracles.bo;
 
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
+import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
 
 /**
 *
@@ -28,5 +29,26 @@ public interface ActivityBO {
 	 * 		Cantidad de ejercicios
 	 */
 	public Integer exercisesCount (Activity activity);
+	
+	
+	/**
+	 * Retorna una actividad utilizando el id
+	 * 
+	 * @param id
+	 * @return
+	 * 		Actividad
+	 */
+	public Activity getActivityById(Long id);
+	
+	/**
+	 * Retorna la cantidad de ejericios de una actividad en determinado estado
+	 * @param activity
+	 * 		actividad
+	 * @param state
+	 * 		estado
+	 * @return
+	 * 		cantidad de ejercicios en determinado estado.
+	 */
+	public Integer exerciseStateCount (Activity activity, ExerciseState state);
 
 }

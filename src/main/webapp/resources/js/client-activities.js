@@ -2,7 +2,7 @@
  * 
  */
 $(document).ready(function() {
-	dataTable = $('#routineTable').DataTable({
+	dataTable = $('#activityTable').DataTable({
 		'processing' : false,
 		'serverSide' : false,
 		'sAjaxSource' : '/client/'+userName+'/routine/'+routineId+'/activities',
@@ -19,7 +19,9 @@ $(document).ready(function() {
 			"mData": null,
 		    "bSortable": false,
 		    "mRender": function(data, type, full) {
-	          return '<button type="button" class="btn btn-success btnView" value="'+data.id+'" >' + 'Ver' + '</button>';}
+		    	var url = '/client/'+userName+'/routine/'+routineId+'/activity/'+data.id;
+		    	return '<a class="btn btn-default" href='+url+' role="button">Ver Actividad</a>';}
+		
 	     }],
 		'columnDefs' : [ {
 			'targets' : 0,

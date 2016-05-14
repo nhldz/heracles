@@ -17,11 +17,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.unlp.bbdd2.heracles.bo.ActivityBO;
 import ar.edu.unlp.bbdd2.heracles.bo.ClientBO;
+import ar.edu.unlp.bbdd2.heracles.bo.ExerciseConfigurationBO;
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
+import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
 import ar.edu.unlp.bbdd2.heracles.dto.ActivityDTO;
+import ar.edu.unlp.bbdd2.heracles.dto.ExerciseConfigurationDTO;
 import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
+import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
+import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
 import ar.edu.unlp.bbdd2.heracles.entities.Routine;
 import ar.edu.unlp.bbdd2.heracles.helper.JsonTransform;
 import ar.edu.unlp.bbdd2.heracles.security.UserPrincipal;
@@ -42,6 +47,8 @@ public class ClientRoutineControler {
 	private RoutineBO routineBO;
 	@Autowired
 	private ActivityBO activityBO;
+	@Autowired
+	private ExerciseConfigurationBO exerciseConfigurationBO;
 	
 	/**
 	 * Vista con el listado de rutinas de un cliente
@@ -102,6 +109,14 @@ public class ClientRoutineControler {
 		return mv;
 	}
 	
+	/**
+	 * Retorna las actividadesd de una Rutina
+	 * @param response
+	 * 		JSON con las actividades
+	 * @param routine
+	 * 		id de la rutina para la que se requieren las actividades
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/{routine}/activities", method = RequestMethod.GET)
 	public void listRoutineActivities(HttpServletResponse response, @PathVariable("routine") String routine) throws IOException {
 		
@@ -121,6 +136,133 @@ public class ClientRoutineControler {
 		}
 		String json = JsonTransform.listToJson(activitiesDTO);
 		out.print(json);
+	}
+	
+	
+	/**
+	 * Obtiene la actividad para una rutina dada
+	 * 
+	 * @param response
+	 * 		
+	 * @param name
+	 * 
+	 * @param routine
+	 * @return
+	 */
+	@RequestMapping(value="/{routine}/activity/{activity}")
+	public ModelAndView getRoutineActivity (HttpServletResponse response, @PathVariable("name") String name, @PathVariable("routine") String routine,
+			@PathVariable("activity") String activity){
+		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		ModelAndView mv = null;
+		if (up.getName().equals(name)){
+			mv = new ModelAndView("/client/activity");
+			Activity act = this.getActivityBO().getActivityById(Long.valueOf(activity));
+			mv.addObject("userName", up.getName());
+			mv.addObject("routineId", routine);
+			mv.addObject("activity", act);
+			mv.addObject("exerciesCount",this.getActivityBO().exercisesCount(act));
+			mv.addObject("exercisesEndCount", this.getActivityBO().exerciseStateCount(act, ExerciseState.STOP));
+			mv.addObject("exercisesCancelCount", this.getActivityBO().exerciseStateCount(act, ExerciseState.CANCEL));
+			Client client = this.getClientBO().getClientByName(name);
+			ExerciseConfiguration exercise = null;
+			ExerciseConfigurationDTO runExerciseDTO = null;
+			try {
+				exercise = act.getRunExercise();
+				runExerciseDTO = new ExerciseConfigurationDTO(exercise);
+				runExerciseDTO.setLastState(this.getClientBO().lastExerciseState(client, exercise));
+				if (runExerciseDTO.getLastState() == ExerciseState.RUN){
+					mv.addObject("runExercise",runExerciseDTO);
+				}else {
+					mv.addObject("runExercise", null);
+				}
+				
+			} catch (NullPointerException e) {
+				mv.addObject("runExercise", null);
+			}
+			
+			
+			
+		}
+		return mv;
+	}
+	
+	/**
+	 * 
+	 * @param response
+	 * @param routine
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/{routine}/activity/{activity}/exercises", method = RequestMethod.GET)
+	public void listRoutineActivitiesExercies(HttpServletResponse response, @PathVariable("name") String name, @PathVariable("routine") String routine, 
+			@PathVariable("activity") String activity) throws IOException {
+		
+		Activity act = this.getActivityBO().getActivityById(Long.valueOf(activity));
+		response.setContentType("application/json");
+		PrintWriter out = response.getWriter();
+		List<ExerciseConfiguration> exercises = act.getExercises();
+		Client client = this.getClientBO().getClientByName(name);
+		try {
+			ExerciseConfiguration runExercise = act.getRunExercise();
+			if ((runExercise != null) && (ExerciseState.RUN == this.getClientBO().lastExerciseState(client, runExercise))){
+				exercises.remove(runExercise);
+			}
+		} catch (NullPointerException e) {
+			// TODO: handle exception
+		}
+		
+
+		List<ExerciseConfigurationDTO> exerciseDTOs = new ArrayList<>();
+		for (ExerciseConfiguration exerciseConfiguration : exercises) {
+			exerciseDTOs.add(new ExerciseConfigurationDTO(exerciseConfiguration));
+		}
+		String json = JsonTransform.listToJson(exerciseDTOs);
+		out.print(json);
+	}
+	
+	
+	/**
+	 * 
+	 * @param response
+	 * @param routine
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/{routine}/activity/{activity}/exercise/{exercise}/run", method = RequestMethod.POST)
+	public void runExercise(HttpServletResponse response, @PathVariable("name") String name, @PathVariable("routine") String routine, 
+			@PathVariable("activity") String activity, @PathVariable("exercise") String exercise) throws IOException {
+		
+		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (up.getName().equals(name)){
+			Client client = this.getClientBO().getClientByName(name);
+			ExerciseConfiguration exerciseConf = this.getExerciseConfigurationBO().getExerciseConfiguration(Long.valueOf(exercise));
+			try {
+				this.getClientBO().startExercise(client, exerciseConf);
+			} catch (BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param response
+	 * @param routine
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/{routine}/activity/{activity}/exercise/{exercise}/stop", method = RequestMethod.POST)
+	public void stopExercise(HttpServletResponse response, @PathVariable("name") String name, @PathVariable("routine") String routine, 
+			@PathVariable("activity") String activity, @PathVariable("exercise") String exercise) throws IOException {
+		
+		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (up.getName().equals(name)){
+			Client client = this.getClientBO().getClientByName(name);
+			try {
+				this.getClientBO().stopExercise(client);
+			} catch (BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public ClientBO getClientBO() {
@@ -145,6 +287,14 @@ public class ClientRoutineControler {
 
 	public void setActivityBO(ActivityBO activityBO) {
 		this.activityBO = activityBO;
+	}
+
+	public ExerciseConfigurationBO getExerciseConfigurationBO() {
+		return exerciseConfigurationBO;
+	}
+
+	public void setExerciseConfigurationBO(ExerciseConfigurationBO exerciseConfigurationBO) {
+		this.exerciseConfigurationBO = exerciseConfigurationBO;
 	}
 	
 }

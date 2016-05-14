@@ -40,5 +40,6 @@ public class ActivityDAOImpl extends BaseDAOImpl<Activity> implements ActivityDA
 	public void setDatastore(DatastoreService datastore) {
 		this.datastore = datastore;
 	}
+
 	
 }

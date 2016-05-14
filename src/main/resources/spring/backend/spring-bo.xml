@@ -50,5 +50,9 @@
 		<property name="trainerDAO" ref="trainer.dao"/>
 		<property name="roleDAO" ref="role.dao"/>
 	</bean>
+	
+	<bean id="exerciseConfiguration.bo" class="ar.edu.unlp.bbdd2.heracles.bo.impl.ExerciseConfigurationBOImpl">
+		<property name="exerciseConfigurationDAO" ref="exerciseConfiguration.dao"/>
+	</bean>
 
 </beans>

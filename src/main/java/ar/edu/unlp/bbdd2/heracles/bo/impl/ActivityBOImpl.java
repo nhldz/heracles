@@ -24,6 +24,15 @@ public class ActivityBOImpl implements ActivityBO{
 	public Integer exercisesCount(Activity activity) {
 		return activity.getExercises().size();
 	}
+	
+	@Override
+	public Activity getActivityById(Long id) {
+		return this.getActivityDAO().loadById(id);
+	}
+	
+	public Integer exerciseStateCount (Activity activity, ExerciseState state){
+		return activityDAO.excerciseStateCount(activity, state);
+	}
 
 	public ActivityDAOImpl getActivityDAO() {
 		return activityDAO;

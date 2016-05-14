@@ -6,6 +6,7 @@ import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
 import ar.edu.unlp.bbdd2.heracles.dto.ClientDTO;
 import ar.edu.unlp.bbdd2.heracles.entities.Client;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
+import ar.edu.unlp.bbdd2.heracles.entities.ExerciseState;
 
 /**
  *
@@ -103,5 +104,13 @@ public interface ClientBO {
 	 * @return El cleinte que tiene ese userName
 	 */
 	Client findByUserName(String userName);
+	
+	/**
+	 * Retorna el ultimo estado de un ejercicio.
+	 * @param client
+	 * @param exercise
+	 * @return
+	 */
+	public ExerciseState lastExerciseState (Client client, ExerciseConfiguration exercise);
 
 }

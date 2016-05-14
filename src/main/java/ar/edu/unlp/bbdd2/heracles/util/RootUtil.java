@@ -266,7 +266,7 @@ public class RootUtil {
 					for (int act = 0; act < 5; act++) {
 						activity = this.getTrainerBO().createActivity(routine, activityName + act,
 								"Actividad #" + act, null, null);
-						for (int exc = 0; exc < 1; exc++) {
+						for (int exc = 0; exc < 5; exc++) {
 							exConf = this.getTrainerBO().createExConfiguration(exercise, activity, exc, exc, exc, exc);
 						}
 						activities.add(activity);
