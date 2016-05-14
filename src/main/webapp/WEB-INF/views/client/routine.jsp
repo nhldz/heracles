@@ -80,7 +80,13 @@
 									<tr>
 										<th class="no-sort id"></th>
 										<th>Nombre</th>
+<<<<<<< HEAD
 										<th>Descripci&oacute;n</th>
+=======
+										<th>Descripción</th>
+										<th>Inicio</th>
+										<th>Fin</th>
+>>>>>>> branch 'master' of https://github.com/nhldz/heracles.git
 									</tr>
 								</thead>
 								<tbody>
@@ -100,6 +106,7 @@
 	</div>
 </div>
 <jsp:include page="../templates/includes/common_foot.jsp" />
+<script src="${contextPath}/resources/js/client-routines.js"></script>
 <<script type="text/javascript">
 var routineId = ${routineId};
 var userName = "${userName}";

@@ -1,37 +1,40 @@
 package ar.edu.unlp.bbdd2.heracles.dto;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.googlecode.objectify.Ref;
 
 import ar.edu.unlp.bbdd2.heracles.entities.Activity;
 import ar.edu.unlp.bbdd2.heracles.entities.ExerciseConfiguration;
 
 public class ActivityDTO {
-	
-	private Long id;
+
+	private String id;
 	private String name;
 	private String description;
 	private RoutineDTO routine;
-	
-	private Ref<ExerciseConfiguration> runExercise;
-	private List<ExerciseConfiguration> exercises;
-	
-	public ActivityDTO (){}
-	
-	public ActivityDTO (Activity activity){
-		this();
-		this.id = activity.getId();
-		this.name = activity.getName();
-		this.description = activity.getDescription();
-		this.routine = new RoutineDTO(activity.getRoutine());
+	private int exerciseCount;
+
+	private ExerciseConfigurationDTO runExercise;
+	private List<ExerciseConfigurationDTO> exercises;
+
+	public ActivityDTO() {
+		exercises = new ArrayList<ExerciseConfigurationDTO>();
 	}
 
-	public Long getId() {
+	public ActivityDTO(Activity activity) {
+		this();
+		this.name = activity.getName();
+		this.description = activity.getDescription();
+	//	this.routine = new RoutineDTO(activity.getRoutine());
+		this.exercises = createListExerciseDTO(activity.getExercises());
+		this.exerciseCount = exercises.size();
+	}
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -59,20 +62,37 @@ public class ActivityDTO {
 		this.routine = routine;
 	}
 
-	public Ref<ExerciseConfiguration> getRunExercise() {
+	public int getExerciseCount() {
+		return exerciseCount;
+	}
+
+	public void setExerciseCount(int i) {
+		this.exerciseCount = i;
+	}
+
+	public ExerciseConfigurationDTO getRunExercise() {
 		return runExercise;
 	}
 
-	public void setRunExercise(Ref<ExerciseConfiguration> runExercise) {
+	public void setRunExercise(ExerciseConfigurationDTO runExercise) {
 		this.runExercise = runExercise;
 	}
 
-	public List<ExerciseConfiguration> getExercises() {
+	public List<ExerciseConfigurationDTO> getExercises() {
 		return exercises;
 	}
 
-	public void setExercises(List<ExerciseConfiguration> exercises) {
+	public void setExercises(List<ExerciseConfigurationDTO> exercises) {
 		this.exercises = exercises;
+	}
+	
+	private List<ExerciseConfigurationDTO> createListExerciseDTO(List<ExerciseConfiguration> exercises) {
+		List<ExerciseConfigurationDTO> listDTO = new ArrayList<ExerciseConfigurationDTO>();
+		for (ExerciseConfiguration exercise : exercises) {
+			ExerciseConfigurationDTO exConfDTO = new ExerciseConfigurationDTO(exercise);
+			listDTO.add(exConfDTO);
+		}
+		return listDTO;
 	}
 
 }

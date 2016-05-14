@@ -2,6 +2,8 @@ package ar.edu.unlp.bbdd2.heracles.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,6 +35,8 @@ public class ClientController {
 
 	@Autowired
 	private ClientBO clientBO;
+
+	private ClientDTO clientDTO;
 
 	/**
 	 * Pagina principal de clientes
@@ -105,7 +109,7 @@ public class ClientController {
 	 * @param client
 	 * @param model
 	 * @return
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
@@ -118,7 +122,7 @@ public class ClientController {
 	 * 
 	 * @param client
 	 * @param model
-	 * @throws BusinessException 
+	 * @throws BusinessException
 	 */
 	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
@@ -151,8 +155,25 @@ public class ClientController {
 	public void getClients(HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
-		String json = JsonTransform.listToJson(this.getClientBO().getAllEnabledClients());
+		List<ClientDTO> listDTO = transformListDTO(this.getClientBO().getAllEnabledClients());
+		String json = JsonTransform.listToJson(listDTO);
 		out.print(json);
+	}
+	
+	/**
+	 * Recorre una lista de clientes transformandola en lista de DTO
+	 * 
+	 * @param clients
+	 * @return
+	 */
+	private List<ClientDTO> transformListDTO(List<Client> clients) {
+		List<ClientDTO> listDTO = new ArrayList<ClientDTO>();
+		for (Client client : clients) {
+			ClientDTO clientDTO = new ClientDTO();
+			clientDTO.loadDataForTheList(client);
+			listDTO.add(clientDTO);
+		}
+		return listDTO;
 	}
 
 	public ClientBO getClientBO() {
@@ -161,5 +182,13 @@ public class ClientController {
 
 	public void setClientBO(ClientBO clientBO) {
 		this.clientBO = clientBO;
+	}
+
+	public ClientDTO getClientDTO() {
+		return clientDTO;
+	}
+
+	public void setClientDTO(ClientDTO clientDTO) {
+		this.clientDTO = clientDTO;
 	}
 }

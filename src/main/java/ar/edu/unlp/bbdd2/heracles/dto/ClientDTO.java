@@ -44,4 +44,18 @@ public class ClientDTO extends UserDTO {
 		this.routines = routines;
 	}
 
+	/**
+	 * Carga la informacion necesaria para visualizar el cliente en la lista
+	 * 
+	 * @param client
+	 */
+	public void loadDataForTheList(Client client) {
+		this.setId(client.getId());
+		this.setEnabledUser(client.isEnabledUser());
+		this.setName(client.getName());
+		this.setSurname(client.getSurname());
+		this.setUserName(client.getUsername());
+		this.setEmail(client.getEmail());
+		this.setPhone(client.getPhone());
+	}
 }

@@ -35,7 +35,21 @@ $(document).ready(function() {
 			'targets':	3,
 			"sType"  :	'date',
 			'render' :	function(data, type, row) {
-							return formatDate(data);
+							var info = "";
+							if(data){
+								info = formatDate(data); 
+							}
+							return info;
+						}
+			},{
+			'targets':	4,
+			"sType"  :	'date',
+			'render' :	function(data, type, row) {
+							var info = "";
+							if(data){
+								info = formatDate(data); 
+							}
+							return info;
 						}
 			}],
 		'language' : {

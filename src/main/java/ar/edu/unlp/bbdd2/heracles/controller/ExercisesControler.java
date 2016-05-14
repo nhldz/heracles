@@ -29,6 +29,7 @@ import ar.edu.unlp.bbdd2.heracles.security.UserPrincipal;
 
 
 @Controller
+@RequestMapping("/exercises")
 public class ExercisesControler {
 
 	@Autowired
@@ -41,7 +42,7 @@ public class ExercisesControler {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/exercises", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView getExercises (){
 		ModelAndView mv = new ModelAndView("exercises/list");
 		mv.addObject("excercisesTypes", ExerciseType.values());
@@ -58,7 +59,7 @@ public class ExercisesControler {
 	 *            del ejercicio
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public void getExerciseById(HttpServletResponse response, @PathVariable("id") String id)
 			throws IOException {
@@ -78,7 +79,7 @@ public class ExercisesControler {
 	 * @return 
 	 * @return
 	 */
-	@RequestMapping(value = "/exercises", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
 	public void add (@ModelAttribute Exercise exercise, Model model){
 		UserPrincipal up = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -105,7 +106,7 @@ public class ExercisesControler {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/exercises", method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
 	public void update(@ModelAttribute Exercise exercise, Model model) {
 		String result = "exercises";
@@ -122,7 +123,7 @@ public class ExercisesControler {
 	 * 		id del ejercicio a eliminar.
 	 * @return
 	 */
-	@RequestMapping(value = "/exercises/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@ResponseBody
 	public void delete (@PathVariable("id") String id){
 		Long idL = Long.valueOf(id);
@@ -142,14 +143,14 @@ public class ExercisesControler {
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/exercises/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public void listExercises(HttpServletResponse response) throws IOException {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		String json = JsonTransform.listToJson(this.getExerciseBO().getAllExercises());
 		out.print(json);
 	}
-
+	
 	public ExerciseBO getExerciseBO() {
 		return exerciseBO;
 	}

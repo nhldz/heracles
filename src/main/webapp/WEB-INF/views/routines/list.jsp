@@ -34,8 +34,6 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<a class="btn btn-success" href="routines/create" id="btnAdd">Agregar</a>
-			    <a class="btn btn-primary" href="routines/edit" id="btnEdit">Editar</a>
-				<button type="button" class="btn btn-danger" id="btnDelete">Borrar</button>
 			</div>
 		</div>
 		<br>
