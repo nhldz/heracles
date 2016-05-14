@@ -21,6 +21,7 @@ import ar.edu.unlp.bbdd2.heracles.bo.ExerciseConfigurationBO;
 import ar.edu.unlp.bbdd2.heracles.bo.RoutineBO;
 import ar.edu.unlp.bbdd2.heracles.bo.impl.BusinessException;
 import ar.edu.unlp.bbdd2.heracles.dao.impl.ActivityDAOImpl;
+import ar.edu.unlp.bbdd2.heracles.dao.impl.RoutineDAOImpl;
 import ar.edu.unlp.bbdd2.heracles.dto.ActivityDTO;
 import ar.edu.unlp.bbdd2.heracles.dto.ExerciseConfigurationDTO;
 import ar.edu.unlp.bbdd2.heracles.dto.RoutineDTO;
@@ -52,6 +53,8 @@ public class ClientRoutineControler {
 	private ExerciseConfigurationBO exerciseConfigurationBO;
 	@Autowired
 	private ActivityDAOImpl activityDAO;
+	@Autowired
+	private RoutineDAOImpl routineDAO;
 	
 	/**
 	 * Vista con el listado de rutinas de un cliente
@@ -106,18 +109,19 @@ public class ClientRoutineControler {
 			Routine rt = this.getRoutineBO().getRoutineById(Long.valueOf(routine));
 			mv.addObject("actualRoutine", rt);
 			mv.addObject("actualRoutineProgress",this.getRoutineBO().progress(rt));
+			Activity activity = null;
 			try {
-				Activity activity = rt.getRunActivity();
-				mv.addObject("runActivity", activity);
-				mv.addObject("runActivityProgress",this.getActivityBO().activityProggress(activity));
+				activity = rt.getRunActivity();
 			} catch (Exception e) {
 				List<Activity> activities = rt.getActivities();
-				Activity activity = activities.get(0);
+				activity = activities.get(0);
 				rt.setRunActivity(activity);
-				this.activityDAO.save(activity);
-				mv.addObject("runActivity", null);
-				mv.addObject("runActivityProgress",null);
+				activity.setRunExercise(activity.getExercises().get(0));
+				this.activityDAO.saveOrUpdate(activity);
+				this.routineDAO.saveOrUpdate(rt);
 			}
+			mv.addObject("runActivity", activity);
+			mv.addObject("runActivityProgress",this.getActivityBO().activityProggress(activity));
 		}
 		return mv;
 	}
@@ -316,5 +320,20 @@ public class ClientRoutineControler {
 	public void setExerciseConfigurationBO(ExerciseConfigurationBO exerciseConfigurationBO) {
 		this.exerciseConfigurationBO = exerciseConfigurationBO;
 	}
-	
+
+	public ActivityDAOImpl getActivityDAO() {
+		return activityDAO;
+	}
+
+	public void setActivityDAO(ActivityDAOImpl activityDAO) {
+		this.activityDAO = activityDAO;
+	}
+
+	public RoutineDAOImpl getRoutineDAO() {
+		return routineDAO;
+	}
+
+	public void setRoutineDAO(RoutineDAOImpl routineDAO) {
+		this.routineDAO = routineDAO;
+	}	
 }

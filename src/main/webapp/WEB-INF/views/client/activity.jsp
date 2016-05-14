@@ -48,7 +48,7 @@
 			<div class="col-lg-12" >
 				<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">Ejercicio iniciado  - ${runExercise.name}</h3>
+					<h3 class="panel-title">Ejercicio iniciado  - ${runExercise.exerciseName}</h3>
 				</div>
 				<div class="panel-body">
 					<div class="cont3">
@@ -58,7 +58,7 @@
 						</p>
 						<p>
 							<ok>Ejercicio que se esta realizando:</ok>
-							${runExercise.type}
+							${runExercise.exercise.type}
 						</p>
 						<p>
 							<ok>Series:</ok>
